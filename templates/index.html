@@ -1,0 +1,212 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row justify-content-center" >
+        <div class="col-sm-12 col-lg-4 align-self-center">
+            <img id="img_traffic" src="../static/img/Topology.png" alt="Network_IOT" style="max-width: 90%;">
+        </div>
+        <form method= "POST" action="" class="col-sm-12 col-lg-7">
+            {{ form.csrf_token }}
+            <fieldset class="rounded-3 bg-light p-5">
+                <legend>SCENARIO</legend>
+                    <div class="mb-3" >
+                        <h4>To get started, you can select one of these presets then press the submit button.</h4>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioPreset" id="radioPreset1" value="1">
+                            <label class="form-check-label" for="radioPreset1">
+                              Preset1: Telemetry Wi-Fi 5
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioPreset" id="radioPreset2" value="2" >
+                            <label class="form-check-label" for="radioPreset2">
+                              Preset2: Video-surveillance Wi-Fi 5
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioPreset" id="radioPreset3" value="3">
+                            <label class="form-check-label" for="radioPreset3">
+                              Preset3: Webcast Wi-Fi 5
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioPreset" id="radioPreset4" value="4">
+                            <label class="form-check-label" for="radioPreset4">
+                              Preset4: Smart metering LoRaWAN
+                            </label>
+                          </div>
+                    </div>
+                     <div class="mb-3">
+                        {{ form.network.label(class="form-label") }}
+                        {{ form.network(class="form-select form-select-lg", id="network") }}
+                    </div>  
+                     <div class="mb-3">
+                        {{ form.traffic_dir.label(class="form-label") }}
+                        {{ form.traffic_dir(class="form-select", id="traffic_direction") }}
+                    </div>
+                     <div class="mb-3">
+                        {{ form.traffic_profile.label(class="form-label") }}
+                        {{ form.traffic_profile(class="form-select", id="traffic_profile") }}
+                    </div>
+                     <div class="mb-3">
+                        {{ form.packet_size_wifi.label(class="form-label", id="lbl_packet_size_wifi") }}
+                        {{ form.packet_size_wifi(class="form-control", id="packet_size_wifi", placeholder="Max 1500") }}
+                    </div>
+                    <div id="wifi_error">
+                        <ul>
+                    {% for error in form.packet_size_wifi.errors %}
+                            <li style="color:red;">{{ error }}</li>
+                            <div id="errorTest" style="width: 0; height: 0;"></div>
+                    {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.packet_size_lorawan.label(class="form-label", id="lbl_packet_size_lorawan") }}
+                        {{ form.packet_size_lorawan(class="form-control", id="packet_size_lorawan", placeholder="Max 230") }}
+                    </div>
+                    <div id="lorawan_error">
+                        <ul>
+                    {% for error in form.packet_size_lorawan.errors %}
+                            <li style="color:red;">{{ error }}</li>
+                    {% endfor %}
+                        </ul>
+                    </div>
+                     <div class="form-floating mb-3">
+                        {{ form.load_freq(class="form-control", placeholder="packet/second" ,id="load_freq") }}
+                        {{ form.load_freq.label(class="form-label", for="load_freq", id="lbl_load_freq") }}
+                    </div>
+                     <div class="form-floating mb-3">
+                        {{ form.mean_load(class="form-control" ,placeholder="Mbps" ,id="mean_load") }}
+                        {{ form.mean_load.label(class="form-label", for="mean_load", id="lbl_mean_load") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.fps.label(class="form-label", id="lbl_fps") }}
+                        {{ form.fps(class="form-control", id="fps", placeholder="Max 50") }}
+                    </div>
+                    <div id="fps_error">
+                        <ul>
+                    {% for error in form.fps.errors %}       
+                        <li style="color:red;">{{ error }}</li>
+                    {% endfor %}    
+                        </ul>
+                    </div>
+                     <div class="mb-3">
+                        {{ form.num_devices.label(class="form-label") }}
+                        {{ form.num_devices(class="form-control", id="num_devices") }}
+                    </div>
+                    <div id="num_devices_error">
+                        <ul>
+                    {% for error in form.num_devices.errors %}       
+                        <li style="color:red;">{{ error }}</li>
+                    {% endfor %}    
+                        </ul>
+                    </div>
+                     <div class="mb-3">
+                        {{ form.dist_devices_gateway.label(class="form-label") }}
+                        {{ form.dist_devices_gateway(class="form-control" , id="dist_devices_gateway") }}
+                    </div>
+                    <div id="dist_devices_gateway_error">
+                        <ul>
+                    {% if messages_error[0]!="" %}   
+                            <li style="color:red;">{{ messages_error[0] }}</li>
+                    {% endif %}         
+                        </ul>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.simulation_time.label(class="form-label") }}
+                        {{ form.simulation_time(class="form-control" , id="simulation_time") }}
+                    </div>
+                    <div id="simulation_time_error">
+                        <ul>
+                            {% if messages_error[1]!="" %}   
+                                    <li style="color:red;">{{ messages_error[1] }}</li>
+                            {% endif %}         
+                                </ul>
+                    </div>
+                    <div class="mb-3">
+                        <tr>
+                        {{ form.hidden_devices.label }}
+                    {% for subfield in form.hidden_devices %}           
+                            <td>{{ subfield(class="form-check-input mx-2") }}</td>
+                            <td>{{ subfield.label }}</td>
+                        </tr>
+                    {% endfor %}
+                    </div>                   
+                    <div class="my-2">
+                        {{ form.change(class="form-check-input me-1", id="change") }}{{form.change.label(class="form-check-label")}}
+                    </div>
+                    <div class='mb-3'>
+                        {{ form.prop_delay.label(class="form-label", id="lbl_prop_delay") }}
+                        {{ form.prop_delay(class="form-select" ,id="prop_delay") }}
+                    </div>
+                    <div class='mb-3'>
+                        {{ form.prop_loss.label(class="form-label", id="lbl_prop_loss") }}
+                        {{ form.prop_loss(class="form-select" ,id="prop_loss") }}
+                    </div>
+                    <div class='mb-3'>
+                        {{ form.cyclic_redundacy_check.label(class="form-label", id="lbl_cyclic_redundacy_check") }}
+                        {{ form.cyclic_redundacy_check(class="form-select" ,id="cyclic_redundacy_check") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.low_data_rate_optimization.label(class="form-label", id="lbl_low_data_rate_optimization") }}
+                        {{ form.low_data_rate_optimization(class="form-select" ,id="low_data_rate_optimization") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.implicit_header_mode.label(class="form-label", id="lbl_implicit_header_mode") }}
+                        {{ form.implicit_header_mode(class="form-select" ,id="implicit_header_mode") }}
+                    </div>
+                     <div class="mb-3">
+                        {{ form.mcs.label(class="form-label", id="lbl_mcs") }}
+                        {{ form.mcs(class="form-select" ,id="mcs") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.sf.label(class="form-label", id="lbl_sf") }}
+                        {{ form.sf(class="form-select" ,id="sf") }}
+                    </div>
+                     <div class="mb-3">
+                        {{ form.bandwidth.label(class="form-label", id="lbl_bandwidth") }}
+                        {{ form.bandwidth(class="form-select" ,id="bandwidth") }}
+                    </div>
+                     <div class="mb-3">
+                        {{ form.spatial_streams.label(class="form-label", id="lbl_spatial_streams") }}
+                        {{ form.spatial_streams(class="form-select",id="spatial_streams") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.tx_current.label(class="form-label", id="lbl_tx_current") }}
+                        {{ form.tx_current(class="form-control",id="tx_current") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.rx_current.label(class="form-label", id="lbl_rx_current") }}
+                        {{ form.rx_current(class="form-control",id="rx_current") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.idle_current.label(class="form-label", id="lbl_idle_current") }}
+                        {{ form.idle_current(class="form-control",id="idle_current") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.cca_busy_current.label(class="form-label", id="lbl_cca_busy_current") }}
+                        {{ form.cca_busy_current(class="form-control",id="cca_busy_current") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.sleep_current.label(class="form-label", id="lbl_sleep_current") }}
+                        {{ form.sleep_current(class="form-control",id="sleep_current") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.voltage.label(class="form-label", id="lbl_voltage") }}
+                        {{ form.voltage(class="form-control",id="voltage") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.battery_cap.label(class="form-label", id="lbl_battery_cap") }}
+                        {{ form.battery_cap(class="form-control",id="battery_cap") }}
+                    </div>
+            </fieldset>
+            <br>
+            <div class="col-12">
+                <div class="d-flex justify-content-center m-3">
+                    {{ form.submit(class="btn btn-success btn-lg", id="submit_btn", style="position:relative; left:40%;") }}
+                    <span class="spinner-border text-success" id="spinner" role="status" aria-hidden="true"></span>       
+                </div>
+            </div>
+        </form>
+    </div>
+<script  src="{{ url_for('static', filename='formScenario.js') }}"> </script>
+{% endblock content %}

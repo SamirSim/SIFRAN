@@ -1,0 +1,319 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row justify-content-around">
+        <div class="col-sm-12 col-lg-7 p-5 border border-dark" style="background-color: #DCECF9; border-radius: 25px;">
+            <div class="row text-center text-primary mb-3">
+                <h2>Input parameters</h2>
+            </div>
+            <div class="row text-primary mb-2">
+                <strong> Principal parameters:</strong>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Type of network
+                </div>
+                <div class="col-5">
+                    : {{ session['network'] }}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Traffic direction
+                </div>
+                <div class="col-5 text-capitalize">
+                    : {{ session['traffic_direction'] }}
+                </div>
+            </div>    
+            <div class="row mb-2">
+                <div class="col-7">
+                    Traffic profile
+                </div>
+                <div class="col-5 text-capitalize">
+                    : {{ session['traffic_profile'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                    Packet size
+                </div>
+                <div class="col-5">
+                    : {{ session['packet_size'] }} bytes
+                </div>  
+            </div>            
+        {% if session['traffic_profile'] == "periodic" %}
+            <div class="row mb-2">
+                <div class="col-7">
+                    Packet period
+                </div>
+                <div class="col-5">
+                    : {{ session['load_freq'] }} sec
+                </div>
+            </div>  
+        {% else %} 
+            <div class="row mb-2">
+                <div class="col-7">
+                    Mean load
+                </div>
+                <div class="col-5">
+                    : {{ session['mean_load'] }} Mbps
+                </div>
+            </div>  
+        {% endif %}      
+            <div class="row mb-2">
+                <div class="col-7">
+                   Number of end-devices
+                </div>
+                <div class="col-5">
+                    : {{ session['number_devices'] }}
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Distance end-devices-gateway
+                </div>
+                <div class="col-5">
+                    : {{ session['distance_devices_gateway'] }} meter
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Simulation time
+                </div>
+                <div class="col-5">
+                    : {{ session['simulation_time'] }} seconds
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                   Hidden devices
+                </div>
+                <div class="col-5">
+                    : {{ session['hidden_devices'] }} 
+                </div>
+            </div>  
+            <hr>
+            <div class="row text-primary mb-2">
+                <strong>  Advanced parameters:</strong>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-7 col-sm-12">
+                    Propagation Delay Model
+                </div>
+                <div class="col-lg-5 col-sm-12">
+                    : {{ session['propagation_delay_model'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-lg-7 col-sm-12">
+                    Propagation Loss Model
+                </div>
+                <div class="col-lg-5 col-sm-12">
+                    : {{ session['propagation_loss_model'] }}
+                </div>
+            </div>  
+        {% if session['network'] != 'LoRaWAN' %}         
+            <div class="row mb-2">
+                <div class="col-7">
+                    MCS
+                </div>
+                <div class="col-5">
+                    : {{ session['mcs'] }}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Bandwidth
+                </div>
+                <div class="col-5">
+                : {{ session['bandwidth'] }} MHz
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Spatial streams
+                </div>
+                <div class="col-5">
+                    : {{ session['spatial_streams'] }}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Tx current draw
+                </div>
+                <div class="col-5">
+                   : {{ session['tx_current'] }} mA
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Rx current draw
+                </div>
+                <div class="col-5">
+                   : {{ session['rx_current'] }} mA
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Idle current draw
+                </div>
+                <div class="col-5">
+                : {{ session['idle_current'] }} mA
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                    CCA_Busy current
+                </div>
+                <div class="col-5">
+                : {{ session['cca_busy_current'] }} mA
+                </div>
+            </div>
+        {% else %}   
+            <div class="row mb-2">
+                <div class="col-7">
+                    Cyclic Redundacy Check
+                </div>
+                <div class="col-5">
+                    : {{ session['cyclic_redundacy_check'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                    Low Data Rate Optimization
+                </div>
+                <div class="col-5">
+                    : {{ session['low_data_rate_optimization'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                    Implicit Header Mode
+                </div>
+                <div class="col-5">
+                    : {{ session['implicit_header_mode'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                    Bandwidth
+                </div>
+                <div class="col-5">
+                : {{ session['bandwidth'] }} KHz
+                </div>
+            </div>   
+            <div class="row mb-2">
+                <div class="col-7">
+                    Spreading factor (SF)
+                </div>
+                <div class="col-5">
+                    : {{ session['sf'] }}
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                    Tx current draw
+                </div>
+                <div class="col-5">
+                   : {{ session['tx_current'] }} mA
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Rx current draw
+                </div>
+                <div class="col-5">
+                   : {{ session['rx_current'] }} mA
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Idle current draw
+                </div>
+                <div class="col-5">
+                : {{ session['idle_current'] }} mA
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Sleep current
+                </div>
+                <div class="col-5">
+                : {{ session['sleep_current'] }} mA
+                </div>
+            </div>
+        {% endif %}    
+            <div class="row mb-2">
+                <div class="col-7">
+                    Voltage
+                </div>
+                <div class="col-5">
+                : {{ session['voltage'] }} V
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Battery capacity
+                </div>
+                <div class="col-5">
+                : {{ session['battery_capacity'] }} mAh
+                </div>
+            </div>            
+        </div>
+        <div class="col-sm-12 col-lg-4 p-4 border border-dark" style="background-color: #DCECF9; border-radius: 25px; height: max-content;">
+            <div class="row text-center text-primary mb-3">
+                <h2>Simulation results</h2>
+            </div>
+            <div class="row text-primary mb-2">
+                <strong>KPIs:</strong>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                   Packet throughput
+                </div>
+                <div class="col-5">
+            {% if session['network'] != 'LoRaWAN' %}             
+                    : {{ jResults['throughput'] }} Mbps
+            {% else %}        
+                    : {{ jResults['throughput'] }} bps
+            {% endif %} 
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Packet latency
+                </div>
+                <div class="col-5">
+                    : {{ jResults['latency'] }} ms
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Packet delivery
+                </div>
+                <div class="col-5">
+                    : {{ jResults['success_rate'] }} %
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Energy consumption
+                </div>
+                <div class="col-5">
+                    : {{ jResults['energy_consumption'] }} J
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Battery lifetime
+                </div>
+                <div class="col-5">
+            {% if session['network'] != 'LoRaWAN' %}             
+                    : {{ jResults['battery_lifetime'] }} days
+            {% else %}        
+                    : {{ jResults['battery_lifetime'] }} years
+            {% endif %}        
+                </div>
+            </div> 
+        </div>    
+    </div>
+{% endblock content %}

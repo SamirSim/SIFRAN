@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container text-white bg-secondary bg-gradient p-5" style="min-height: 75vh;">
+    <h3 class="text-center mb-3">User Dashboard</h3>
+    <div class="row mb-3">
+        <div class="col-lg-6 col-sm-12 fs-5">
+            Username : {{ session['username'] }}
+        </div>
+        <div class="col-lg-6 col-sm-12 fs-5">
+            Email : {{ session['email'] }}
+        </div>
+    </div>
+    <h4 class="mb-3">Simulation records</h4>
+    {% for record in user_records %}
+        <div class="row mb-3">
+            <div class="col-lg-5 col-sm-12">
+                Record ID : <a href="{{ url_for('api', id=record['_id']) }}" class="link-info">{{ record['_id']}}</a> 
+            </div>
+            <div class="col-lg-5 col-sm-12">
+                DateTime : {{ record['dateTime']}}
+            </div>     
+            <div class="col-2">
+           <!--   <a href="{{ url_for('delete', id=record['_id']) }}"> -->
+                    <button type="button" class="btn btn-danger btn-sm" name="delete_record" id="{{record['_id']}}">
+                        Delete
+                    </button>
+           <!--   </a> -->
+            </div>        
+        </div>
+    {% endfor %}    
+</div>  
+<script>
+    btns_del = document.querySelectorAll('button[name="delete_record"]');
+    for( let btn of btns_del)
+    {
+        btn.addEventListener("click", function(){
+            if(confirm("Delete a simulation record, id "+btn['id']+"?"))
+            {
+                ID = btn['id'];
+                window.location.replace("/delete/"+ID);
+            }
+        })
+    }
+</script>
+{% endblock content %}

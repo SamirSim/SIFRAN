@@ -1,0 +1,319 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row justify-content-around">
+        <div class="col-sm-12 col-lg-7 p-5 border border-dark" style="background-color: #DCECF9; border-radius: 25px;">
+            <div class="row text-center text-primary mb-3">
+                <h2>Input parameters</h2>
+            </div>
+            <div class="row text-primary mb-2">
+                <strong> Principal parameters:</strong>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Type of network
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['network'] }}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Traffic direction
+                </div>
+                <div class="col-5 text-capitalize">
+                    : {{ user_record['parameters']['traffic_direction'] }}
+                </div>
+            </div>    
+            <div class="row mb-2">
+                <div class="col-7">
+                    Traffic profile
+                </div>
+                <div class="col-5 text-capitalize">
+                    : {{ user_record['parameters']['traffic_profile'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                    Packet size
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['packet_size'] }} bytes
+                </div>  
+            </div>            
+        {% if user_record['parameters']['traffic_profile'] == "periodic" %}
+            <div class="row mb-2">
+                <div class="col-7">
+                    Load frequency
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['load_frequency'] }} packet/sec
+                </div>
+            </div>  
+        {% else %} 
+            <div class="row mb-2">
+                <div class="col-7">
+                    Mean load
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['mean_load'] }} Mbps
+                </div>
+            </div>  
+        {% endif %}      
+            <div class="row mb-2">
+                <div class="col-7">
+                   Number of end-devices
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['number_devices'] }}
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Distance end-devices-gateway
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['distance_devices_gateway'] }} meter
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                   Simulation time
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['simulation_time'] }} seconds
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Hidden devices
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['hidden_devices'] }} 
+                </div>
+            </div>  
+            <hr>
+            <div class="row text-primary mb-2">
+                <strong>  Advanced parameters:</strong>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-7 col-sm-12">
+                    Propagation Delay Model
+                </div>
+                <div class="col-lg-5 col-sm-12">
+                    : {{ user_record['parameters']['propagation_delay_model'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-lg-7 col-sm-12">
+                    Propagation Loss Model
+                </div>
+                <div class="col-lg-5 col-sm-12">
+                    : {{ user_record['parameters']['propagation_loss_model'] }}
+                </div>
+            </div>  
+        {% if user_record['parameters']['network'] != 'LoRaWAN' %}        
+            <div class="row mb-2">
+                <div class="col-7">
+                    MCS
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['mcs'] }}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Bandwidth
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['bandwidth'] }} MHz
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Spatial streams
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['spatial_streams'] }}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Tx current draw
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['tx_current'] }} w
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Rx current draw
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['rx_current'] }} w
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Idle current draw
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['idle_current'] }} mJ
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                    CCA_Busy draw current
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['cca_busy_current'] }} mJ
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                    Sleep draw current
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['sleep_current'] }} mJ
+                </div>
+            </div> 
+        {% else %}   
+            <div class="row mb-2">
+                <div class="col-7">
+                    Cyclic Redundacy Check
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['cyclic_redundacy_check'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                    Low Data Rate Optimization
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['low_data_rate_optimization'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                    Implicit Header Mode
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['implicit_header_mode'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                    Bandwidth
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['bandwidth'] }} KHz
+                </div>
+            </div>   
+            <div class="row mb-2">
+                <div class="col-7">
+                    Spreading factor (SF)
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['sf'] }}
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                    Tx current draw
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['tx_current'] }} w
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Rx current draw
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['rx_current'] }} w
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Idle current draw
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['idle_current'] }} mJ
+                </div>
+            </div> 
+        {% endif %}    
+            <div class="row mb-2">
+                <div class="col-7">
+                    Voltage
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['voltage'] }} V
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Battery capacity
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['battery_capacity'] }} mAh
+                </div>
+            </div>            
+        </div>
+        <div class="col-sm-12 col-lg-4 p-4 border border-dark" style="background-color: #DCECF9; border-radius: 25px; height: max-content;">
+            <div class="row text-center text-primary mb-3">
+                <h2>Simulation results</h2>
+            </div>
+            <div class="row text-primary mb-2">
+                <strong>Output parameters:</strong>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                   Packet throughput
+                </div>
+                <div class="col-5">
+                    {% if session['network'] != 'LoRaWAN' %}             
+                            : {{ user_record['results']['throughput'] }} Mbps
+                    {% else %}        
+                            : {{ user_record['results']['throughput'] }} bps
+                    {% endif %} 
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Packet latency
+                </div>
+                <div class="col-5">
+                    : {{ user_record['results']['latency'] }} ms
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Packet delivery
+                </div>
+                <div class="col-5">
+                    : {{ user_record['results']['success_rate'] }} %
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Energy consumption
+                </div>
+                <div class="col-5">
+                    : {{ user_record['results']['energy_consumption'] }} J
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Battery lifetime
+                </div>
+                <div class="col-5">
+            {% if user_record['parameters']['network'] != 'LoRaWAN' %}             
+                    : {{ user_record['results']['battery_lifetime'] }} days
+            {% else %}        
+                    : {{ user_record['results']['battery_lifetime'] }} year
+            {% endif %}        
+                </div>
+            </div> 
+        </div>    
+    </div>
+{% endblock content %}
