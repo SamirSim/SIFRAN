@@ -20,4 +20,4 @@ Navigate inside the directory of NS-3 (ns-3) in static
 # Launch the flask platform
 python3 app.py
 
-The website is now accessible at 127.0.0.1 through your browser.
+The website is now accessible at 127.0.0.1:5000 through your browser.
