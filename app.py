@@ -351,4 +351,4 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == "__main__" :
-    app.run(debug=True, reloader_interval=10)
+    app.run(debug=True, reloader_interval=99999999)

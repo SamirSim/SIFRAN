@@ -43,10 +43,10 @@
         {% if user_record['parameters']['traffic_profile'] == "periodic" %}
             <div class="row mb-2">
                 <div class="col-7">
-                    Load frequency
+                    Packet period
                 </div>
                 <div class="col-5">
-                    : {{ user_record['parameters']['load_frequency'] }} packet/sec
+                    : {{ user_record['parameters']['load_frequency'] }} sec
                 </div>
             </div>  
         {% else %} 
@@ -271,7 +271,7 @@
                    Packet throughput
                 </div>
                 <div class="col-5">
-                    {% if session['network'] != 'LoRaWAN' %}             
+                    {% if user_record['parameters']['network'] != 'LoRaWAN' %}             
                             : {{ user_record['results']['throughput'] }} Mbps
                     {% else %}        
                             : {{ user_record['results']['throughput'] }} bps

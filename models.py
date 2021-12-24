@@ -88,6 +88,7 @@ class ModelRecords:
                 "load_frequency": session['load_freq'],
                 "number_devices": session['number_devices'],
                 "distance_devices_gateway": session['distance_devices_gateway'],
+                "simulation_time": session['simulation_time'],
                 "hidden_devices": session['hidden_devices'],
                 "propagation_delay_model": session['propagation_delay_model'],
                 "propagation_loss_model": session['propagation_loss_model'],
