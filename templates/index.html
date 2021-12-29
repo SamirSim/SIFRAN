@@ -80,11 +80,33 @@
                     </div>
                     <div class="mb-3">
                         {{ form.fps.label(class="form-label", id="lbl_fps") }}
-                        {{ form.fps(class="form-control", id="fps", placeholder="Max 50") }}
+                        {{ form.fps(class="form-control", id="fps") }}
                     </div>
                     <div id="fps_error">
                         <ul>
                     {% for error in form.fps.errors %}       
+                        <li style="color:red;">{{ error }}</li>
+                    {% endfor %}    
+                        </ul>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.mean.label(class="form-label", id="lbl_mean") }}
+                        {{ form.mean(class="form-control", id="mean") }}
+                    </div>
+                    <div id="mean_error">
+                        <ul>
+                    {% for error in form.mean.errors %}       
+                        <li style="color:red;">{{ error }}</li>
+                    {% endfor %}    
+                        </ul>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.variance.label(class="form-label", id="lbl_variance") }}
+                        {{ form.variance(class="form-control", id="variance")}}
+                    </div>
+                    <div id="variance_error">
+                        <ul>
+                    {% for error in form.variance.errors %}       
                         <li style="color:red;">{{ error }}</li>
                     {% endfor %}    
                         </ul>

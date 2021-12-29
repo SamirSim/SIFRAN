@@ -39,6 +39,10 @@ var lbl_mcs = document.getElementById("lbl_mcs");
 var mcs = document.getElementById("mcs");
 var lbl_fps = document.getElementById("lbl_fps");
 var fps = document.getElementById("fps");
+var lbl_mean = document.getElementById("lbl_mean");
+var mean = document.getElementById("mean");
+var lbl_variance = document.getElementById("lbl_variance");
+var variance = document.getElementById("variance");
 var lbl_bandwidth = document.getElementById("lbl_bandwidth");
 var bandwidth = document.getElementById("bandwidth");
 var lbl_spatial_streams = document.getElementById("lbl_spatial_streams");
@@ -73,6 +77,10 @@ lbl_mcs.style.display = "none";
 mcs.style.display = "none";
 lbl_fps.style.display = "none";
 fps.style.display = "none";
+lbl_mean.style.display = "none";
+mean.style.display = "none";
+lbl_variance.style.display = "none";
+variance.style.display = "none";
 //hiding SF before choosing LoRaWAN
 lbl_sf.style.display = "none";
 sf.style.display = "none";     
@@ -109,6 +117,8 @@ submit_btn.addEventListener("click", function() {
     var load_freq_indicator = document.getElementById("load_freq").value;
     var mean_load_indicator = document.getElementById("mean_load").value;
     var fps_indicator = document.getElementById("fps").value;
+    var mean_indicator = document.getElementById("mean").value;
+    var variance_indicator = document.getElementById("variance").value;
     var tx_current_indicator = document.getElementById("tx_current").value;
     var rx_current_indicator = document.getElementById("rx_current").value;
     var idle_current_indicator = document.getElementById("idle_current").value;
@@ -119,7 +129,8 @@ submit_btn.addEventListener("click", function() {
    if (!simulation_time_indicator == ' ' && !packet_size_wifi_indicator == ' ' &&
        !packet_size_lorawan_indicator == ' ' && !num_devices_indicator == ' ' &&
        !dist_devices_gateway_indicator == ' ' && !load_freq_indicator == ' ' &&
-       !mean_load_indicator == ' ' && !fps_indicator == ' ' &&
+       !mean_load_indicator == ' ' && !fps_indicator == ' ' && 
+       !mean_indicator == ' ' && !variance_indicator == ' ' &&
        !tx_current_indicator == ' ' && !rx_current_indicator == ' ' &&
        !idle_current_indicator == ' ' && !cca_busy_current_indicator == ' ' &&
        !battery_cap_indicator == ' ' && !voltage_indicator == ' ') {
@@ -197,6 +208,8 @@ function onCheck(){
         mcs.style.display = "none";
         //lbl_fps.style.display = "none";
         fps.style.display = "none";
+        mean.style.display = "none";
+        variance.style.display = "none";
         lbl_sf.style.display = "none";
         sf.style.display = "none";     
         lbl_bandwidth.style.display = "none";
@@ -233,6 +246,8 @@ function onCheck(){
     var simulation_time_error = document.getElementById("simulation_time_error");
     var num_devices_error = document.getElementById("num_devices_error");
     var fps_error = document.getElementById("fps_error");
+    var mean_error = document.getElementById("mean_error");
+    var variance_error = document.getElementById("variance_error");
 
   
 //hide packet sizes fields
@@ -289,6 +304,8 @@ else
      lorawan_error.innerText = "";
      num_devices_error.innerText = "";
      fps_error.innerText = "";
+     mean_error.innerText = "";
+     variance_error.innerText = "";
      dist_devices_gateway_error.innerText = "";
      simulation_time_error.innerText = "";
  }
@@ -556,6 +573,10 @@ function onChangeTrafficProfile(){
                 mean_load.style.display = "none";
                 lbl_fps.style.display = "none";
                 fps.style.display = "none";
+                lbl_mean.style.display = "none";
+                mean.style.display = "none";
+                lbl_variance.style.display = "none";
+                variance.style.display = "none";
                 lbl_mean_load.style.display = "none";
                 break;
         case 'cbr' :
@@ -566,6 +587,10 @@ function onChangeTrafficProfile(){
                 mean_load.style.display = "inherit";
                 lbl_fps.style.display = "none";
                 fps.style.display = "none";
+                lbl_mean.style.display = "none";
+                mean.style.display = "none";
+                lbl_variance.style.display = "none";
+                variance.style.display = "none";
                 lbl_mean_load.style.display = "inherit";
                 break;
         case 'vbr' :
@@ -573,10 +598,14 @@ function onChangeTrafficProfile(){
                 packet_size_wifi.style.display = "none";
                 lbl_packet_size_wifi.style.display = "none";
                 lbl_load_freq.style.display = "none";
-                mean_load.style.display = "inherit";
-                lbl_mean_load.style.display = "inherit";
+                mean_load.style.display = "none";
+                lbl_mean_load.style.display = "none";
                 lbl_fps.style.display = "inherit";
                 fps.style.display = "inherit";
+                lbl_mean.style.display = "inherit";
+                mean.style.display = "inherit";
+                lbl_variance.style.display = "inherit";
+                variance.style.display = "inherit";
                 break;
         default :
                 load_freq.style.display = "none";
@@ -584,6 +613,10 @@ function onChangeTrafficProfile(){
                 mean_load.style.display = "none";
                 lbl_fps.style.display = "none";
                 fps.style.display = "none";
+                lbl_mean.style.display = "none";
+                mean.style.display = "none";
+                lbl_variance.style.display = "none";
+                variance.style.display = "none"
                 lbl_mean_load.style.display = "none";
     }
 }  

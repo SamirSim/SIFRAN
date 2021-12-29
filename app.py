@@ -122,6 +122,8 @@ def index():
             session['load_freq'] = str(load_freq)
             session['mean_load'] = str(form.mean_load.data)
             session['fps'] = str(form.fps.data)
+            session['mean'] = str(form.mean.data)
+            session['variance'] = str(form.variance.data)
             session['number_devices'] = str(form.num_devices.data)
             session['distance_devices_gateway'] = str(form.dist_devices_gateway.data)
             session['simulation_time'] = str(form.simulation_time.data)
@@ -168,6 +170,8 @@ def index():
             os.environ['PACKETSIZE']=session['packet_size']
             os.environ['LOADFREQ']=session['load_freq'] 
             os.environ['FPS']=session['fps'] 
+            os.environ['MEAN']=session['mean'] 
+            os.environ['VARIANCE']=session['variance'] 
             os.environ['MEANLOAD']= str(session['mean_load'])
             os.environ['HIDDENDEVICES']=hidden_devices
             #advanced varaibles for both Wi-Fi and LoRaWAN
@@ -213,7 +217,7 @@ def index():
                             subprocess.check_output('cd static/ns3; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
                     elif os.environ['TRAFFICPROF'] == "vbr":
                         if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                            output = subprocess.check_output('cd static/ns3; ./waf --run "scratch/wifi-vbr.cc --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --fps=$FPS --hiddenStations=$HIDDENDEVICES --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt', shell=True, text=True,stderr=subprocess.DEVNULL)
+                            output = subprocess.check_output('cd static/ns3; ./waf --run "scratch/wifi-vbr.cc --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --fps=$FPS --mean=$MEAN --variance=$VARIANCE --hiddenStations=$HIDDENDEVICES --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt', shell=True, text=True,stderr=subprocess.DEVNULL)
                             latency = subprocess.check_output('cd static/ns3; cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
                             subprocess.check_output('cd static/ns3; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)                    
                     elif os.environ['TRAFFICPROF'] == "periodic":

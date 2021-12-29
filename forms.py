@@ -26,6 +26,8 @@ class ScenarioForm(FlaskForm):
     load_freq = IntegerField('Packet period, seconds', validators=[DataRequired(), NumberRange(min=0, message='Load frequency must not be negative.')], default=1)
     mean_load = IntegerField('Mean load, Mbps', validators=[DataRequired(), NumberRange(min=0, message='Mean load must not be negative.')], default=2)
     fps = IntegerField('FPS, Frames per Second', validators=[DataRequired(), NumberRange(min=0, message='FPS must not be negative.')], default=30)
+    mean = IntegerField('Mean of packet size variable', validators=[DataRequired(), NumberRange(min=0, message='Mean must not be negative.')], default=1500)
+    variance = IntegerField('Variance of packet size variable', validators=[DataRequired(), NumberRange(min=0, message='Variance must not be negative.')], default=100)
     num_devices = IntegerField('Number of end-devices', validators=[DataRequired(), NumberRange(min=1, message='Number of end-devices must not be negative.')]) 
     dist_devices_gateway = IntegerField('Distance end-devices-gateway, meter', validators=[DataRequired(), NumberRange(min=0, message='Distance between gateway and end-devices must not be negative.')])
     simulation_time = IntegerField('Simulation time, seconds', validators=[DataRequired(), NumberRange(min=0, message='Time must be > 5s')])
