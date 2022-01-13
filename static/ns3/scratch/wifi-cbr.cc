@@ -151,7 +151,7 @@ int main (int argc, char *argv[]) {
     // Set the maximum wireless range to 5 meters in order to reproduce a hidden nodes scenario, i.e. the distance between hidden stations is larger than 5 meters
     Config::SetDefault ("ns3::RangePropagationLossModel::MaxRange", DoubleValue (distance));
 
-    channel.AddPropagationLoss ("ns3::RangePropagationLossModel"); //wireless range limited to (distance) meters! 
+    channel.AddPropagationLoss ("ns3::RangePropagationLossModel"); //wireless range limited to (distance) meters!
 
     positionAlloc->Add (Vector (distance, 0.0, 0.0));
     

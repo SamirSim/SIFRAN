@@ -360,4 +360,4 @@ def logout():
 
 if __name__ == "__main__" :
     port = os.getenv('PORT', 80)
-    app.run(debug=True, reloader_interval=99999999)
+    app.run(debug=True, port=port, reloader_interval=99999999)
