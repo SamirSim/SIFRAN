@@ -11,14 +11,18 @@ from models import ModelUsers, ModelRecords
 
 
 #cluster = MongoClient("mongodb+srv://admin:KesummWHH5yr68c@cluster0.mi5o8.mongodb.net/web_simulation?retryWrites=true&w=majority")
-cluster = MongoClient("mongodb://127.0.0.1:27017/")
-print(cluster)
+MONGO_URL=os.getenv('MONGO_URL')
+SECRET_KEY=os.getenv('SECRET_KEY', '5791628bb0b13ce0c676dfde280ba245')
+
+
+cluster = MongoClient(MONGO_URL)
+
 db = cluster["web_simulation"]
 users = db["users"]
 records = db["records"]
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
+app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SESSION_COOKIE_SAMESITE']='Lax'
 
 @app.route('/login', methods = ['POST','GET'])
@@ -355,4 +359,5 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == "__main__" :
+    port = os.getenv('PORT', 80)
     app.run(debug=True, reloader_interval=99999999)
