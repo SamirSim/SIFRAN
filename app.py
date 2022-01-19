@@ -228,7 +228,7 @@ def index():
                         if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
                             print("TRAFFIC DIR: ", os.environ['TRAFFICDIR'])
                             #output = subprocess.check_output('cd static/ns3; ./waf --run "scratch/wifi-periodic.cc --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt', shell=True, text=True,stderr=subprocess.DEVNULL)
-                            output = subprocess.check_output('cd static/ns3; ./waf --run "scratch/wifi-periodic.cc"', shell=True, text=True,stderr=subprocess.DEVNULL)
+                            output = subprocess.check_output('cd static/ns3', shell=True, text=True,stderr=subprocess.DEVNULL)
                             print("OUTPUT: ", output)
                             latency = subprocess.check_output('cd static/ns3; cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
                             subprocess.check_output('cd static/ns3; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
