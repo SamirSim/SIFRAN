@@ -16,7 +16,7 @@ SECRET_KEY=os.getenv('SECRET_KEY', '5791628bb0b13ce0c676dfde280ba245')
 
 cluster = MongoClient(MONGO_URL)
 
-db = cluster["web_simulation"]
+db = cluster.get_default_database()
 users = db["users"]
 records = db["records"]
 
