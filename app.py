@@ -229,48 +229,38 @@ def index():
                     try:
                         logging.debug(f"working dir : {os.getcwd()}")
                         logging.debug(os.environ['NETWORK'])
+                        cd_ns3_dir = f"cd {NS3_DIR}; "
                         if os.environ['TRAFFICPROF'] == "cbr":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                                output = subprocess.check_output(f'cd {NS3_DIR}; ./waf --run "wifi-cbr --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --dataRate=$MEANLOAD --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt', shell=True, text=True,stderr=subprocess.DEVNULL)
-                                logging.debug(output)
-                                _log_file_content(f'{NS3_DIR}/log.txt')
-                                latency = subprocess.check_output(f'cd {NS3_DIR}; cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
-                                _log_file_content(f'{NS3_DIR}/log-parsed.txt')
-                                subprocess.check_output(f'cd {NS3_DIR}; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
+                                output = _check_output(cd_ns3_dir + './waf --run "wifi-cbr --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --dataRate=$MEANLOAD --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt')
+                                latency = _check_output(cd_ns3_dir +'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"')
+                                _check_output(cd_ns3_dir +'rm "log.txt"; rm "log-parsed.txt"')
 
                         elif os.environ['TRAFFICPROF'] == "vbr":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                                output = subprocess.check_output(f'cd {NS3_DIR}; ./waf --run "wifi-vbr --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --fps=$FPS --mean=$MEAN --variance=$VARIANCE --hiddenStations=$HIDDENDEVICES --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt', shell=True, text=True,stderr=subprocess.DEVNULL)
-                                logging.debug(output)
-                                _log_file_content('static/ns3/log.txt')
-                                latency = subprocess.check_output(f'cd {NS3_DIR}; cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
-                                _log_file_content('static/ns3/log-parsed.txt')
-
-                                subprocess.check_output(f'cd {NS3_DIR}; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)                    
+                                output = _check_output(cd_ns3_dir +'./waf --run "wifi-vbr --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --fps=$FPS --mean=$MEAN --variance=$VARIANCE --hiddenStations=$HIDDENDEVICES --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt')
+                                _log_file_content(f'{NS3_DIR}/log.txt')
+                                latency = _check_output(cd_ns3_dir +'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"')
+                                _check_output(cd_ns3_dir +'rm "log.txt"; rm "log-parsed.txt"')                    
                         elif os.environ['TRAFFICPROF'] == "periodic":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
                                 logging.debug("TRAFFIC DIR: ", os.environ['TRAFFICDIR'])
-                                output = subprocess.check_output(f'cd {NS3_DIR}; ./waf --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE"', shell=True, text=True)
-                                logging.debug(output)
-                                _log_file_content(f'{NS3_DIR}/log.txt')
-                                latency = subprocess.check_output(f'cd {NS3_DIR}; cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
-                                _log_file_content(f'{NS3_DIR}/log-parsed.txt')
-
-                                subprocess.check_output(f'cd {NS3_DIR}; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
+                                output = _check_output(cd_ns3_dir +'./waf --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
+                                latency = _check_output(cd_ns3_dir +'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"')
+                                
                             elif os.environ['NETWORK'] == "LoRaWAN":
-                                output = subprocess.check_output(f'cd {NS3_DIR}; ./waf --run lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt', shell=True, text=True,stderr=subprocess.DEVNULL)
-                                output = output + "Energy consumption: " + subprocess.check_output(f"cd {NS3_DIR}; cat 'log.txt' | grep -e 'LoraRadioEnergyModel:Total energy consumption' | tail -1 | awk 'NF>1{{print $NF}}' | sed 's/J//g'", shell=True, text=True,stderr=subprocess.DEVNULL)
-                                logging.debug(output)
-
-                                _log_file_content(f'{NS3_DIR}/log.txt')
-                                latency = subprocess.check_output(f'cd {NS3_DIR}; cat "log.txt" | grep -e "GatewayLorawanMac:Receive()" -e "EndDeviceLorawanMac:Send(" > "log-parsed.txt"; python3 lora-scripts/get_latencies.py "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)  
-                                _log_file_content(f'{NS3_DIR}/log-parsed.txt')
-                                subprocess.check_output(f'cd {NS3_DIR}; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
+                                output = _check_output(cd_ns3_dir +'./waf --run lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt')
+                                output = output + "Energy consumption: " + _check_output(cd_ns3_dir +"cat 'log.txt' | grep -e 'LoraRadioEnergyModel:Total energy consumption' | tail -1 | awk 'NF>1{print $NF}' | sed 's/J//g'")
+                                latency = _check_output(cd_ns3_dir +'cat "log.txt" | grep -e "GatewayLorawanMac:Receive()" -e "EndDeviceLorawanMac:Send(" > "log-parsed.txt"; python3 lora-scripts/get_latencies.py "log-parsed.txt"')  
                                 
                     except CalledProcessError as exception:
+                        _log_file_content(f'{NS3_DIR}/log.txt')
+                        _log_file_content(f'{NS3_DIR}/log-parsed.txt')
                         logging.error(exception.output)
                         logging.error(exception.stderr)
                         raise exception
+                    finally:
+                        _check_output(cd_ns3_dir +'rm "log.txt"; rm "log-parsed.txt"')
 
                     print(output)
                     return output, latency
@@ -402,6 +392,16 @@ if __name__ == "__main__" :
 def _log_file_content(file: str) -> None:
     absolute_path = os.path.abspath(file)
     logging.debug(absolute_path)
+    if not os.path.isfile(absolute_path):
+        logging.error(f"{absolute_path} does not exists")
+        return 
+
     with io.open(absolute_path) as file_pointer:
         content = file_pointer.read()
         logging.debug(content)
+
+def _check_output(cmd: str, **kwargs) -> str:
+    logging.debug(f'cmd: {cmd}')
+    output = subprocess.check_output(cmd, shell=True, text=True, stderr=subprocess.DEVNULL)
+    logging.debug(f'output: {output}')
+    return output
