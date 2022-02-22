@@ -1,28 +1,60 @@
+import json
+import os, threading, subprocess
+import logging
+import io
+from subprocess import CalledProcessError
+
 from bson.objectid import ObjectId
 from flask import Flask, render_template, request, url_for, redirect, session, flash
 from flask.scaffold import F
 from flask_wtf import FlaskForm
 from forms import ScenarioForm, RegisterForm, LoginForm
-import json, datetime
-import os, threading, subprocess, time
 import pymongo, bcrypt
 from pymongo import MongoClient
 from models import ModelUsers, ModelRecords 
 
 
-#cluster = MongoClient("mongodb+srv://admin:KesummWHH5yr68c@cluster0.mi5o8.mongodb.net/web_simulation?retryWrites=true&w=majority")
-MONGO_URL=os.getenv('MONGO_URL')
-SECRET_KEY=os.getenv('SECRET_KEY', '5791628bb0b13ce0c676dfde280ba245')
+def configure_auto_logging(force_debug=False):
+    debug = force_debug or os.getenv('VERBOSE') == '1'
+    level_info = logging.DEBUG if debug else logging.INFO
+    logging.basicConfig(format="%(message)s" ,level=level_info)
 
+def _check_output(cmd: str, **kwargs) -> str:
+    logging.debug(f'cmd: {cmd}')
+    output = subprocess.check_output(cmd, shell=True, text=True, stderr=subprocess.DEVNULL)
+    logging.debug(f'output: {output}')
+    return output
+
+def _log_file_content(file: str) -> None:
+    absolute_path = os.path.abspath(file)
+    logging.debug(absolute_path)
+    if not os.path.isfile(absolute_path):
+        logging.error(f"{absolute_path} does not exists")
+        return 
+
+    with io.open(absolute_path) as file_pointer:
+        content = file_pointer.read()
+        logging.debug(content)
+
+configure_auto_logging()
+
+#cluster = MongoClient("mongodb+srv://admin:KesummWHH5yr68c@cluster0.mi5o8.mongodb.net/web_simulation?retryWrites=true&w=majority")
+#MONGO_URL=os.getenv('MONGO_URL')
+SECRET_KEY=os.getenv('SECRET_KEY', '5791628bb0b13ce0c676dfde280ba245')
+NS3_DIR=os.getenv('NS3_DIR', 'static/ns3')
+
+MONGO_URL = "mongodb://host/db_name"
 cluster = MongoClient(MONGO_URL)
 
-db = cluster["web_simulation"]
+db = cluster.get_default_database()
 users = db["users"]
 records = db["records"]
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+
 
 @app.route('/login', methods = ['POST','GET'])
 def login():
@@ -206,37 +238,56 @@ def index():
                     self.output = output
                     self.latency = latency
                 def run(self):
-                    print("Start Thread",self.threadID)
+                    logging.debug(f"Start Thread {self.threadID}")
                     self.output, self.latency=simulationCall(self.threadID)
-                    print("Exit Thread",self.threadID)
+                    logging.debug(f"Exit Thread {self.threadID}")
             
             def simulationCall(threadID):
                 if threadID==1 :
-                    print(os.environ['NETWORK'])
-                    if os.environ['TRAFFICPROF'] == "cbr":
-                        if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                            output = subprocess.check_output('cd static/ns3; ./waf --run "scratch/wifi-cbr.cc --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --dataRate=$MEANLOAD --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt', shell=True, text=True,stderr=subprocess.DEVNULL)
-                            latency = subprocess.check_output('cd static/ns3; cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
-                            subprocess.check_output('cd static/ns3; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
-                    elif os.environ['TRAFFICPROF'] == "vbr":
-                        if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                            output = subprocess.check_output('cd static/ns3; ./waf --run "scratch/wifi-vbr.cc --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --fps=$FPS --mean=$MEAN --variance=$VARIANCE --hiddenStations=$HIDDENDEVICES --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt', shell=True, text=True,stderr=subprocess.DEVNULL)
-                            latency = subprocess.check_output('cd static/ns3; cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
-                            subprocess.check_output('cd static/ns3; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)                    
-                    elif os.environ['TRAFFICPROF'] == "periodic":
-                        if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                            print("TRAFFIC DIR: ", os.environ['TRAFFICDIR'])
-                            output = subprocess.check_output('pwd; cd static/ns3; ./waf --run "scratch/wifi-periodic.cc --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt', shell=True, text=True,stderr=subprocess.DEVNULL)
-                            #output = subprocess.check_output('cd static/ns3; ./waf', shell=True, text=True,stderr=subprocess.DEVNULL)
-                            print("OUTPUT: ", output)
-                            latency = subprocess.check_output('cd static/ns3; cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
-                            subprocess.check_output('cd static/ns3; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
-                        elif os.environ['NETWORK'] == "LoRaWAN":
-                            output = subprocess.check_output('cd static/ns3; ./waf --run "scratch/lora-periodic.cc --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt', shell=True, text=True,stderr=subprocess.DEVNULL)
-                            output = output + "Energy consumption: " + subprocess.check_output("cd static/ns3; cat 'log.txt' | grep -e 'LoraRadioEnergyModel:Total energy consumption' | tail -1 | awk 'NF>1{print $NF}' | sed 's/J//g'", shell=True, text=True,stderr=subprocess.DEVNULL)
-                            latency = subprocess.check_output('cd static/ns3; cat "log.txt" | grep -e "GatewayLorawanMac:Receive()" -e "EndDeviceLorawanMac:Send(" > "log-parsed.txt"; python3 lora-scripts/get_latencies.py "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
-                
-                            subprocess.check_output('cd static/ns3; rm "log.txt"; rm "log-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
+                    try:
+                        logging.debug(f"working dir : {os.getcwd()}")
+                        logging.debug(os.environ['NETWORK'])
+                        cd_ns3_dir = f"cd {NS3_DIR}; "
+                        if os.environ['TRAFFICPROF'] == "cbr":
+                            if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
+                                output = _check_output(cd_ns3_dir + './waf --jobs=2 --run "wifi-cbr --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --dataRate=$MEANLOAD --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE"')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                _check_output('cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
+                                latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
+                                print(latency)
+                                #_check_output('rm "log.txt";')
+
+                        elif os.environ['TRAFFICPROF'] == "vbr":
+                            if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-vbr --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --fps=$FPS --mean=$MEAN --variance=$VARIANCE --hiddenStations=$HIDDENDEVICES --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                _check_output('cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
+                                latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')                               
+
+                        elif os.environ['TRAFFICPROF'] == "periodic":
+                            if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                _check_output('cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
+                                latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
+
+                            elif os.environ['NETWORK'] == "LoRaWAN":
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt')
+                                output = output + "Energy consumption: " + _check_output(cd_ns3_dir +"cat 'log.txt' | grep -e 'LoraRadioEnergyModel:Total energy consumption' | tail -1 | awk 'NF>1{print $NF}' | sed 's/J//g'")
+                                latency = _check_output(cd_ns3_dir +'cat "log.txt" | grep -e "GatewayLorawanMac:Receive()" -e "EndDeviceLorawanMac:Send(" > "log-parsed.txt"; python3 lora-scripts/get_latencies.py "log-parsed.txt"')  
+                                
+                    except CalledProcessError as exception:
+                        _log_file_content(f'{NS3_DIR}/log.txt')
+                        _log_file_content(f'{NS3_DIR}/log-parsed.txt')
+                        logging.error(exception.output)
+                        logging.error(exception.stderr)
+                        raise exception
+                    finally:
+                       _check_output('rm "log.txt"; rm "log-parsed.txt"')
+
                     print(output)
                     return output, latency
             #Call NS-3 simulation by python shell script according network type
