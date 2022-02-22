@@ -220,9 +220,9 @@ def index():
                     self.output = output
                     self.latency = latency
                 def run(self):
-                    logging.debug("Start Thread",self.threadID)
+                    logging.debug(f"Start Thread {self.threadID}")
                     self.output, self.latency=simulationCall(self.threadID)
-                    logging.debug("Exit Thread",self.threadID)
+                    logging.debug(f"Exit Thread {self.threadID}")
             
             def simulationCall(threadID):
                 if threadID==1 :
@@ -244,7 +244,7 @@ def index():
                                 _check_output(cd_ns3_dir +'rm "log.txt"; rm "log-parsed.txt"')                    
                         elif os.environ['TRAFFICPROF'] == "periodic":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                                logging.debug("TRAFFIC DIR: ", os.environ['TRAFFICDIR'])
+                                logging.debug(f"TRAFFIC DIR: {os.environ['TRAFFICDIR']}")
                                 output = _check_output(cd_ns3_dir +'./waf --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
                                 latency = _check_output(cd_ns3_dir +'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt"; python3 wifi-scripts/get_latencies.py "log-parsed.txt"')
                                 
