@@ -170,12 +170,18 @@
            NS_LOG_INFO ("At time " << Simulator::Now ().As (Time::S) << " server received " << packet->GetSize () << " bytes from " <<
                         InetSocketAddress::ConvertFrom (from).GetIpv4 () << " port " <<
                         InetSocketAddress::ConvertFrom (from).GetPort ());
+          std::cout << "At time " << Simulator::Now ().As (Time::S) << " server received " << packet->GetSize () << " bytes from " <<
+                        InetSocketAddress::ConvertFrom (from).GetIpv4 () << " port " <<
+                        InetSocketAddress::ConvertFrom (from).GetPort () << std::endl;
          }
        else if (Inet6SocketAddress::IsMatchingType (from))
          {
            NS_LOG_INFO ("At time " << Simulator::Now ().As (Time::S) << " server received " << packet->GetSize () << " bytes from " <<
                         Inet6SocketAddress::ConvertFrom (from).GetIpv6 () << " port " <<
                         Inet6SocketAddress::ConvertFrom (from).GetPort ());
+          std::cout << "At time " << Simulator::Now ().As (Time::S) << " server received " << packet->GetSize () << " bytes from " <<
+                        Inet6SocketAddress::ConvertFrom (from).GetIpv6 () << " port " <<
+                        Inet6SocketAddress::ConvertFrom (from).GetPort () << std::endl;
          }
   
        packet->RemoveAllPacketTags ();
@@ -189,12 +195,18 @@
            NS_LOG_INFO ("At time " << Simulator::Now ().As (Time::S) << " server sent " << packet->GetSize () << " bytes to " <<
                         InetSocketAddress::ConvertFrom (from).GetIpv4 () << " port " <<
                         InetSocketAddress::ConvertFrom (from).GetPort ());
+          std::cout << "At time " << Simulator::Now ().As (Time::S) << " server sent " << packet->GetSize () << " bytes to " <<
+                        InetSocketAddress::ConvertFrom (from).GetIpv4 () << " port " <<
+                        InetSocketAddress::ConvertFrom (from).GetPort () << std::endl;
          }
        else if (Inet6SocketAddress::IsMatchingType (from))
          {
            NS_LOG_INFO ("At time " << Simulator::Now ().As (Time::S) << " server sent " << packet->GetSize () << " bytes to " <<
                         Inet6SocketAddress::ConvertFrom (from).GetIpv6 () << " port " <<
                         Inet6SocketAddress::ConvertFrom (from).GetPort ());
+          std::cout << "At time " << Simulator::Now ().As (Time::S) << " server sent " << packet->GetSize () << " bytes to " <<
+                        Inet6SocketAddress::ConvertFrom (from).GetIpv6 () << " port " <<
+                        Inet6SocketAddress::ConvertFrom (from).GetPort () << std::endl;
          }
      }
  }
