@@ -39,11 +39,11 @@ def _log_file_content(file: str) -> None:
 configure_auto_logging()
 
 #cluster = MongoClient("mongodb+srv://admin:KesummWHH5yr68c@cluster0.mi5o8.mongodb.net/web_simulation?retryWrites=true&w=majority")
-#MONGO_URL=os.getenv('MONGO_URL')
+MONGO_URL=os.getenv('MONGO_URL')
 SECRET_KEY=os.getenv('SECRET_KEY', '5791628bb0b13ce0c676dfde280ba245')
 NS3_DIR=os.getenv('NS3_DIR', 'static/ns3')
 
-MONGO_URL = "mongodb://host/db_name"
+#MONGO_URL = "mongodb://host/db_name"
 cluster = MongoClient(MONGO_URL)
 
 db = cluster.get_default_database()
@@ -382,6 +382,10 @@ def results():
 @app.route('/documents')
 def documents():
     return render_template("documents.html")
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
 
 @app.route('/api/<id>')    
 def api(id):

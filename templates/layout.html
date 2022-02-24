@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>PERFORMANCE EVALUATION OF AN IoT SCENARIO</title>
+    <title>SIFRAN</title>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
             <div class="container-fluid">
-              <a class="navbar-brand me-5 text-wrap" href="{{url_for('index')}}">PERFORMANCE EVALUATION OF AN IoT SCENARIO</a>
+              <a class="navbar-brand me-5 text-wrap" href="{{url_for('index')}}">SIFRAN:  Evaluating IoT Networks with a no-code Framework based on NS-3</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -25,7 +25,7 @@
                     <a class="nav-link" href="{{url_for('documents')}}">DOCUMENTATION</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">CONTACT</a>
+                    <a class="nav-link" href="{{url_for('contact')}}">CONTACT</a>
                   </li>
                 {% if session['username'] == Nul %}
                   <li class="nav-item">
