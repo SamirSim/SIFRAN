@@ -482,7 +482,11 @@ int main (int argc, char *argv[]) {
   else {
     for (uint32_t index = 0; index < sinkApplications.GetN (); ++index) {
       totalPacketsThrough += DynamicCast<PacketSink> (sinkApplications.Get (index))->GetTotalRx ();
+      throughput += ((totalPacketsThrough * 8) / ((simulationTime) * 1000000.0)); //Mbps
     }
+    std::cout << "Packet Throughput: " << throughput << std::endl;
+    double successRate =  (totalPacketsThrough / totalpacketsSent / nWifi) * 100;
+    std::cout << "Packet Delivery: " << successRate << std::endl; // %
   }
 
   if (energyRatio) {

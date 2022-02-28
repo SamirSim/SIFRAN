@@ -515,7 +515,9 @@ int main (int argc, char *argv[]) {
   else {
     for (uint32_t index = 0; index < sinkApplications.GetN (); ++index) {
       totalPacketsThrough += DynamicCast<PacketSink> (sinkApplications.Get (index))->GetTotalRx ();
+      throughput += ((totalPacketsThrough * 8) / ((simulationTime) * 1024 * 1024)); //Mbit/s
     }
+    std::cout << "Throughput: " << throughput << std::endl;
   }
 
   double totalSentPackets = (( 1 / periodSeconds * simulationTime ) * nWifi); // Estimation of number of generated packets in the network

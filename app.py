@@ -255,8 +255,6 @@ def index():
                                     text_file.write(output)
                                 _check_output('cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
                                 latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
-                                print(latency)
-                                #_check_output('rm "log.txt";')
 
                         elif os.environ['TRAFFICPROF'] == "vbr":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
@@ -275,9 +273,12 @@ def index():
                                 latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
 
                             elif os.environ['NETWORK'] == "LoRaWAN":
-                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt')
-                                output = output + "Energy consumption: " + _check_output(cd_ns3_dir +"cat 'log.txt' | grep -e 'LoraRadioEnergyModel:Total energy consumption' | tail -1 | awk 'NF>1{print $NF}' | sed 's/J//g'")
-                                latency = _check_output(cd_ns3_dir +'cat "log.txt" | grep -e "GatewayLorawanMac:Receive()" -e "EndDeviceLorawanMac:Send(" > "log-parsed.txt"; python3 lora-scripts/get_latencies.py "log-parsed.txt"')  
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE"')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                output = output + "Energy consumption: " + _check_output('cat "log.txt" | grep -e "LoraRadioEnergyModel:Total energy consumption" | tail -1 | awk "NF>1{print $NF}" | sed "s/J//g"')
+                                _check_output("cat 'log.txt' | grep -e 'Total time' | tail -1 | awk '{print $NF}' > 'log-parsed.txt'")  
+                                latency = _check_output('cat "log-parsed.txt"')
                                 
                     except CalledProcessError as exception:
                         _log_file_content(f'{NS3_DIR}/log.txt')
