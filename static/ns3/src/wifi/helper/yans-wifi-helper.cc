@@ -127,7 +127,7 @@ YansWifiPhyHelper::YansWifiPhyHelper ()
   : m_channel (0)
 {
   m_phy.SetTypeId ("ns3::YansWifiPhy");
-  SetErrorRateModel ("ns3::TableBasedErrorRateModel");
+  SetErrorRateModel ("ns3::NistErrorRateModel");
 }
 
 void

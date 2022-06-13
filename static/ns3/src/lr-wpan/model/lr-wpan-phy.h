@@ -116,7 +116,10 @@ typedef enum
   IEEE_802_15_4_PHY_TX_ON = 0x09,
   IEEE_802_15_4_PHY_UNSUPPORTED_ATTRIBUTE = 0xa,
   IEEE_802_15_4_PHY_READ_ONLY = 0xb,
-  IEEE_802_15_4_PHY_UNSPECIFIED = 0xc // all cases not covered by ieee802.15.4
+  IEEE_802_15_4_PHY_UNSPECIFIED = 0xc, // all cases not covered by ieee802.15.4
+
+  IEEE_802_15_4_PHY_TRX_START = 0xd,
+  IEEE_802_15_4_PHY_TRX_SWITCHING = 0xe
 } LrWpanPhyEnumeration;
 
 namespace TracedValueCallback
@@ -476,6 +479,8 @@ public:
    * \return the number of stream indices assigned by this model
    */
   int64_t AssignStreams (int64_t stream);
+
+   void HandleEnergyDepletion ();
 
   /**
    * TracedCallback signature for Trx state change events.

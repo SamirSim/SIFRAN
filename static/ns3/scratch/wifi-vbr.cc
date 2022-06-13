@@ -27,7 +27,6 @@
 #include "ns3/energy-source-container.h"
 #include "ns3/device-energy-model-container.h"
 #include "ns3/applications-module.h"
-#include "ns3/random-variable-stream.h"
 #include <iomanip>
 
 using namespace ns3;
@@ -36,23 +35,16 @@ using namespace std;
 double totalBytes = 0; // To compute success rate
 
 std::list<double> sizes; // List containing frame sizes
- 
-Ptr<NormalRandomVariable> x = CreateObject<NormalRandomVariable> ();
 
 NS_LOG_COMPONENT_DEFINE ("wifi-vbr");
 
 static void GenerateTraffic (Ptr<Socket> socket,
 							uint32_t pktCount, Time pktInterval, int index ) {
-  
 	if (pktCount > 0) {
-    int pktSize = int(x->GetValue());
-
-    /*
-    list<double>::iterator it = sizes.begin();
+		list<double>::iterator it = sizes.begin();
 		advance(it, index);
 		int pktSize = *it;
-    */
-    
+
 		socket->Send (Create<Packet> (pktSize));
 		
 		totalBytes += pktSize;
@@ -68,15 +60,13 @@ static void GenerateTraffic (Ptr<Socket> socket,
 int main (int argc, char *argv[]) {
   SeedManager::SetSeed (3);  // Changes seed from default of 1 to 3
   SeedManager::SetRun (2);  // Changes run number from default of 1 to 7
-  double simulationTime = 5; // Seconds
+  double simulationTime = 20; // Seconds
   uint32_t nWifi = 1; // Number of stations
   uint32_t MCS = 9; // Number of stations
   uint32_t txPower = 9; // Number of stations
   std::string trafficDirection = "upstream";
-  double fps = 30; // FPS is considered constant (30)
-  double mean = 5000;
-  double variance = 100;  
-  //std::string traceFile = "2Mbps.txt"; // Video trace file for stochastic traffic
+  double fps = 30.0; // FPS is considered constant (30)
+  std::string traceFile = "2Mbps.txt"; // Video trace file for stochastic traffic
   // Tx current draw in mA
   double txCurrent = 107;
   // Rx current draw in mA
@@ -131,8 +121,6 @@ int main (int argc, char *argv[]) {
   cmd.AddValue ("ccaBusyCurrent", "CCA Busy voltage in Volts", ccaBusyCurrent);
   cmd.AddValue ("nWifi", "Number of stations", nWifi);
   cmd.AddValue ("fps", "Frames per second", fps);
-  cmd.AddValue ("mean", "Normal variable mean", mean);
-  cmd.AddValue ("variance", "Normal variable variance", variance);
   cmd.AddValue ("trafficDirection", "Direction of traffic UL/DL", trafficDirection);
   cmd.AddValue ("latency", "Time a probing packets takes", latency);
   cmd.AddValue ("energyPower", "Energy consumption in Watts", energyPower);
@@ -151,31 +139,28 @@ int main (int argc, char *argv[]) {
   }
 
   double period = 1 / fps;
-  std::cout << period << std::endl;
 
   LogComponentEnableAll (LOG_PREFIX_FUNC);
   LogComponentEnableAll (LOG_PREFIX_NODE);
   LogComponentEnableAll (LOG_PREFIX_TIME);
 
-  /*
   CsvReader csv (traceFile);
 
   while (csv.FetchNextRow ()) {
-    if (csv.IsBlankRow ()) {
-      continue;
-    }
+	if (csv.IsBlankRow ()) {
+		continue;
+	}
 
-    // Read the trace and get the arrival information
-    double s;
-    bool ok = csv.GetValue (3, s);
-    sizes.push_back(s);
-      
-    if (!ok) {
-      // Handle error, then
-      continue;
-    }
+	// Read the trace and get the arrival information
+	double s;
+	bool ok = csv.GetValue (3, s);
+	sizes.push_back(s);
+		
+	if (!ok) {
+		// Handle error, then
+		continue;
+	}
   }
-  */
 
   YansWifiChannelHelper channel;
   channel.AddPropagationLoss ("ns3::"+propLoss);
@@ -391,9 +376,6 @@ int main (int argc, char *argv[]) {
   double min = 0.0;
   double max = 0.5;
 
-  x->SetAttribute ("Mean", DoubleValue (mean));
-  x->SetAttribute ("Variance", DoubleValue (variance));
-
   for (uint32_t index = 0; index < nWifi; ++index) {
 	if (agregation == false) {
 		// Disable A-MPDU & A-MSDU in each station
@@ -403,22 +385,22 @@ int main (int argc, char *argv[]) {
 		wifi_dev->GetMac ()->SetAttribute ("BE_MaxAmsduSize", UintegerValue (0));
 	}
 
-    Ptr<Socket> source = Socket::CreateSocket (wifiStaNodes.Get (index), tid);
-    //InetSocketAddress remote =  recvSocket;
-    //source->SetAllowBroadcast (true);
-    source->Connect (recvSocket);
-    
-    Time interPacketInterval = Seconds (period);
-    
-    Ptr<UniformRandomVariable> y = CreateObject<UniformRandomVariable> ();
-    y->SetAttribute ("Min", DoubleValue (min));
-    y->SetAttribute ("Max", DoubleValue (max));
+	Ptr<Socket> source = Socket::CreateSocket (wifiStaNodes.Get (index), tid);
+	//InetSocketAddress remote =  recvSocket;
+	//source->SetAllowBroadcast (true);
+	source->Connect (recvSocket);
+	
+	Time interPacketInterval = Seconds (period);
+	
+	Ptr<UniformRandomVariable> x = CreateObject<UniformRandomVariable> ();
+	x->SetAttribute ("Min", DoubleValue (min));
+	x->SetAttribute ("Max", DoubleValue (max));
 
-    double value = 1 + y->GetValue ();
+	double value = 1 + x->GetValue ();
 
-    Simulator::ScheduleWithContext (source->GetNode ()->GetId (),
-                    Seconds (value) , &GenerateTraffic,
-                    source, numPackets, interPacketInterval, 0);
+	Simulator::ScheduleWithContext (source->GetNode ()->GetId (),
+								  Seconds (value) , &GenerateTraffic,
+								  source, numPackets, interPacketInterval, 0);
   }
 
   DeviceEnergyModelContainer deviceModels;

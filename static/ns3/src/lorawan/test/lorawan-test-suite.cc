@@ -889,6 +889,7 @@ TimeOnAirTest::DoRun (void)
   // PayloadSize, SF, HeaderDisabled, CodingRate, Bandwidth, nPreambleSyms, crcEnabled, lowDROptimization
 
   // Starting parameters
+
   packet = Create<Packet> (10);
   LoraTxParameters txParams;
   txParams.sf = 7;
