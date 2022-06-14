@@ -270,7 +270,7 @@ def index():
 
                         elif os.environ['TRAFFICPROF'] == "periodic":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE"')
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
                                 with open("log.txt", "w") as text_file:
                                     text_file.write(output)
                                 _check_output(cd_ns3_dir+'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
