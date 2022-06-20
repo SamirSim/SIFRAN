@@ -503,9 +503,6 @@ WifiPhy::GetTypeId (void)
   return tid;
 }
 
-double per = 999;
-double cpt = 0;
-
 WifiPhy::WifiPhy ()
   : m_txMpduReferenceNumber (0xffffffff),
     m_rxMpduReferenceNumber (0xffffffff),
@@ -3304,16 +3301,7 @@ WifiPhy::GetReceptionStatus (Ptr<const WifiPsdu> psdu, Ptr<Event> event, uint16_
   SignalNoiseDbm signalNoise;
   signalNoise.signal = WToDbm (event->GetRxPowerW (band));
   signalNoise.noise = WToDbm (event->GetRxPowerW (band) / snrPer.snr);
-  double value = m_random->GetValue ();
-
-  //cpt = cpt + 1;
-  //if (cpt == per) {
-  //  cpt = 0;
-  //  value = -1;
-  //}
-  //std::cout << "CPT: " << cpt  <<" Random value: " << value << " PER: " << snrPer.per << std::endl;
-  
-  if (value > snrPer.per &&
+  if (m_random->GetValue () > snrPer.per &&
       !(m_postReceptionErrorModel && m_postReceptionErrorModel->IsCorrupt (psdu->GetPacket ()->Copy ())))
     {
       NS_LOG_DEBUG ("Reception succeeded: " << psdu);

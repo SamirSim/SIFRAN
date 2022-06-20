@@ -21,7 +21,6 @@
 #include "ns3/lora-phy.h"
 #include "ns3/log.h"
 #include "ns3/simulator.h"
-#include "ns3/uinteger.h"
 #include <algorithm>
 
 namespace ns3 {
@@ -37,12 +36,6 @@ LoraPhy::GetTypeId (void)
   static TypeId tid = TypeId ("ns3::LoraPhy")
     .SetParent<Object> ()
     .SetGroupName ("lorawan")
-    .AddAttribute ("CodingRate",
-                   "Coding Rate",
-                   UintegerValue (0),
-                   MakeUintegerAccessor (&LoraPhy::GetCodingRate,
-                                         &LoraPhy::SetCodingRate),
-                   MakeUintegerChecker<uint16_t> ())
     .AddTraceSource ("StartSending",
                      "Trace source indicating the PHY layer"
                      "has begun the sending process for a packet",
@@ -108,18 +101,6 @@ LoraPhy::GetChannel (void) const
   NS_LOG_FUNCTION_NOARGS ();
 
   return m_channel;
-}
-
-uint16_t
-LoraPhy::GetCodingRate (void) const
-{
-  return m_codingRate;
-}
-
-void
-LoraPhy::SetCodingRate (uint16_t codingRate)
-{
-  m_codingRate = codingRate;
 }
 
 Ptr<MobilityModel>
@@ -220,6 +201,7 @@ LoraPhy::GetOnAirTime (Ptr<Packet> packet, LoraTxParameters txParams)
   NS_LOG_DEBUG ("tPreamble = " << tPreamble);
   NS_LOG_DEBUG ("tPayload = " << tPayload);
   NS_LOG_DEBUG ("Total time = " << tPreamble + tPayload);
+  std::cout << "Total time = " << tPreamble + tPayload << std::endl;
 
   // Compute and return the total packet on-air time
   return Seconds (tPreamble + tPayload);

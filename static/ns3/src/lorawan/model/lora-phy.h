@@ -104,8 +104,6 @@ public:
    */
   typedef Callback<void, Ptr<const Packet> > TxFinishedCallback;
 
-   uint8_t m_codingRate = 1;
-
   /**
    * Start receiving a packet.
    *
@@ -220,8 +218,6 @@ public:
    */
   Ptr<LoraChannel> GetChannel (void) const;
 
-  uint16_t GetCodingRate (void) const;
-
   /**
    * Get the NetDevice associated to this PHY.
    *
@@ -235,8 +231,6 @@ public:
    * \param device The NetDevice this PHY will reference as its owner.
    */
   void SetDevice (Ptr<NetDevice> device);
-
-  virtual void SetCodingRate (uint16_t codingRate);
 
   /**
    * Compute the symbol time from SF and BW.

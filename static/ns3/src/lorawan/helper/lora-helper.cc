@@ -57,7 +57,6 @@ NS_LOG_COMPONENT_DEFINE ("LoraHelper");
 
         // Create the PHY
         Ptr<LoraPhy> phy = phyHelper.Create (node, device);
-        
         NS_ASSERT (phy != 0);
         device->SetPhy (phy);
         NS_LOG_DEBUG ("Done creating the PHY");

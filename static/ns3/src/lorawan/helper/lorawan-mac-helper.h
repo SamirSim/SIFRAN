@@ -109,7 +109,7 @@ public:
    * SF12 -> DR0
    */
   static std::vector<int> SetSpreadingFactorsUp (NodeContainer endDevices, NodeContainer gateways,
-                                                 Ptr<LoraChannel> channel, double SF, uint8_t codingRate, bool crc, std::string trafficType);
+                                                 Ptr<LoraChannel> channel, double SF);
   /**
    * Set up the end device's data rates according to the given distribution.
    */

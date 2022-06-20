@@ -105,13 +105,13 @@
             </div>  
             <div class="row mb-2">
                 <div class="col-lg-7 col-sm-12">
-                    Radio Environment
+                    Propagation Loss Model
                 </div>
                 <div class="col-lg-5 col-sm-12">
-                    : {{ session['radio_environment'] }}
+                    : {{ session['propagation_loss_model'] }}
                 </div>
             </div>  
-        {% if session['network'] == 'Wi-Fi 802.11ac' or session['network'] == 'Wi-Fi 802.11ax' %}         
+        {% if session['network'] != 'LoRaWAN' %}         
             <div class="row mb-2">
                 <div class="col-7">
                     MCS
@@ -168,7 +168,7 @@
                 : {{ session['cca_busy_current'] }} mA
                 </div>
             </div>
-        {% elif session['network'] == 'LoRaWAN' %}   
+        {% else %}   
             <div class="row mb-2">
                 <div class="col-7">
                     Cyclic Redundacy Check
@@ -179,18 +179,18 @@
             </div>  
             <div class="row mb-2">
                 <div class="col-7">
-                    Type of Traffic
+                    Low Data Rate Optimization
                 </div>
                 <div class="col-5">
-                    : {{ session['confirmed_traffic'] }}
+                    : {{ session['low_data_rate_optimization'] }}
                 </div>
-            </div> 
+            </div>  
             <div class="row mb-2">
                 <div class="col-7">
-                    Coding Rate
+                    Implicit Header Mode
                 </div>
                 <div class="col-5">
-                    : {{ session['coding_rate'] }}
+                    : {{ session['implicit_header_mode'] }}
                 </div>
             </div>  
             <div class="row mb-2">
@@ -241,64 +241,7 @@
                 : {{ session['sleep_current'] }} mA
                 </div>
             </div>
-        {% elif session['network'] == '6LoWPAN' %}  
-        <div class="row mb-2">
-            <div class="col-7">
-                Min BA
-            </div>
-            <div class="col-5">
-                : {{ session['min_BE'] }}
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-7">
-                Max BE
-            </div>
-            <div class="col-5">
-            : {{ session['max_BE'] }}
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-7">
-                Max Frame Retries
-            </div>
-            <div class="col-5">
-                : {{ session['max_frame_retries'] }}
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-7">
-                CSMA Backoffs
-            </div>
-            <div class="col-5">
-               : {{ session['csma_backoffs'] }} mA
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-7">
-                Tx current draw
-            </div>
-            <div class="col-5">
-               : {{ session['tx_current'] }} mA
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-7">
-                Rx current draw
-            </div>
-            <div class="col-5">
-            : {{ session['rx_current'] }} mA
-            </div>
-        </div> 
-        <div class="row mb-2">
-            <div class="col-7">
-                Idle current
-            </div>
-            <div class="col-5">
-            : {{ session['idle_current'] }} mA
-            </div>
-        </div>
-        {% endif %} 
+        {% endif %}    
             <div class="row mb-2">
                 <div class="col-7">
                     Voltage
@@ -371,32 +314,6 @@
             {% endif %}        
                 </div>
             </div> 
-            <div class="row mb-2">
-                <div class="col-7">
-                   Success Rate Scalability
-                </div>
-                <div class="col-5">
-                    : <a target="_blank" style="color:DodgerBlue;" href="{{'../static/img/'+jResults['path']+'-success-rate.png'}}">Link</a>
-                </div>
-            </div> 
-            {% if session['network'] != 'LoRaWAN' %}   
-            <div class="row mb-2">
-                <div class="col-7">
-                   Battery Lifetime Scalability
-                </div>
-                <div class="col-5">
-                    : <a target="_blank" style="color:DodgerBlue;" href="{{'../static/img/'+jResults['path']+'-battery-lifetime.png'}}">Link</a>
-                </div>
-            </div> 
-            <div class="row mb-2">
-                <div class="col-7">
-                   Packet Latency Scalability
-                </div>
-                <div class="col-5">
-                    : <a target="_blank" style="color:DodgerBlue;" href="{{'../static/img/'+jResults['path']+'-latency.png'}}">Link</a>
-                </div>
-            </div> 
-            {% endif %} 
         </div>    
     </div>
 {% endblock content %}

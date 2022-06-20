@@ -99,10 +99,6 @@ public:
    */
   void CloseSecondReceiveWindow (void);
 
-  void SetCodingRate (uint8_t codingRate);
-
-  void SetCrc (bool crc);
-
   /////////////////////////
   // Getters and Setters //
   /////////////////////////

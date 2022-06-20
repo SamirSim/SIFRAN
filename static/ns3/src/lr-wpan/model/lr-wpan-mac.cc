@@ -170,7 +170,7 @@ LrWpanMac::LrWpanMac ()
   m_macLIFSPeriod = 40;
   m_macSIFSPeriod = 12;
 
-  m_macBeaconOrder = 1;
+  m_macBeaconOrder = 15;
   m_macSuperframeOrder = 15;
   m_macTransactionPersistanceTime = 500; //0x01F5
   m_macAutoRequest = true;
@@ -566,7 +566,6 @@ LrWpanMac::MlmeStartRequest (MlmeStartRequestParams params)
 
 
       m_macBeaconOrder = params.m_bcnOrd;
-      //std::cout << m_macBeaconOrder << std::endl;
       if (m_macBeaconOrder == 15)
         {
           //Non-beacon enabled PAN
@@ -1452,7 +1451,6 @@ void
 LrWpanMac::AckWaitTimeout (void)
 {
   NS_LOG_FUNCTION (this);
-  NS_LOG_DEBUG ("Preparing retransmission");
 
   // TODO: If we are a PAN coordinator and this was an indirect transmission,
   //       we will not initiate a retransmission. Instead we wait for the data
@@ -1463,7 +1461,6 @@ LrWpanMac::AckWaitTimeout (void)
     }
   else
     {
-      //std::cout << "here " << std::endl;
       SetLrWpanMacState (MAC_CSMA);
     }
 }
@@ -1481,7 +1478,7 @@ bool
 LrWpanMac::PrepareRetransmission (void)
 {
   NS_LOG_FUNCTION (this);
-  //std::cout << "FRAME RETRIES " << (int) m_macMaxFrameRetries << std::endl;
+
   if (m_retransmission >= m_macMaxFrameRetries)
     {
       // Maximum number of retransmissions has been reached.
@@ -1697,7 +1694,6 @@ void
 LrWpanMac::SetLrWpanMacState (LrWpanMacState macState)
 {
   NS_LOG_FUNCTION (this << "mac state = " << macState);
-  NS_LOG_DEBUG ("mac state = " << macState);
 
   McpsDataConfirmParams confirmParams;
 
