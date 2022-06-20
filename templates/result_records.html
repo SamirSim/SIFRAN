@@ -102,16 +102,16 @@
                 <div class="col-lg-5 col-sm-12">
                     : {{ user_record['parameters']['propagation_delay_model'] }}
                 </div>
-            </div>  
+            </div>
             <div class="row mb-2">
                 <div class="col-lg-7 col-sm-12">
-                    Propagation Loss Model
+                    Radio Environment
                 </div>
                 <div class="col-lg-5 col-sm-12">
-                    : {{ user_record['parameters']['propagation_loss_model'] }}
+                    : {{ user_record['parameters']['radio_environment'] }}
                 </div>
             </div>  
-        {% if user_record['parameters']['network'] != 'LoRaWAN' %}        
+        {% if user_record['parameters']['network'] == 'Wi-Fi 802.11ac' or user_record['parameters']['network'] == 'Wi-Fi 802.11ax' or user_record['parameters']['network'] == 'Wi-Fi 802.11ah' %}        
             <div class="row mb-2">
                 <div class="col-7">
                     MCS
@@ -176,7 +176,7 @@
                 : {{ user_record['parameters']['sleep_current'] }} mJ
                 </div>
             </div> 
-        {% else %}   
+        {% elif user_record['parameters']['network'] == 'LoRaWAN' %}   
             <div class="row mb-2">
                 <div class="col-7">
                     Cyclic Redundacy Check
@@ -187,18 +187,18 @@
             </div>  
             <div class="row mb-2">
                 <div class="col-7">
-                    Low Data Rate Optimization
+                    Type of Traffic
                 </div>
                 <div class="col-5">
-                    : {{ user_record['parameters']['low_data_rate_optimization'] }}
+                    : {{ session['confirmed_traffic'] }}
                 </div>
-            </div>  
+            </div> 
             <div class="row mb-2">
                 <div class="col-7">
-                    Implicit Header Mode
+                    Coding Rate
                 </div>
                 <div class="col-5">
-                    : {{ user_record['parameters']['implicit_header_mode'] }}
+                    : {{ user_record['parameters']['coding_rate'] }}
                 </div>
             </div>  
             <div class="row mb-2">
@@ -217,6 +217,63 @@
                     : {{ user_record['parameters']['sf'] }}
                 </div>
             </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                    Tx current draw
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['tx_current'] }} w
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Rx current draw
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['rx_current'] }} w
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7">
+                    Idle current draw
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['idle_current'] }} mJ
+                </div>
+            </div>  
+        {% elif user_record['parameters']['network'] == '6LoWPAN' %}   
+            <div class="row mb-2">
+                <div class="col-7">
+                    Minimum BE
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['min_BE'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                    Maximum BE
+                </div>
+                <div class="col-5">
+                    : {{ session['max_BE'] }}
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                    CSMA Backoffs
+                </div>
+                <div class="col-5">
+                    : {{ user_record['parameters']['csma_backoffs'] }}
+                </div>
+            </div>  
+            <div class="row mb-2">
+                <div class="col-7">
+                    Maximum Frame Retries
+                </div>
+                <div class="col-5">
+                : {{ user_record['parameters']['max_frame_retries'] }} KHz
+                </div>
+            </div>   
             <div class="row mb-2">
                 <div class="col-7">
                     Tx current draw
@@ -314,6 +371,32 @@
             {% endif %}        
                 </div>
             </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Success Rate Scalability
+                </div>
+                <div class="col-5">
+                    : <a target="_blank" style="color:DodgerBlue;" href="{{'../static/img/'+user_record['path']+'-success-rate.png'}}">Link</a>
+                </div>
+            </div> 
+            {% if session['network'] != 'LoRaWAN' %}   
+            <div class="row mb-2">
+                <div class="col-7">
+                   Battery Lifetime Scalability
+                </div>
+                <div class="col-5">
+                    : <a target="_blank" style="color:DodgerBlue;" href="{{'../static/img/'+user_record['path']+'-battery-lifetime.png'}}">Link</a>
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Packet Latency Scalability
+                </div>
+                <div class="col-5">
+                    : <a target="_blank" style="color:DodgerBlue;" href="{{'static/img/'+user_record['path']+'-latency.png'}}">Link</a>
+                </div>
+            </div> 
+            {% endif %} 
         </div>    
     </div>
 {% endblock content %}
