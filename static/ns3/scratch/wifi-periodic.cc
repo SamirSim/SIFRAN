@@ -80,7 +80,7 @@ int main (int argc, char *argv[]) {
   // Delay propagation model
   std::string propDelay = "ConstantSpeedPropagationDelayModel";
   // Radio environment
-  std::string radioEnvironment = "Rural";
+  std::string radioEnvironment = "Urban";
   // Number of spatial streams
   int spatialStreams = 3; 
 
