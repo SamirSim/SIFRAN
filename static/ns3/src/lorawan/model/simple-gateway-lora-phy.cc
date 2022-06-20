@@ -45,6 +45,9 @@ SimpleGatewayLoraPhy::GetTypeId (void)
   return tid;
 }
 
+double cpt = 0;
+double per = 10;
+
 SimpleGatewayLoraPhy::SimpleGatewayLoraPhy ()
 {
   NS_LOG_FUNCTION_NOARGS ();
@@ -150,7 +153,7 @@ SimpleGatewayLoraPhy::StartReceive (Ptr<Packet> packet, double rxPowerDbm, uint8
 
   // Cycle over the receive paths to check availability to receive the packet
   std::list<Ptr<SimpleGatewayLoraPhy::ReceptionPath>>::iterator it;
-
+  cpt = cpt + 1;
   for (it = m_receptionPaths.begin (); it != m_receptionPaths.end (); ++it)
     {
       Ptr<SimpleGatewayLoraPhy::ReceptionPath> currentPath = *it;
@@ -163,8 +166,20 @@ SimpleGatewayLoraPhy::StartReceive (Ptr<Packet> packet, double rxPowerDbm, uint8
           // for that spreading factor
           double sensitivity = SimpleGatewayLoraPhy::sensitivity[unsigned (sf) - 7];
 
-          if (rxPowerDbm < sensitivity) // Packet arrived below sensitivity
+          Ptr<UniformRandomVariable> x = CreateObject<UniformRandomVariable> ();
+          double value = x->GetValue (); 
+          
+          //if (cpt == per) {
+          //  cpt = 0;
+          //  value = 1;
+          //}
+
+          //std::cout << "CPT: " << cpt  <<" Random value: " << value << " RxPowerDbm: " << rxPowerDbm << "Sensitivity: " << sensitivity << std::endl;
+        
+          //if (rxPowerDbm < sensitivity || value == 1) // Packet arrived below sensitivity
+          if (rxPowerDbm < sensitivity)
             {
+              //std::cout << "HEREEE" << std::endl;
               NS_LOG_INFO ("Dropping packet reception of packet with sf = "
                            << unsigned (sf) << " because under the sensitivity of " << sensitivity
                            << " dBm");
@@ -184,6 +199,7 @@ SimpleGatewayLoraPhy::StartReceive (Ptr<Packet> packet, double rxPowerDbm, uint8
             }
           else // We have sufficient sensitivity to start receiving
             {
+              //std::cout << "HEREEE2" << std::endl;
               NS_LOG_INFO ("Scheduling reception of a packet, "
                            << "occupying one demodulator");
 

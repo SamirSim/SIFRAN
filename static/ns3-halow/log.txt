@@ -1,0 +1,221 @@
+,,m_wifiPhy->GetChannelWidth () 42
+>>m_wifiPhy->GetChannelWidth () 4
+00:00:00:00:00:0a GetSupportedRates 
+00:00:00:00:00:02, receive 0
+,,m_wifiPhy->GetChannelWidth () 22
+,,m_wifiPhy->GetChannelWidth () 22
+00:00:00:00:00:0a GetSupportedRates 
+,,m_wifiPhy->GetChannelWidth () 22
+00:00:00:00:00:0a GetSupportedRates 
+00:00:00:00:00:06, receive 0
+,,m_wifiPhy->GetChannelWidth () 22
+00:00:00:00:00:09, receive 0
+,,m_wifiPhy->GetChannelWidth () 22
+,,m_wifiPhy->GetChannelWidth () 22
+00:00:00:00:00:0a GetSupportedRates 
+00:00:00:00:00:07, receive 0
+,,m_wifiPhy->GetChannelWidth () 22
+,,m_wifiPhy->GetChannelWidth () 22
+00:00:00:00:00:0a GetSupportedRates 
+00:00:00:00:00:04, receive 0
+,,m_wifiPhy->GetChannelWidth () 22
+,,m_wifiPhy->GetChannelWidth () 22
+00:00:00:00:00:0a GetSupportedRates 
+00:00:00:00:00:03, receive 0
+,,m_wifiPhy->GetChannelWidth () 22
+,,m_wifiPhy->GetChannelWidth () 22
+00:00:00:00:00:0a GetSupportedRates 
+,,m_wifiPhy->GetChannelWidth () 22
+00:00:00:00:00:0a GetSupportedRates 
+00:00:00:00:00:01, receive 0
+,,m_wifiPhy->GetChannelWidth () 22
+00:00:00:00:00:05, receive 0
+,,m_wifiPhy->GetChannelWidth () 22
+,,m_wifiPhy->GetChannelWidth () 22
+00:00:00:00:00:0a GetSupportedRates 
+00:00:00:00:00:08, receive 0
+,,m_wifiPhy->GetChannelWidth () 22
+1.05446s 0 UdpEchoClientApplication:Send(): At time 1.05446s client=192.168.0.1 sent 50 bytes to 192.168.0.10 port 10
+1.08077s 9 UdpEchoServerApplication:HandleRead(): At time 1.08077s server=192.168.0.10 received 50 bytes from 192.168.0.1 port 49153
+1.08077s 9 UdpEchoServerApplication:HandleRead(): At time 1.08077s server=192.168.0.10 sent 50 bytes to 192.168.0.1 port 49153
+1.13862s 0 UdpEchoClientApplication:HandleRead(): At time 1.13862s client=192.168.0.1 received 50 bytes from 192.168.0.10 port 10
+2.17212s 6 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 82 Time: 2.17212
+2.1726s 5 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 83 Time: 2.1726
+2.20666s 9 PacketSink:HandleRead(): At time 2.20666s packet sink received 23 bytes from 192.168.0.6 port 49153 total Rx 23 bytes
+2.21269s 9 PacketSink:HandleRead(): At time 2.21269s packet sink received 23 bytes from 192.168.0.7 port 49153 total Rx 46 bytes
+2.21802s 7 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 87 Time: 2.21802
+2.30437s 9 PacketSink:HandleRead(): At time 2.30437s packet sink received 23 bytes from 192.168.0.8 port 49153 total Rx 69 bytes
+2.33178s 1 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 91 Time: 2.33178
+2.36041s 4 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 93 Time: 2.36041
+2.37919s 8 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 94 Time: 2.37919
+2.41073s 9 PacketSink:HandleRead(): At time 2.41073s packet sink received 23 bytes from 192.168.0.2 port 49153 total Rx 92 bytes
+2.4163s 9 PacketSink:HandleRead(): At time 2.4163s packet sink received 23 bytes from 192.168.0.5 port 49153 total Rx 115 bytes
+2.41837s 9 PacketSink:HandleRead(): At time 2.41837s packet sink received 23 bytes from 192.168.0.9 port 49153 total Rx 138 bytes
+2.43612s 3 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 99 Time: 2.43612
+2.4572s 9 PacketSink:HandleRead(): At time 2.4572s packet sink received 23 bytes from 192.168.0.4 port 49153 total Rx 161 bytes
+2.85237s 2 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 109 Time: 2.85237
+2.8668s 9 PacketSink:HandleRead(): At time 2.8668s packet sink received 23 bytes from 192.168.0.3 port 49153 total Rx 184 bytes
+3.05446s 0 UdpEchoClientApplication:Send(): At time 3.05446s client=192.168.0.1 sent 50 bytes to 192.168.0.10 port 10
+3.07164s 9 UdpEchoServerApplication:HandleRead(): At time 3.07164s server=192.168.0.10 received 50 bytes from 192.168.0.1 port 49153
+3.07164s 9 UdpEchoServerApplication:HandleRead(): At time 3.07164s server=192.168.0.10 sent 50 bytes to 192.168.0.1 port 49153
+3.07753s 0 UdpEchoClientApplication:HandleRead(): At time 3.07753s client=192.168.0.1 received 50 bytes from 192.168.0.10 port 10
+3.17212s 6 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 120 Time: 3.17212
+3.1726s 5 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 121 Time: 3.1726
+3.21802s 7 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 123 Time: 3.21802
+3.23244s 9 PacketSink:HandleRead(): At time 3.23244s packet sink received 23 bytes from 192.168.0.6 port 49153 total Rx 207 bytes
+3.23483s 9 PacketSink:HandleRead(): At time 3.23483s packet sink received 23 bytes from 192.168.0.8 port 49153 total Rx 230 bytes
+3.23706s 9 PacketSink:HandleRead(): At time 3.23706s packet sink received 23 bytes from 192.168.0.7 port 49153 total Rx 253 bytes
+3.33178s 1 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 130 Time: 3.33178
+3.3327s 9 PacketSink:HandleRead(): At time 3.3327s packet sink received 23 bytes from 192.168.0.2 port 49153 total Rx 276 bytes
+3.36041s 4 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 132 Time: 3.36041
+3.37919s 8 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 133 Time: 3.37919
+3.43612s 3 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 136 Time: 3.43612
+3.4418s 9 PacketSink:HandleRead(): At time 3.4418s packet sink received 23 bytes from 192.168.0.5 port 49153 total Rx 299 bytes
+3.44388s 9 PacketSink:HandleRead(): At time 3.44388s packet sink received 23 bytes from 192.168.0.9 port 49153 total Rx 322 bytes
+3.4812s 9 PacketSink:HandleRead(): At time 3.4812s packet sink received 23 bytes from 192.168.0.4 port 49153 total Rx 345 bytes
+3.85237s 2 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 148 Time: 3.85237
+3.8908s 9 PacketSink:HandleRead(): At time 3.8908s packet sink received 23 bytes from 192.168.0.3 port 49153 total Rx 368 bytes
+4.17212s 6 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 156 Time: 4.17212
+4.1726s 5 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 157 Time: 4.1726
+4.21802s 7 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 159 Time: 4.21802
+4.25455s 9 PacketSink:HandleRead(): At time 4.25455s packet sink received 23 bytes from 192.168.0.8 port 49153 total Rx 391 bytes
+4.25689s 9 PacketSink:HandleRead(): At time 4.25689s packet sink received 23 bytes from 192.168.0.6 port 49153 total Rx 414 bytes
+4.2609s 9 PacketSink:HandleRead(): At time 4.2609s packet sink received 23 bytes from 192.168.0.7 port 49153 total Rx 437 bytes
+4.33178s 1 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 165 Time: 4.33178
+4.35237s 9 PacketSink:HandleRead(): At time 4.35237s packet sink received 23 bytes from 192.168.0.2 port 49153 total Rx 460 bytes
+4.36041s 4 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 168 Time: 4.36041
+4.36411s 9 PacketSink:HandleRead(): At time 4.36411s packet sink received 23 bytes from 192.168.0.5 port 49153 total Rx 483 bytes
+4.37919s 8 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 170 Time: 4.37919
+4.43612s 3 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 172 Time: 4.43612
+4.46487s 9 PacketSink:HandleRead(): At time 4.46487s packet sink received 23 bytes from 192.168.0.9 port 49153 total Rx 506 bytes
+4.5052s 9 PacketSink:HandleRead(): At time 4.5052s packet sink received 23 bytes from 192.168.0.4 port 49153 total Rx 529 bytes
+4.85237s 2 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 183 Time: 4.85237
+4.9148s 9 PacketSink:HandleRead(): At time 4.9148s packet sink received 23 bytes from 192.168.0.3 port 49153 total Rx 552 bytes
+5.05446s 0 UdpEchoClientApplication:Send(): At time 5.05446s client=192.168.0.1 sent 50 bytes to 192.168.0.10 port 10
+5.11964s 9 UdpEchoServerApplication:HandleRead(): At time 5.11964s server=192.168.0.10 received 50 bytes from 192.168.0.1 port 49153
+5.11964s 9 UdpEchoServerApplication:HandleRead(): At time 5.11964s server=192.168.0.10 sent 50 bytes to 192.168.0.1 port 49153
+5.12553s 0 UdpEchoClientApplication:HandleRead(): At time 5.12553s client=192.168.0.1 received 50 bytes from 192.168.0.10 port 10
+5.17212s 6 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 195 Time: 5.17212
+5.1726s 5 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 196 Time: 5.1726
+5.17672s 9 PacketSink:HandleRead(): At time 5.17672s packet sink received 23 bytes from 192.168.0.6 port 49153 total Rx 575 bytes
+5.18307s 9 PacketSink:HandleRead(): At time 5.18307s packet sink received 23 bytes from 192.168.0.7 port 49153 total Rx 598 bytes
+5.21802s 7 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 199 Time: 5.21802
+5.27752s 9 PacketSink:HandleRead(): At time 5.27752s packet sink received 23 bytes from 192.168.0.8 port 49153 total Rx 621 bytes
+5.33178s 1 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 204 Time: 5.33178
+5.36041s 4 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 205 Time: 5.36041
+5.37919s 8 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 207 Time: 5.37919
+5.38132s 9 PacketSink:HandleRead(): At time 5.38132s packet sink received 23 bytes from 192.168.0.2 port 49153 total Rx 644 bytes
+5.3872s 9 PacketSink:HandleRead(): At time 5.3872s packet sink received 23 bytes from 192.168.0.9 port 49153 total Rx 667 bytes
+5.38937s 9 PacketSink:HandleRead(): At time 5.38937s packet sink received 23 bytes from 192.168.0.5 port 49153 total Rx 690 bytes
+5.43612s 3 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 212 Time: 5.43612
+5.43656s 9 PacketSink:HandleRead(): At time 5.43656s packet sink received 23 bytes from 192.168.0.4 port 49153 total Rx 713 bytes
+5.85237s 2 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 222 Time: 5.85237
+5.85281s 9 PacketSink:HandleRead(): At time 5.85281s packet sink received 23 bytes from 192.168.0.3 port 49153 total Rx 736 bytes
+6.17212s 6 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 230 Time: 6.17212
+6.1726s 5 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 231 Time: 6.1726
+6.20041s 9 PacketSink:HandleRead(): At time 6.20041s packet sink received 23 bytes from 192.168.0.6 port 49153 total Rx 759 bytes
+6.2065s 9 PacketSink:HandleRead(): At time 6.2065s packet sink received 23 bytes from 192.168.0.7 port 49153 total Rx 782 bytes
+6.21802s 7 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 235 Time: 6.21802
+6.29797s 9 PacketSink:HandleRead(): At time 6.29797s packet sink received 23 bytes from 192.168.0.8 port 49153 total Rx 805 bytes
+6.33178s 1 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 239 Time: 6.33178
+6.36041s 4 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 241 Time: 6.36041
+6.37919s 8 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 242 Time: 6.37919
+6.40444s 9 PacketSink:HandleRead(): At time 6.40444s packet sink received 23 bytes from 192.168.0.2 port 49153 total Rx 828 bytes
+6.41021s 9 PacketSink:HandleRead(): At time 6.41021s packet sink received 23 bytes from 192.168.0.5 port 49153 total Rx 851 bytes
+6.41234s 9 PacketSink:HandleRead(): At time 6.41234s packet sink received 23 bytes from 192.168.0.9 port 49153 total Rx 874 bytes
+6.43612s 3 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 247 Time: 6.43612
+6.4508s 9 PacketSink:HandleRead(): At time 6.4508s packet sink received 23 bytes from 192.168.0.4 port 49153 total Rx 897 bytes
+6.85237s 2 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 257 Time: 6.85237
+6.8604s 9 PacketSink:HandleRead(): At time 6.8604s packet sink received 23 bytes from 192.168.0.3 port 49153 total Rx 920 bytes
+7.05446s 0 UdpEchoClientApplication:Send(): At time 7.05446s client=192.168.0.1 sent 50 bytes to 192.168.0.10 port 10
+7.06524s 9 UdpEchoServerApplication:HandleRead(): At time 7.06524s server=192.168.0.10 received 50 bytes from 192.168.0.1 port 49153
+7.06524s 9 UdpEchoServerApplication:HandleRead(): At time 7.06524s server=192.168.0.10 sent 50 bytes to 192.168.0.1 port 49153
+7.07113s 0 UdpEchoClientApplication:HandleRead(): At time 7.07113s client=192.168.0.1 received 50 bytes from 192.168.0.10 port 10
+7.17212s 6 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 269 Time: 7.17212
+7.1726s 5 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 270 Time: 7.1726
+7.21802s 7 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 271 Time: 7.21802
+7.22343s 9 PacketSink:HandleRead(): At time 7.22343s packet sink received 23 bytes from 192.168.0.8 port 49153 total Rx 943 bytes
+7.2254s 9 PacketSink:HandleRead(): At time 7.2254s packet sink received 23 bytes from 192.168.0.6 port 49153 total Rx 966 bytes
+7.22926s 9 PacketSink:HandleRead(): At time 7.22926s packet sink received 23 bytes from 192.168.0.7 port 49153 total Rx 989 bytes
+7.33178s 1 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 278 Time: 7.33178
+7.36041s 4 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 279 Time: 7.36041
+7.37919s 8 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 281 Time: 7.37919
+7.42895s 9 PacketSink:HandleRead(): At time 7.42895s packet sink received 23 bytes from 192.168.0.2 port 49153 total Rx 1012 bytes
+7.43488s 9 PacketSink:HandleRead(): At time 7.43488s packet sink received 23 bytes from 192.168.0.5 port 49153 total Rx 1035 bytes
+7.43612s 3 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 285 Time: 7.43612
+7.43691s 9 PacketSink:HandleRead(): At time 7.43691s packet sink received 23 bytes from 192.168.0.9 port 49153 total Rx 1058 bytes
+7.4748s 9 PacketSink:HandleRead(): At time 7.4748s packet sink received 23 bytes from 192.168.0.4 port 49153 total Rx 1081 bytes
+7.85237s 2 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 296 Time: 7.85237
+7.8844s 9 PacketSink:HandleRead(): At time 7.8844s packet sink received 23 bytes from 192.168.0.3 port 49153 total Rx 1104 bytes
+8.17212s 6 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 304 Time: 8.17212
+8.1726s 5 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 305 Time: 8.1726
+8.21802s 7 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 307 Time: 8.21802
+8.24815s 9 PacketSink:HandleRead(): At time 8.24815s packet sink received 23 bytes from 192.168.0.8 port 49153 total Rx 1127 bytes
+8.25043s 9 PacketSink:HandleRead(): At time 8.25043s packet sink received 23 bytes from 192.168.0.6 port 49153 total Rx 1150 bytes
+8.25424s 9 PacketSink:HandleRead(): At time 8.25424s packet sink received 23 bytes from 192.168.0.7 port 49153 total Rx 1173 bytes
+8.33178s 1 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 313 Time: 8.33178
+8.34597s 9 PacketSink:HandleRead(): At time 8.34597s packet sink received 23 bytes from 192.168.0.2 port 49153 total Rx 1196 bytes
+8.36041s 4 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 316 Time: 8.36041
+8.36085s 9 PacketSink:HandleRead(): At time 8.36085s packet sink received 23 bytes from 192.168.0.5 port 49153 total Rx 1219 bytes
+8.37919s 8 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 318 Time: 8.37919
+8.43612s 3 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 320 Time: 8.43612
+8.45826s 9 PacketSink:HandleRead(): At time 8.45826s packet sink received 23 bytes from 192.168.0.9 port 49153 total Rx 1242 bytes
+8.4988s 9 PacketSink:HandleRead(): At time 8.4988s packet sink received 23 bytes from 192.168.0.4 port 49153 total Rx 1265 bytes
+8.85237s 2 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 331 Time: 8.85237
+8.9084s 9 PacketSink:HandleRead(): At time 8.9084s packet sink received 23 bytes from 192.168.0.3 port 49153 total Rx 1288 bytes
+9.05446s 0 UdpEchoClientApplication:Send(): At time 9.05446s client=192.168.0.1 sent 50 bytes to 192.168.0.10 port 10
+9.11324s 9 UdpEchoServerApplication:HandleRead(): At time 9.11324s server=192.168.0.10 received 50 bytes from 192.168.0.1 port 49153
+9.11324s 9 UdpEchoServerApplication:HandleRead(): At time 9.11324s server=192.168.0.10 sent 50 bytes to 192.168.0.1 port 49153
+9.11913s 0 UdpEchoClientApplication:HandleRead(): At time 9.11913s client=192.168.0.1 received 50 bytes from 192.168.0.10 port 10
+9.17212s 6 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 343 Time: 9.17212
+9.1726s 5 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 344 Time: 9.1726
+9.17304s 9 PacketSink:HandleRead(): At time 9.17304s packet sink received 23 bytes from 192.168.0.6 port 49153 total Rx 1311 bytes
+9.17615s 9 PacketSink:HandleRead(): At time 9.17615s packet sink received 23 bytes from 192.168.0.7 port 49153 total Rx 1334 bytes
+9.21802s 7 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 348 Time: 9.21802
+9.27164s 9 PacketSink:HandleRead(): At time 9.27164s packet sink received 23 bytes from 192.168.0.8 port 49153 total Rx 1357 bytes
+9.33178s 1 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 352 Time: 9.33178
+9.36041s 4 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 353 Time: 9.36041
+9.37476s 9 PacketSink:HandleRead(): At time 9.37476s packet sink received 23 bytes from 192.168.0.2 port 49153 total Rx 1380 bytes
+9.37919s 8 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 356 Time: 9.37919
+9.38074s 9 PacketSink:HandleRead(): At time 9.38074s packet sink received 23 bytes from 192.168.0.9 port 49153 total Rx 1403 bytes
+9.38277s 9 PacketSink:HandleRead(): At time 9.38277s packet sink received 23 bytes from 192.168.0.5 port 49153 total Rx 1426 bytes
+9.43612s 3 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 360 Time: 9.43612
+9.5228s 9 PacketSink:HandleRead(): At time 9.5228s packet sink received 23 bytes from 192.168.0.4 port 49153 total Rx 1449 bytes
+9.85237s 2 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 370 Time: 9.85237
+9.9324s 9 PacketSink:HandleRead(): At time 9.9324s packet sink received 23 bytes from 192.168.0.3 port 49153 total Rx 1472 bytes
+10.1721s 6 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 378 Time: 10.1721
+10.1726s 5 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 379 Time: 10.1726
+10.1939s 9 PacketSink:HandleRead(): At time 10.1939s packet sink received 23 bytes from 192.168.0.6 port 49153 total Rx 1495 bytes
+10.2004s 9 PacketSink:HandleRead(): At time 10.2004s packet sink received 23 bytes from 192.168.0.7 port 49153 total Rx 1518 bytes
+10.218s 7 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 383 Time: 10.218
+10.2916s 9 PacketSink:HandleRead(): At time 10.2916s packet sink received 23 bytes from 192.168.0.8 port 49153 total Rx 1541 bytes
+10.3318s 1 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 387 Time: 10.3318
+10.3604s 4 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 389 Time: 10.3604
+10.3792s 8 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 390 Time: 10.3792
+10.3981s 9 PacketSink:HandleRead(): At time 10.3981s packet sink received 23 bytes from 192.168.0.2 port 49153 total Rx 1564 bytes
+10.4039s 9 PacketSink:HandleRead(): At time 10.4039s packet sink received 23 bytes from 192.168.0.9 port 49153 total Rx 1587 bytes
+10.4059s 9 PacketSink:HandleRead(): At time 10.4059s packet sink received 23 bytes from 192.168.0.5 port 49153 total Rx 1610 bytes
+10.4361s 3 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 395 Time: 10.4361
+10.4444s 9 PacketSink:HandleRead(): At time 10.4444s packet sink received 23 bytes from 192.168.0.4 port 49153 total Rx 1633 bytes
+10.8524s 2 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 405 Time: 10.8524
+10.854s 9 PacketSink:HandleRead(): At time 10.854s packet sink received 23 bytes from 192.168.0.3 port 49153 total Rx 1656 bytes
+11.0545s 0 UdpEchoClientApplication:Send(): At time 11.0545s client=192.168.0.1 sent 50 bytes to 192.168.0.10 port 10
+11.0588s 9 UdpEchoServerApplication:HandleRead(): At time 11.0588s server=192.168.0.10 received 50 bytes from 192.168.0.1 port 49153
+11.0588s 9 UdpEchoServerApplication:HandleRead(): At time 11.0588s server=192.168.0.10 sent 50 bytes to 192.168.0.1 port 49153
+11.0647s 0 UdpEchoClientApplication:HandleRead(): At time 11.0647s client=192.168.0.1 received 50 bytes from 192.168.0.10 port 10
+11.1721s 6 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 417 Time: 11.1721
+11.1726s 5 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 418 Time: 11.1726
+11.2172s 9 PacketSink:HandleRead(): At time 11.2172s packet sink received 23 bytes from 192.168.0.6 port 49153 total Rx 1679 bytes
+11.218s 7 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 421 Time: 11.218
+11.2192s 9 PacketSink:HandleRead(): At time 11.2192s packet sink received 23 bytes from 192.168.0.8 port 49153 total Rx 1702 bytes
+11.2229s 9 PacketSink:HandleRead(): At time 11.2229s packet sink received 23 bytes from 192.168.0.7 port 49153 total Rx 1725 bytes
+11.3318s 1 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 426 Time: 11.3318
+11.3604s 4 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 427 Time: 11.3604
+11.3792s 8 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 429 Time: 11.3792
+11.4228s 9 PacketSink:HandleRead(): At time 11.4228s packet sink received 23 bytes from 192.168.0.2 port 49153 total Rx 1748 bytes
+11.4286s 9 PacketSink:HandleRead(): At time 11.4286s packet sink received 23 bytes from 192.168.0.9 port 49153 total Rx 1771 bytes
+11.4307s 9 PacketSink:HandleRead(): At time 11.4307s packet sink received 23 bytes from 192.168.0.5 port 49153 total Rx 1794 bytes
+11.4361s 3 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 434 Time: 11.4361
+11.4684s 9 PacketSink:HandleRead(): At time 11.4684s packet sink received 23 bytes from 192.168.0.4 port 49153 total Rx 1817 bytes
+11.8524s 2 UdpClient:Send(): TraceDelay TX 23 bytes to 192.168.0.10 Uid: 444 Time: 11.8524
+11.878s 9 PacketSink:HandleRead(): At time 11.878s packet sink received 23 bytes from 192.168.0.3 port 49153 total Rx 1840 bytes

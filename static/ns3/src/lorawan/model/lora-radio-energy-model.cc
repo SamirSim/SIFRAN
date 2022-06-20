@@ -269,8 +269,6 @@ LoraRadioEnergyModel::ChangeState (int newState)
       // some debug message
       NS_LOG_DEBUG ("LoraRadioEnergyModel:Total energy consumption is " <<
                     m_totalEnergyConsumption << "J");
-      std::cout << "LoraRadioEnergyModel:Total energy consumption is " <<
-                    m_totalEnergyConsumption << "J" << std::endl;
     }
 
   m_isSupersededChangeState = (m_nPendingChangeState > 1);

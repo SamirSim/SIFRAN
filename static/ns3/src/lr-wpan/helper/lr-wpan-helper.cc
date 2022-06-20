@@ -27,6 +27,9 @@
 #include <ns3/single-model-spectrum-channel.h>
 #include <ns3/multi-model-spectrum-channel.h>
 #include <ns3/propagation-loss-model.h>
+#include "ns3/cost231-propagation-loss-model.h"
+#include "ns3/okumura-hata-propagation-loss-model.h"
+#include "ns3/hybrid-buildings-propagation-loss-model.h"
 #include <ns3/propagation-delay-model.h>
 #include <ns3/log.h>
 #include "ns3/names.h"
@@ -67,8 +70,8 @@ LrWpanHelper::LrWpanHelper (void)
 {
   m_channel = CreateObject<SingleModelSpectrumChannel> ();
 
-  Ptr<LogDistancePropagationLossModel> lossModel = CreateObject<LogDistancePropagationLossModel> ();
-  m_channel->AddPropagationLossModel (lossModel);
+  //Ptr<LogDistancePropagationLossModel> lossModel = CreateObject<LogDistancePropagationLossModel> ();
+  //m_channel->AddPropagationLossModel (lossModel);
 
   Ptr<ConstantSpeedPropagationDelayModel> delayModel = CreateObject<ConstantSpeedPropagationDelayModel> ();
   m_channel->SetPropagationDelayModel (delayModel);
@@ -230,17 +233,37 @@ LrWpanHelper::AssignStreams (NetDeviceContainer c, int64_t stream)
 }
 
 void
-LrWpanHelper::AssociateToPan (NetDeviceContainer c, uint16_t panId)
+LrWpanHelper::AssociateToPan (NetDeviceContainer c, uint16_t panId, uint8_t max_BE, uint8_t min_BE, uint8_t csma_backoffs, uint8_t maxFrameRetries, std::string radioEnvironment)
 {
   NetDeviceContainer devices;
   uint16_t id = 1;
   uint8_t idBuf[2];
+
+  if (radioEnvironment == "Suburban") {
+    Ptr<LogDistancePropagationLossModel> propModel = CreateObject<LogDistancePropagationLossModel> ();
+    m_channel->AddPropagationLossModel (propModel);
+  } else if (radioEnvironment == "Urban") {
+    Ptr<Cost231PropagationLossModel> propModel = CreateObject<Cost231PropagationLossModel> ();
+    m_channel->AddPropagationLossModel (propModel);
+  } else if (radioEnvironment == "Rural") {
+    Ptr<OkumuraHataPropagationLossModel> propModel = CreateObject<OkumuraHataPropagationLossModel> ();
+    m_channel->AddPropagationLossModel (propModel);
+  } else if (radioEnvironment == "Indoor") {
+    Ptr<HybridBuildingsPropagationLossModel> propModel = CreateObject<HybridBuildingsPropagationLossModel> ();
+    m_channel->AddPropagationLossModel (propModel);
+  }
 
   for (NetDeviceContainer::Iterator i = c.Begin (); i != c.End (); i++)
     {
       Ptr<LrWpanNetDevice> device = DynamicCast<LrWpanNetDevice> (*i);
       if (device)
         {
+          Ptr<LrWpanCsmaCa> m_csmaca = CreateObject<LrWpanCsmaCa> ();
+          //std::cout << "Setting parameters MAXBE" << std::endl;
+          //m_csmaca->SetMacMaxBE(max_BE);
+          //m_csmaca->SetMacMinBE(min_BE);
+          //m_csmaca->SetMacMaxCSMABackoffs(csma_backoffs);
+
           idBuf[0] = (id >> 8) & 0xff;
           idBuf[1] = (id >> 0) & 0xff;
           Mac16Address address;
@@ -248,6 +271,11 @@ LrWpanHelper::AssociateToPan (NetDeviceContainer c, uint16_t panId)
 
           device->GetMac ()->SetPanId (panId);
           device->GetMac ()->SetShortAddress (address);
+          device->GetMac ()->SetMacMaxFrameRetries(maxFrameRetries);
+          device->GetCsmaCa () -> SetMacMaxBE(max_BE);
+          device->GetCsmaCa () -> SetMacMinBE(min_BE);
+          device->GetCsmaCa () -> SetMacMaxCSMABackoffs(csma_backoffs);
+          //device->GetMac ()->SetCsmaCa(m_csmaca);
           id++;
         }
     }
@@ -296,7 +324,7 @@ LrWpanHelper::AssociateToBeaconPan (NetDeviceContainer c, uint16_t panId, Mac16A
 
               Ptr<UniformRandomVariable> uniformRandomVariable = CreateObject<UniformRandomVariable> ();;
               Time jitter = Time (MilliSeconds (uniformRandomVariable->GetInteger (0, 10)));
-
+          
               Simulator::Schedule (jitter, &LrWpanMac::MlmeStartRequest,
                                               device->GetMac (), params);
             }

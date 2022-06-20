@@ -1,0 +1,39 @@
++0.000000000s 1 UdpEchoClientApplication:Send(): At time +0s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
++2.000000000s 1 UdpEchoClientApplication:Send(): At time +2s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
++2.023136000s 0 UdpEchoServerApplication:HandleRead(): At time +2.02314s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
++2.023136000s 0 UdpEchoServerApplication:HandleRead(): At time +2.02314s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
++2.028096000s 0 UdpEchoServerApplication:HandleRead(): At time +2.0281s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
++2.028096000s 0 UdpEchoServerApplication:HandleRead(): At time +2.0281s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
++2.033888000s 1 UdpEchoClientApplication:HandleRead(): At time +2.03389s client received 50 bytes from 2001:2::ff:fe00:1 port 10
++2.041088000s 1 UdpEchoClientApplication:HandleRead(): At time +2.04109s client received 50 bytes from 2001:2::ff:fe00:1 port 10
++4.000000000s 1 UdpEchoClientApplication:Send(): At time +4s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
++4.003776000s 0 UdpEchoServerApplication:HandleRead(): At time +4.00378s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
++4.003776000s 0 UdpEchoServerApplication:HandleRead(): At time +4.00378s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
++4.009568000s 1 UdpEchoClientApplication:HandleRead(): At time +4.00957s client received 50 bytes from 2001:2::ff:fe00:1 port 10
++4.049347085s 7 UdpClient:Send(): TraceDelay TX 1024 bytes to 2001:2::ff:fe00:1 Uid: 41 Time: +4.04935s
++4.142219545s 0 PacketSink:HandleRead(): At time +4.14222s packet sink received 1024 bytes from 2001:2::ff:fe00:8 port 49153 total Rx 1024 bytes
++6.000000000s 1 UdpEchoClientApplication:Send(): At time +6s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
++6.004096000s 0 UdpEchoServerApplication:HandleRead(): At time +6.0041s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
++6.004096000s 0 UdpEchoServerApplication:HandleRead(): At time +6.0041s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
++6.008928000s 1 UdpEchoClientApplication:HandleRead(): At time +6.00893s client received 50 bytes from 2001:2::ff:fe00:1 port 10
++6.621434974s 3 UdpClient:Send(): TraceDelay TX 1024 bytes to 2001:2::ff:fe00:1 Uid: 60 Time: +6.62143s
++6.703147618s 0 PacketSink:HandleRead(): At time +6.70315s packet sink received 1024 bytes from 2001:2::ff:fe00:4 port 49153 total Rx 2048 bytes
++6.931019805s 2 UdpClient:Send(): TraceDelay TX 1024 bytes to 2001:2::ff:fe00:1 Uid: 76 Time: +6.93102s
++7.016132817s 0 PacketSink:HandleRead(): At time +7.01613s packet sink received 1024 bytes from 2001:2::ff:fe00:3 port 49153 total Rx 3072 bytes
++7.211589864s 4 UdpClient:Send(): TraceDelay TX 1024 bytes to 2001:2::ff:fe00:1 Uid: 96 Time: +7.21159s
++7.295383290s 0 PacketSink:HandleRead(): At time +7.29538s packet sink received 1024 bytes from 2001:2::ff:fe00:5 port 49153 total Rx 4096 bytes
++7.514633490s 8 UdpClient:Send(): TraceDelay TX 1024 bytes to 2001:2::ff:fe00:1 Uid: 112 Time: +7.51463s
++7.594505835s 0 PacketSink:HandleRead(): At time +7.59451s packet sink received 1024 bytes from 2001:2::ff:fe00:9 port 49153 total Rx 5120 bytes
++7.682411938s 5 UdpClient:Send(): TraceDelay TX 1024 bytes to 2001:2::ff:fe00:1 Uid: 128 Time: +7.68241s
++7.767405433s 0 PacketSink:HandleRead(): At time +7.76741s packet sink received 1024 bytes from 2001:2::ff:fe00:6 port 49153 total Rx 6144 bytes
++8.000000000s 1 UdpEchoClientApplication:Send(): At time +8s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
++8.004096000s 0 UdpEchoServerApplication:HandleRead(): At time +8.0041s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
++8.004096000s 0 UdpEchoServerApplication:HandleRead(): At time +8.0041s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
++8.009568000s 1 UdpEchoClientApplication:HandleRead(): At time +8.00957s client received 50 bytes from 2001:2::ff:fe00:1 port 10
++8.259527720s 6 UdpClient:Send(): TraceDelay TX 1024 bytes to 2001:2::ff:fe00:1 Uid: 147 Time: +8.25953s
++8.344080019s 0 PacketSink:HandleRead(): At time +8.34408s packet sink received 1024 bytes from 2001:2::ff:fe00:7 port 49153 total Rx 7168 bytes
++10.000000000s 1 UdpEchoClientApplication:Send(): At time +10s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
++10.004736000s 0 UdpEchoServerApplication:HandleRead(): At time +10.0047s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
++10.004736000s 0 UdpEchoServerApplication:HandleRead(): At time +10.0047s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
++10.010208000s 1 UdpEchoClientApplication:HandleRead(): At time +10.0102s client received 50 bytes from 2001:2::ff:fe00:1 port 10
+End of simulation (20s) Total energy consumed by radio (Station) = 0.0613125J

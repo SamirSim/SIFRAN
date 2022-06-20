@@ -50,8 +50,10 @@ double
 NistErrorRateModel::GetBpskBer (double snr) const
 {
   NS_LOG_FUNCTION (this << snr);
+
   double z = std::sqrt (snr);
   double ber = 0.5 * erfc (z);
+  //std::cout << "SNR: " << snr << " Z: " << z << " Erfc: " << erfc (z) << " BER: " << ber <<std::endl;
   NS_LOG_INFO ("bpsk snr=" << snr << " ber=" << ber);
   return ber;
 }
@@ -177,6 +179,7 @@ NistErrorRateModel::CalculatePe (double p, uint8_t bValue) const
     {
       NS_ASSERT (false);
     }
+  //std::cout << "PE: " << pe << std::endl;
   return pe;
 }
 
@@ -220,6 +223,7 @@ double
 NistErrorRateModel::DoGetChunkSuccessRate (WifiMode mode, WifiTxVector txVector, double snr, uint64_t nbits) const
 {
   NS_LOG_FUNCTION (this << mode << snr << nbits);
+  //std::cout << mode << " " << snr << " " << nbits << std::endl;
   if (mode.GetModulationClass () == WIFI_MOD_CLASS_ERP_OFDM
       || mode.GetModulationClass () == WIFI_MOD_CLASS_OFDM
       || mode.GetModulationClass () == WIFI_MOD_CLASS_HT
@@ -228,7 +232,8 @@ NistErrorRateModel::DoGetChunkSuccessRate (WifiMode mode, WifiTxVector txVector,
     {
       if (mode.GetConstellationSize () == 2)
         {
-          return GetFecBpskBer (snr, nbits, GetBValue (mode.GetCodeRate ()));
+          double value = GetFecBpskBer (snr, nbits, GetBValue (mode.GetCodeRate ()));
+          return value;
         }
       else if (mode.GetConstellationSize () == 4)
         {
