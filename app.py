@@ -272,7 +272,7 @@ def index():
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
                                 #output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
                                 #output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
-                                print("result now: ")
+                                logging.debug("result now: ")
                                 output = _check_output(cd_ns3_dir +'./waf --jobs=2')
                                 with open("log.txt", "w") as text_file:
                                     text_file.write(output)
