@@ -117,8 +117,9 @@ PeriodicSenderHelper::InstallPriv (Ptr<Node> node) const
   app->SetInterval (interval);
   NS_LOG_DEBUG ("Created an application with interval = " <<
                 interval.GetHours () << " hours");
-
-  app->SetInitialDelay (Seconds (m_initialDelay->GetValue (0, interval.GetSeconds ())));
+  double value = m_initialDelay->GetValue (0, interval.GetSeconds ());
+  app->SetInitialDelay (Seconds (value));
+  //std::cout << "VALUE : " << value << std::endl;
   app->SetPacketSize (m_pktSize);
   if (m_pktSizeRV)
     {

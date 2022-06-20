@@ -140,7 +140,8 @@ void
 LrWpanCsmaCa::SetMacMaxBE (uint8_t macMaxBE)
 {
   NS_LOG_FUNCTION (this << macMaxBE);
-  m_macMinBE = macMaxBE;
+  //std::cout << "Set Mac Max BE" << std::endl;
+  m_macMaxBE = macMaxBE;
 }
 
 uint8_t
@@ -244,6 +245,7 @@ LrWpanCsmaCa::Start ()
 {
   NS_LOG_FUNCTION (this);
   m_NB = 0;
+  //std::cout << "MAX BE " << (int) m_macMaxBE << " " << (int) m_macMinBE << " " << (int) m_macMaxCSMABackoffs << std::endl;
   if (IsSlottedCsmaCa ())
     {
       // TODO: Check if the current PHY is using the Japanese band 950 Mhz:
@@ -532,6 +534,7 @@ LrWpanCsmaCa::PlmeCcaConfirm (LrWpanPhyEnumeration status)
               if (!m_lrWpanMacStateCallback.IsNull ())
                 {
                   NS_LOG_LOGIC ("Notifying MAC of Channel access failure");
+                  //std::cout << "SELSSA BOULEHNAK " << std::endl;
                   m_lrWpanMacStateCallback (CHANNEL_ACCESS_FAILURE);
                 }
               return;
@@ -539,6 +542,7 @@ LrWpanCsmaCa::PlmeCcaConfirm (LrWpanPhyEnumeration status)
           else
             {
               NS_LOG_DEBUG ("Perform another backoff; m_NB = " << static_cast<uint16_t> (m_NB));
+              //std::cout << "SELSSA NOT BOULEHNAK " << std::endl;
               m_randomBackoffEvent = Simulator::ScheduleNow (&LrWpanCsmaCa::RandomBackoffDelay, this); //Perform another backoff (step 2)
             }
         }

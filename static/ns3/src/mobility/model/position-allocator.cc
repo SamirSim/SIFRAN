@@ -604,6 +604,7 @@ UniformDiscPositionAllocator::GetNext (void) const
   x += m_x;
   y += m_y;
   NS_LOG_DEBUG ("Disc position x=" << x << ", y=" << y);
+  //std::cout << x << " " << y << " " << m_z << std::endl;
   return Vector (x, y, m_z);
 }
 

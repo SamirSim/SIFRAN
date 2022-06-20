@@ -54,8 +54,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
-
-
 @app.route('/login', methods = ['POST','GET'])
 def login():
     form = LoginForm()
@@ -167,8 +165,8 @@ def index():
             sf = form.sf.data
             session['sf'] = dict(form.sf.choices).get(sf)
             #In case of LoRaWAN manager chosen, for the moment set sf = 7
-            session['propagation_delay_model'] = dict(form.prop_delay.choices).get(form.prop_delay.data)
-            session['propagation_loss_model'] =  dict(form.prop_loss.choices).get(form.prop_loss.data)
+            #session['propagation_delay_model'] = dict(form.prop_delay.choices).get(form.prop_delay.data)
+            #session['propagation_loss_model'] =  dict(form.prop_loss.choices).get(form.prop_loss.data)
             session['cyclic_redundacy_check'] = form.cyclic_redundacy_check.data
             session['low_data_rate_optimization'] = form.low_data_rate_optimization.data
             session['implicit_header_mode'] = form.implicit_header_mode.data
@@ -266,7 +264,8 @@ def index():
 
                         elif os.environ['TRAFFICPROF'] == "periodic":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
+                                #output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --propLoss=$PROPLOSS --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
+                                output =  _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic 2> log.txt"')
                                 with open("log.txt", "w") as text_file:
                                     text_file.write(output)
                                 _check_output('cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
