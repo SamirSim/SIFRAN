@@ -271,7 +271,7 @@ def index():
                         elif os.environ['TRAFFICPROF'] == "periodic":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
                                 #output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
-                                output = _check_output(cd_ns3_dir +'./waf --run scratch/wifi-periodic')
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic"')
                                 print("OUTPUT: ", output)
                                 with open("log.txt", "w") as text_file:
                                     text_file.write(output)
@@ -301,6 +301,7 @@ def index():
                                 latency = _check_output('python3 static/ns3-halow/halow-scripts/get_latencies.py "static/ns3-halow/log-parsed.txt"')
                                 
                     except CalledProcessError as exception:
+                        print("output: ", output)
                         _log_file_content(f'{NS3_DIR}/log.txt')
                         _log_file_content(f'{NS3_DIR}/log-parsed.txt')
                         logging.error(exception.output)
