@@ -462,7 +462,7 @@ LorawanMacHelper::ApplyCommonSingleChannelConfigurations (Ptr<LorawanMac> lorawa
 
 std::vector<int>
 LorawanMacHelper::SetSpreadingFactorsUp (NodeContainer endDevices, NodeContainer gateways,
-                                         Ptr<LoraChannel> channel, double SF)
+                                         Ptr<LoraChannel> channel, double SF , uint8_t codingRate, bool crc, std::string trafficType)
 {
   NS_LOG_FUNCTION_NOARGS ();
 
@@ -477,6 +477,11 @@ LorawanMacHelper::SetSpreadingFactorsUp (NodeContainer endDevices, NodeContainer
       NS_ASSERT (loraNetDevice != 0);
       Ptr<ClassAEndDeviceLorawanMac> mac =
           loraNetDevice->GetMac ()->GetObject<ClassAEndDeviceLorawanMac> ();
+      mac->SetCodingRate(codingRate);
+      mac->SetCrc(crc);
+      if (trafficType == "Confirmed") mac->SetMType(LorawanMacHeader::CONFIRMED_DATA_UP);
+      else mac->SetMType(LorawanMacHeader::UNCONFIRMED_DATA_UP);
+
       NS_ASSERT (mac != 0);
 
       // Try computing the distance from each gateway and find the best one

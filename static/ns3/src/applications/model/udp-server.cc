@@ -166,6 +166,7 @@ void
 UdpServer::HandleRead (Ptr<Socket> socket)
 {
   NS_LOG_FUNCTION (this << socket);
+  std::cout << "HEERRE UDPSERVER" << std::endl;
   Ptr<Packet> packet;
   Address from;
   Address localAddress;
