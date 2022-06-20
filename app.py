@@ -301,7 +301,6 @@ def index():
                                 latency = _check_output('python3 static/ns3-halow/halow-scripts/get_latencies.py "static/ns3-halow/log-parsed.txt"')
                                 
                     except CalledProcessError as exception:
-                        print("output: ", output)
                         _log_file_content(f'{NS3_DIR}/log.txt')
                         _log_file_content(f'{NS3_DIR}/log-parsed.txt')
                         logging.error(exception.output)
