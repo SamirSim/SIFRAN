@@ -110,7 +110,7 @@ public:
    * \param c a set of nodes
    * \param panId the PAN Id
    */
-  void AssociateToPan (NetDeviceContainer c, uint16_t panId, uint8_t max_BE, uint8_t min_BE, uint8_t csma_backoffs, uint8_t maxFrameRetries, std::string propLoss);
+  void AssociateToPan (NetDeviceContainer c, uint16_t panId);
 
   /**
    * \brief Associate the nodes to the same PAN and initiate beacon enabled mode.

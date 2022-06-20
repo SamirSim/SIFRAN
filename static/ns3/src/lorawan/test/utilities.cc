@@ -96,9 +96,6 @@ InitializeNetwork (int nDevices, int nGateways)
 
   Ptr<LoraChannel> channel = CreateChannel ();
   double SF=0;
-  uint8_t codingRate = 1;
-  bool crc = 1;
-  std::string trafficType = "Unconfirmed";
 
   MobilityHelper mobility;
   mobility.SetPositionAllocator ("ns3::UniformDiscPositionAllocator",
@@ -111,7 +108,7 @@ InitializeNetwork (int nDevices, int nGateways)
 
   NodeContainer gateways = CreateGateways (nGateways, mobility, channel);
 
-  LorawanMacHelper ().SetSpreadingFactorsUp (endDevices, gateways, channel, SF, codingRate, crc, trafficType);
+  LorawanMacHelper ().SetSpreadingFactorsUp (endDevices, gateways, channel, SF);
 
   Ptr<Node> nsNode = CreateNetworkServer (endDevices, gateways);
 

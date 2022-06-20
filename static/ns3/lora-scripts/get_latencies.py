@@ -1,24 +1,10 @@
 import csv
-from operator import truediv
 import sys
 
 filepath = sys.argv[1]
 
 dict = []
-cpt = 0.0
-time = 0.0
 
-with open(filepath) as fp:
-   line = fp.readline()
-   while line:
-       words = line.split()
-       time += float(words[len(words)-1])
-       cpt = cpt + 1
-       line = fp.readline()
-
-print(time/cpt)
-
-"""
 with open(filepath) as fp:
    line = fp.readline()
    while line:
@@ -36,10 +22,6 @@ with open(filepath) as fp:
            for element in dict:
                if element["_id"] == id:
                    start = element["start"]
-                   stop = 1
                    break
-       if stop:
-            break
-print ("{:.4f}".format(end-start))
-"""
 
+print ("{:.4f}".format(end-start))

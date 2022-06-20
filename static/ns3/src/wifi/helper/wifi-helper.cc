@@ -157,7 +157,6 @@ WifiPhyHelper::SetErrorRateModel (std::string name,
                                   std::string n7, const AttributeValue &v7)
 {
   m_errorRateModel = ObjectFactory ();
-  std::cout << name << std::endl;
   m_errorRateModel.SetTypeId (name);
   m_errorRateModel.Set (n0, v0);
   m_errorRateModel.Set (n1, v1);

@@ -47,25 +47,13 @@
                         {{ form.traffic_profile.label(class="form-label") }}
                         {{ form.traffic_profile(class="form-select", id="traffic_profile") }}
                     </div>
-                    <div class="mb-3">
+                     <div class="mb-3">
                         {{ form.packet_size_wifi.label(class="form-label", id="lbl_packet_size_wifi") }}
                         {{ form.packet_size_wifi(class="form-control", id="packet_size_wifi", placeholder="Max 1500") }}
                     </div>
                     <div id="wifi_error">
                         <ul>
                     {% for error in form.packet_size_wifi.errors %}
-                            <li style="color:red;">{{ error }}</li>
-                            <div id="errorTest" style="width: 0; height: 0;"></div>
-                    {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="mb-3">
-                        {{ form.packet_size_6lowpan.label(class="form-label", id="lbl_packet_size_6lowpan") }}
-                        {{ form.packet_size_6lowpan(class="form-control", id="packet_size_6lowpan", placeholder="Max 1000") }}
-                    </div>
-                    <div id="sixlowpan_error">
-                        <ul>
-                    {% for error in form.packet_size_6lowpan.errors %}
                             <li style="color:red;">{{ error }}</li>
                             <div id="errorTest" style="width: 0; height: 0;"></div>
                     {% endfor %}
@@ -173,36 +161,20 @@
                         {{ form.prop_delay(class="form-select" ,id="prop_delay") }}
                     </div>
                     <div class='mb-3'>
-                        {{ form.radio_environment.label(class="form-label", id="lbl_radio_environment") }}
-                        {{ form.radio_environment(class="form-select" ,id="radio_environment") }}
+                        {{ form.prop_loss.label(class="form-label", id="lbl_prop_loss") }}
+                        {{ form.prop_loss(class="form-select" ,id="prop_loss") }}
                     </div>
                     <div class='mb-3'>
                         {{ form.cyclic_redundacy_check.label(class="form-label", id="lbl_cyclic_redundacy_check") }}
                         {{ form.cyclic_redundacy_check(class="form-select" ,id="cyclic_redundacy_check") }}
                     </div>
                     <div class="mb-3">
-                        {{ form.confirmed_traffic.label(class="form-label", id="lbl_confirmed_traffic") }}
-                        {{ form.confirmed_traffic(class="form-select" ,id="confirmed_traffic") }}
+                        {{ form.low_data_rate_optimization.label(class="form-label", id="lbl_low_data_rate_optimization") }}
+                        {{ form.low_data_rate_optimization(class="form-select" ,id="low_data_rate_optimization") }}
                     </div>
                     <div class="mb-3">
-                        {{ form.coding_rate.label(class="form-label", id="lbl_coding_rate") }}
-                        {{ form.coding_rate(class="form-select" ,id="coding_rate") }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.min_BE.label(class="form-label", id="lbl_min_BE") }}
-                        {{ form.min_BE(class="form-select" ,id="min_BE") }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.max_BE.label(class="form-label", id="lbl_max_BE") }}
-                        {{ form.max_BE(class="form-select" ,id="max_BE") }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.csma_backoffs.label(class="form-label", id="lbl_csma_backoffs") }}
-                        {{ form.csma_backoffs(class="form-select" ,id="csma_backoffs") }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.max_frame_retries.label(class="form-label", id="lbl_max_frame_retries") }}
-                        {{ form.max_frame_retries(class="form-select" ,id="max_frame_retries") }}
+                        {{ form.implicit_header_mode.label(class="form-label", id="lbl_implicit_header_mode") }}
+                        {{ form.implicit_header_mode(class="form-select" ,id="implicit_header_mode") }}
                     </div>
                      <div class="mb-3">
                         {{ form.mcs.label(class="form-label", id="lbl_mcs") }}

@@ -53,6 +53,7 @@ ClassAEndDeviceLorawanMac::ClassAEndDeviceLorawanMac () :
   m_rx1DrOffset (0)
 {
   NS_LOG_FUNCTION (this);
+
   // Void the two receiveWindow events
   m_closeFirstWindow = EventId ();
   m_closeFirstWindow.Cancel ();
@@ -65,18 +66,6 @@ ClassAEndDeviceLorawanMac::ClassAEndDeviceLorawanMac () :
 ClassAEndDeviceLorawanMac::~ClassAEndDeviceLorawanMac ()
 {
   NS_LOG_FUNCTION_NOARGS ();
-}
-
-void
-ClassAEndDeviceLorawanMac::SetCodingRate (uint8_t codingRate)
-{
-  m_codingRate = codingRate;
-}
-
-void
-ClassAEndDeviceLorawanMac::SetCrc (bool crc)
-{
-  m_crc = crc;
 }
 
 /////////////////////
@@ -108,7 +97,7 @@ ClassAEndDeviceLorawanMac::SendToPhy (Ptr<Packet> packetToSend)
   params.codingRate = m_codingRate;
   params.bandwidthHz = GetBandwidthFromDataRate (m_dataRate);
   params.nPreamble = m_nPreambleSymbols;
-  params.crcEnabled = m_crc;
+  params.crcEnabled = 1;
   params.lowDataRateOptimizationEnabled = LoraPhy::GetTSym (params) > MilliSeconds (16) ? true : false;
 
   // Wake up PHY layer and directly send the packet

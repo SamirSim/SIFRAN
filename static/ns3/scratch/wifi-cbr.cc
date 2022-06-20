@@ -46,13 +46,13 @@ void TotalEnergy (double oldValue, double totalEnergy) {
 int main (int argc, char *argv[]) {
   SeedManager::SetSeed (3);  // Changes seed from default of 1 to 3
   SeedManager::SetRun (2);  // Changes run number from default of 1 to 7
-  double simulationTime = 20; // Seconds
-  uint32_t nWifi = 2; // Number of stations
-  uint32_t MCS = 0; // Number of stations
+  double simulationTime = 5; // Seconds
+  uint32_t nWifi = 1; // Number of stations
+  uint32_t MCS = 9; // Number of stations
   uint32_t txPower = 9; // Number of stations
   std::string trafficDirection = "upstream";
   uint32_t payloadSize = 1024; 
-  std::string dataRate = "10";
+  std::string dataRate = "2";
 
   bool latency = true;
   bool energyPower = true;
@@ -63,7 +63,7 @@ int main (int argc, char *argv[]) {
 
   bool hiddenStations = 0;
 
-  double distance = 30.0; // Meters between AP and stations
+  double distance = 1.0; // Meters between AP and stations
   bool agregation = false; // Allow or not the packet agregation
   int channelWidth = 80; // BW Channel Width in MHz
   int sgi = 0; // Indicates whether Short Guard Interval is enabled or not (SGI==1 <==> GI=400ns)
@@ -151,7 +151,7 @@ int main (int argc, char *argv[]) {
     // Set the maximum wireless range to 5 meters in order to reproduce a hidden nodes scenario, i.e. the distance between hidden stations is larger than 5 meters
     Config::SetDefault ("ns3::RangePropagationLossModel::MaxRange", DoubleValue (distance));
 
-    channel.AddPropagationLoss ("ns3::RangePropagationLossModel"); //wireless range limited to (distance) meters! 
+    channel.AddPropagationLoss ("ns3::RangePropagationLossModel"); //wireless range limited to (distance) meters!
 
     positionAlloc->Add (Vector (distance, 0.0, 0.0));
     
@@ -438,8 +438,7 @@ int main (int argc, char *argv[]) {
   phy.SetPcapDataLinkType (WifiPhyHelper::DLT_IEEE802_11_RADIO);
   //std::string s = "cbr/"+std::to_string(nWifi)+"-"+dataRate+"-"+std::to_string(MCS)+"-"+std::to_string(payloadSize);
   //phy.EnableAsciiAll (ascii.CreateFileStream(s+".tr"));
-  std::string s = "trace";
-  phy.EnablePcap (s+".pcap", apDevice.Get(0), false, true);
+  //phy.EnablePcap (s+".pcap", apDevice.Get(0), false, true);
 
   Simulator::Stop (Seconds (simulationTime + 2));
   Simulator::Run ();
@@ -483,7 +482,11 @@ int main (int argc, char *argv[]) {
   else {
     for (uint32_t index = 0; index < sinkApplications.GetN (); ++index) {
       totalPacketsThrough += DynamicCast<PacketSink> (sinkApplications.Get (index))->GetTotalRx ();
+      throughput += ((totalPacketsThrough * 8) / ((simulationTime) * 1000000.0)); //Mbps
     }
+    std::cout << "Packet Throughput: " << throughput << std::endl;
+    double successRate =  (totalPacketsThrough / totalpacketsSent / nWifi) * 100;
+    std::cout << "Packet Delivery: " << successRate << std::endl; // %
   }
 
   if (energyRatio) {

@@ -370,11 +370,6 @@ protected:
   uint8_t m_codingRate;
 
   /**
-   * Whether the CRC is enabled or not.
-   */
-  bool m_crc;
-
-  /**
    * Whether or not the header is disabled for communications by this device.
    */
   bool m_headerDisabled;

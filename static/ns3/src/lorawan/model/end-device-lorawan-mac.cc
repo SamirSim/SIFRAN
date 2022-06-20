@@ -98,7 +98,7 @@ EndDeviceLorawanMac::GetTypeId (void)
                    MakeBooleanChecker ())
     .AddAttribute ("MType",
                    "Specify type of message will be sent by this ED.",
-                   EnumValue (LorawanMacHeader::CONFIRMED_DATA_UP),
+                   EnumValue (LorawanMacHeader::UNCONFIRMED_DATA_UP),
                    MakeEnumAccessor (&EndDeviceLorawanMac::m_mType),
                    MakeEnumChecker (LorawanMacHeader::UNCONFIRMED_DATA_UP,
                                     "Unconfirmed",
@@ -113,7 +113,7 @@ EndDeviceLorawanMac::EndDeviceLorawanMac ()
       m_maxNumbTx (8),
       m_dataRate (0),
       m_txPower (14),
-      //m_codingRate (2),
+      m_codingRate (1),
       // LoraWAN default
       m_headerDisabled (0),
       // LoraWAN default
@@ -125,7 +125,7 @@ EndDeviceLorawanMac::EndDeviceLorawanMac ()
       m_lastKnownLinkMargin (0),
       m_lastKnownGatewayCount (0),
       m_aggregatedDutyCycle (1),
-      m_mType (LorawanMacHeader::UNCONFIRMED_DATA_UP),
+      m_mType (LorawanMacHeader::CONFIRMED_DATA_UP),
       m_currentFCnt (0)
 {
   NS_LOG_FUNCTION (this);

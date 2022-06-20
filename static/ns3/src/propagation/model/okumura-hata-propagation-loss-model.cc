@@ -43,12 +43,12 @@ OkumuraHataPropagationLossModel::GetTypeId (void)
     .AddConstructor<OkumuraHataPropagationLossModel> ()
     .AddAttribute ("Frequency",
                    "The propagation frequency in Hz",
-                   DoubleValue (861e6),
+                   DoubleValue (2160e6),
                    MakeDoubleAccessor (&OkumuraHataPropagationLossModel::m_frequency),
                    MakeDoubleChecker<double> ())
     .AddAttribute ("Environment",
                    "Environment Scenario",
-                   EnumValue (OpenAreasEnvironment),
+                   EnumValue (UrbanEnvironment),
                    MakeEnumAccessor (&OkumuraHataPropagationLossModel::m_environment),
                    MakeEnumChecker (UrbanEnvironment, "Urban",
                                     SubUrbanEnvironment, "SubUrban",
@@ -141,7 +141,6 @@ OkumuraHataPropagationLossModel::GetLoss (Ptr<MobilityModel> a, Ptr<MobilityMode
 
       loss = 46.3 + (33.9 * log_f) - log_aHeight + (((44.9 - (6.55 * std::log10 (hb)) )) * std::log10 (dist)) - log_bHeight + C;
     }
-  //std::cout << "LOSS: " << loss << std::endl;
   return loss;
 }
 
@@ -150,7 +149,6 @@ OkumuraHataPropagationLossModel::DoCalcRxPower (double txPowerDbm,
 						Ptr<MobilityModel> a,
 						Ptr<MobilityModel> b) const
 {
-  //std::cout << "Attenuated signal: " << (txPowerDbm - GetLoss (a, b)) << std::endl;
   return (txPowerDbm - GetLoss (a, b));
 }
 

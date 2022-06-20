@@ -357,7 +357,6 @@ LrWpanPhy::StartRx (Ptr<SpectrumSignalParameters> spectrumRxParams)
     {
       // Drop the new packet.
       NS_LOG_DEBUG (this << " packet collision");
-      //std::cout << "Collision " << std::endl;
       m_phyRxDropTrace (p);
 
       // Check if we correctly received the old packet up to now.
@@ -693,9 +692,7 @@ LrWpanPhy::PlmeSetTRXStateRequest (LrWpanPhyEnumeration state)
   NS_ABORT_IF ( (state != IEEE_802_15_4_PHY_RX_ON)
                 && (state != IEEE_802_15_4_PHY_TRX_OFF)
                 && (state != IEEE_802_15_4_PHY_FORCE_TRX_OFF)
-                && (state != IEEE_802_15_4_PHY_TX_ON)
-                && (state != IEEE_802_15_4_PHY_TRX_START)
-                && (state != IEEE_802_15_4_PHY_TRX_SWITCHING));
+                && (state != IEEE_802_15_4_PHY_TX_ON) );
 
   NS_LOG_LOGIC ("Trying to set m_trxState from " << m_trxState << " to " << state);
   // this method always overrides previous state setting attempts
@@ -728,9 +725,7 @@ LrWpanPhy::PlmeSetTRXStateRequest (LrWpanPhyEnumeration state)
     }
 
   if ( ((state == IEEE_802_15_4_PHY_RX_ON)
-        || (state == IEEE_802_15_4_PHY_TRX_OFF)
-        || (state == IEEE_802_15_4_PHY_TRX_START)
-        || (state == IEEE_802_15_4_PHY_TRX_SWITCHING))
+        || (state == IEEE_802_15_4_PHY_TRX_OFF))
        && (m_trxState == IEEE_802_15_4_PHY_BUSY_TX) )
     {
       NS_LOG_DEBUG ("Phy is busy; setting state pending to " << state);
@@ -753,8 +748,7 @@ LrWpanPhy::PlmeSetTRXStateRequest (LrWpanPhyEnumeration state)
           m_trxStatePending = state;
           return;  // Send PlmeSetTRXStateConfirm later
         }
-      else if (m_trxState == IEEE_802_15_4_PHY_RX_ON || m_trxState == IEEE_802_15_4_PHY_TX_ON
-               || m_trxState == IEEE_802_15_4_PHY_TRX_SWITCHING || m_trxState == IEEE_802_15_4_PHY_TRX_START)
+      else if (m_trxState == IEEE_802_15_4_PHY_RX_ON || m_trxState == IEEE_802_15_4_PHY_TX_ON)
         {
           ChangeTrxState (IEEE_802_15_4_PHY_TRX_OFF);
           if (!m_plmeSetTRXStateConfirmCallback.IsNull ())
@@ -763,28 +757,6 @@ LrWpanPhy::PlmeSetTRXStateRequest (LrWpanPhyEnumeration state)
             }
           return;
         }
-    }
-
-  if (state == IEEE_802_15_4_PHY_TRX_SWITCHING)
-    {
-
-      ChangeTrxState (IEEE_802_15_4_PHY_TRX_SWITCHING);
-      if (!m_plmeSetTRXStateConfirmCallback.IsNull ())
-        {
-          m_plmeSetTRXStateConfirmCallback (state);
-        }
-      return;
-    }
-
-  if (state == IEEE_802_15_4_PHY_TRX_START)
-    {
-
-      ChangeTrxState (IEEE_802_15_4_PHY_TRX_START);
-      if (!m_plmeSetTRXStateConfirmCallback.IsNull ())
-        {
-          m_plmeSetTRXStateConfirmCallback (state);
-        }
-      return;
     }
 
   if (state == IEEE_802_15_4_PHY_TX_ON)
@@ -812,8 +784,6 @@ LrWpanPhy::PlmeSetTRXStateRequest (LrWpanPhyEnumeration state)
                 }
             }
 
-          ChangeTrxState (IEEE_802_15_4_PHY_TRX_SWITCHING);
-
           m_trxStatePending = IEEE_802_15_4_PHY_TX_ON;
 
           // Delay for turnaround time
@@ -833,8 +803,7 @@ LrWpanPhy::PlmeSetTRXStateRequest (LrWpanPhyEnumeration state)
             }
           return;
         }
-      else if (m_trxState == IEEE_802_15_4_PHY_TRX_OFF || m_trxState == IEEE_802_15_4_PHY_TRX_SWITCHING
-               || m_trxState == IEEE_802_15_4_PHY_TRX_START)
+      else if (m_trxState == IEEE_802_15_4_PHY_TRX_OFF)
         {
           ChangeTrxState (IEEE_802_15_4_PHY_TX_ON);
           if (!m_plmeSetTRXStateConfirmCallback.IsNull ())
@@ -880,10 +849,6 @@ LrWpanPhy::PlmeSetTRXStateRequest (LrWpanPhyEnumeration state)
     {
       if (m_trxState == IEEE_802_15_4_PHY_TX_ON || m_trxState == IEEE_802_15_4_PHY_TRX_OFF)
         {
-
-          ChangeTrxState (IEEE_802_15_4_PHY_TRX_SWITCHING);
-          m_trxStatePending = IEEE_802_15_4_PHY_RX_ON;
-
           // Turnaround delay
           // TODO: Does it really take aTurnaroundTime to switch the transceiver state,
           //       even when the transmitter is not busy? (6.9.1)
@@ -893,16 +858,7 @@ LrWpanPhy::PlmeSetTRXStateRequest (LrWpanPhyEnumeration state)
           m_setTRXState = Simulator::Schedule (setTime, &LrWpanPhy::EndSetTRXState, this);
           return;
         }
-      else if (m_trxState == IEEE_802_15_4_PHY_TRX_OFF || m_trxState == IEEE_802_15_4_PHY_TRX_SWITCHING
-               || m_trxState == IEEE_802_15_4_PHY_TRX_START)
-        {
-          if (!m_plmeSetTRXStateConfirmCallback.IsNull ())
-            {
-              m_plmeSetTRXStateConfirmCallback (IEEE_802_15_4_PHY_RX_ON);
-            }
-          return;
-        }
-        else if (m_trxState == IEEE_802_15_4_PHY_BUSY_RX)
+      else if (m_trxState == IEEE_802_15_4_PHY_BUSY_RX)
         {
           if (!m_plmeSetTRXStateConfirmCallback.IsNull ())
             {
@@ -1466,13 +1422,6 @@ LrWpanPhy::AssignStreams (int64_t stream)
   NS_LOG_FUNCTION (this);
   m_random->SetStream (stream);
   return 1;
-}
-
-void
-LrWpanPhy::HandleEnergyDepletion ()
-{
-  NS_LOG_LOGIC ("Transceiver is forced to be Off due to Energy Depletion!");
-  PlmeSetTRXStateRequest(IEEE_802_15_4_PHY_FORCE_TRX_OFF);
 }
 
 } // namespace ns3
