@@ -165,8 +165,8 @@ def index():
             sf = form.sf.data
             session['sf'] = dict(form.sf.choices).get(sf)
             #In case of LoRaWAN manager chosen, for the moment set sf = 7
-            #session['propagation_delay_model'] = dict(form.prop_delay.choices).get(form.prop_delay.data)
-            #session['propagation_loss_model'] =  dict(form.prop_loss.choices).get(form.prop_loss.data)
+            session['propagation_delay_model'] = dict(form.prop_delay.choices).get(form.prop_delay.data)
+            session['propagation_loss_model'] =  dict(form.prop_loss.choices).get(form.prop_loss.data)
             session['cyclic_redundacy_check'] = form.cyclic_redundacy_check.data
             session['low_data_rate_optimization'] = form.low_data_rate_optimization.data
             session['implicit_header_mode'] = form.implicit_header_mode.data
