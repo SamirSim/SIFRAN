@@ -1,7 +1,7 @@
 Waf: Entering directory `/home/lip/Bureau/SIFRAN/SIFRAN/static/ns3/build'
 Waf: Leaving directory `/home/lip/Bureau/SIFRAN/SIFRAN/static/ns3/build'
 Build commands will be stored in build/compile_commands.json
-'build' finished successfully (0.659s)
+'build' finished successfully (0.652s)
 At time +0s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
 At time +2s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
 At time +2.02314s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
