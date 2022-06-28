@@ -52,10 +52,14 @@ def find_program(program_name, env):
         if not getattr(obj, 'is_ns3_program', False):
             continue
 
+        # Fabien: This filtering is incompatible with the way our hosting cloud
+        # expose NS3 programs. We have decided to remove it.
+        #
+        #
         ## filter out programs not in the subtree starting at the launch dir
-        if not (obj.path.abspath().startswith(launch_dir)
-                or obj.path.get_bld().abspath().startswith(launch_dir)):
-            continue
+        #if not (obj.path.abspath().startswith(launch_dir)
+        #        or obj.path.get_bld().abspath().startswith(launch_dir)):
+        #    continue
         
         name1 = obj.name
         name2 = os.path.join(relpath(obj.path.abspath(), launch_dir), obj.name)
@@ -257,4 +261,3 @@ def uniquify_list(seq):
     """
     seen = set()
     return [ x for x in seq if x not in seen and not seen.add(x)]
-
