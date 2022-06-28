@@ -1,0 +1,12 @@
+At time +0s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +2s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +2.02314s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +2.0281s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +4s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +4.00378s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +6s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +6.0041s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +8s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +8.0041s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +10s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +10.0047s server received 50 bytes from 2001:2::ff:fe00:2 port 49153

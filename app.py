@@ -270,14 +270,14 @@ def index():
 
                         elif os.environ['TRAFFICPROF'] == "periodic":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE"')
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
                                 with open("log.txt", "w") as text_file:
-                                    text_file.write(output)
-                                _check_output(cd_ns3_dir +'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "static/ns3/log-parsed.txt";')
+                                   text_file.write(output)
+                                _check_output('cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
                                 latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
 
                             elif os.environ['NETWORK'] == "LoRaWAN":
-                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt"')
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt')
                                 #with open("log.txt", "w") as text_file:
                                    # text_file.write(output)
                                 output = output + "Energy consumption: " + _check_output(cd_ns3_dir+"cat log.txt | grep -e 'LoraRadioEnergyModel:Total energy consumption' | tail -1 | awk 'NF>1{print $NF}' | sed 's/J//g'")
@@ -286,10 +286,10 @@ def index():
                             
                             elif os.environ['NETWORK'] == "6LoWPAN":
                                 output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "6lowpan-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --packetSize=$PACKETSIZE --period=$LOADFREQ --min_BE=$MINBE --max_BE=$MAXBE --csma_backoffs=$CSMABACKOFFS --maxFrameRetries=$MAXFRAMERETRIES --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT 2> log.txt"')
-                                #with open("log.txt", "w") as text_file:
-                                 #   text_file.write(output)
-                                _check_output(cd_ns3_dir+'cat "log.txt" | grep -e "client sent 50 bytes" -e "server received 50 bytes from" > "log-parsed.txt";')
-                                latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "static/ns3/log-parsed.txt"')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                _check_output('cat "log.txt" | grep -e "client sent 50 bytes" -e "server received 50 bytes from" > "log-parsed.txt";')
+                                latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
                             
                             elif os.environ['NETWORK'] == "Wi-Fi HaLow":
                                 output = _check_output('cd static/ns3-halow; ./waf --jobs=2 --run "rca --rho=$DISTANCE --simulationTime=$SIMULATION_TIME --Nsta=$NUMDEVICES --payloadSize=$PACKETSIZE --trafficInterval=$LOADFREQ --mcs=$MCS --bandWidth=$BANDWIDTH --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT" 2> log.txt')
@@ -305,8 +305,8 @@ def index():
                         logging.error(exception.stderr)
                         raise exception
                     finally:
-                        pass
-                        #_check_output(cd_ns3_dir+'rm "log.txt"; rm "log-parsed.txt"')
+                        #pass
+                        _check_output('rm "log.txt"; rm "log-parsed.txt"')
 
                     return output, latency
             #Call NS-3 simulation by python shell script according network type
@@ -617,8 +617,8 @@ def explore(technology, densities):
             #os.environ['LOGFILEPARSED'] = "log-"+technology+"-"+str(use_case)+"-"+str(nb_devices)+"-"+str(packet_period)+"-parsed.txt"
 
             output = _check_output('cd static/ns3; ./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
-            _check_output('cd static/ns3; cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
-            latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "static/ns3/log-parsed.txt"')
+            _check_output('cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
+            latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
 
             #latency = subprocess.check_output('cd NS3-6LoWPAN; cat $LOGFILE | grep -e "UdpEchoClientApplication" -e "UdpEchoServerApplication" > $LOGFILEPARSED; python3 wifi-scripts/get_latencies.py $LOGFILEPARSED', shell=True, text=True,stderr=subprocess.DEVNULL)
             #subprocess.check_output('rm "log-wifi.txt"; rm "log-wifi-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
@@ -680,11 +680,13 @@ def explore(technology, densities):
     elif technology == "6LoWPAN":
         for nb_devices in densities:
             os.environ['NUMDEVICES'] = str(nb_devices)
-            os.environ['LOGFILE'] = "log-"+str(nb_devices)+".txt"
-            os.environ['LOGFILEPARSED'] = "log-"+str(nb_devices)+"-parsed.txt"
+            #os.environ['LOGFILE'] = "log-"+str(nb_devices)+".txt"
+            #os.environ['LOGFILEPARSED'] = "log-"+str(nb_devices)+"-parsed.txt"
 
-            output = _check_output('cd static/ns3; ./waf --jobs=2 --run "6lowpan-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --packetSize=$PACKETSIZE --period=$LOADFREQ --min_BE=$MINBE --max_BE=$MAXBE --csma_backoffs=$CSMABACKOFFS --maxFrameRetries=$MAXFRAMERETRIES --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT" 2> $LOGFILE')
-            latency = _check_output('cd static/ns3; cat $LOGFILE | grep -e "client sent 50 bytes" -e "server received 50 bytes from" > $LOGFILEPARSED; python3 wifi-scripts/get_latencies.py $LOGFILEPARSED')
+            output = _check_output('cd static/ns3; ./waf --jobs=2 --run "6lowpan-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --packetSize=$PACKETSIZE --period=$LOADFREQ --min_BE=$MINBE --max_BE=$MAXBE --csma_backoffs=$CSMABACKOFFS --maxFrameRetries=$MAXFRAMERETRIES --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT" 2> "log.txt"')
+            with open("log.txt", "w") as text_file:
+                text_file.write(output)
+            latency = _check_output('cat "log.txt" | grep -e "client sent 50 bytes" -e "server received 50 bytes from" > "log-parsed.txt"; python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
             #latency = subprocess.check_output('cd NS3-6LoWPAN; cat $LOGFILE | grep -e "UdpEchoClientApplication" -e "UdpEchoServerApplication" > $LOGFILEPARSED; python3 wifi-scripts/get_latencies.py $LOGFILEPARSED', shell=True, text=True,stderr=subprocess.DEVNULL)
             #subprocess.check_output('rm "log-6lowpan.txt"; rm "log-6lowpan-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
 

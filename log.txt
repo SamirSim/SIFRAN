@@ -1,9 +1,32 @@
 Waf: Entering directory `/home/lip/Bureau/SIFRAN/SIFRAN/static/ns3/build'
 Waf: Leaving directory `/home/lip/Bureau/SIFRAN/SIFRAN/static/ns3/build'
 Build commands will be stored in build/compile_commands.json
-'build' finished successfully (0.648s)
-ns3::NistErrorRateModel
-Total energy consumed by radio (Station): 0.04
-Battery lifetime: 72.53
-Throughput: 0.01
-Success rate: 100.00
+'build' finished successfully (0.659s)
+At time +0s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +2s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +2.02314s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +2.02314s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
+At time +2.0281s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +2.0281s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
+At time +2.03389s client received 50 bytes from 2001:2::ff:fe00:1 port 10
+At time +2.04109s client received 50 bytes from 2001:2::ff:fe00:1 port 10
+At time +4s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +4.00378s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +4.00378s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
+At time +4.00957s client received 50 bytes from 2001:2::ff:fe00:1 port 10
+At time +6s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +6.0041s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +6.0041s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
+At time +6.00893s client received 50 bytes from 2001:2::ff:fe00:1 port 10
+At time +8s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +8.0041s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +8.0041s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
+At time +8.00957s client received 50 bytes from 2001:2::ff:fe00:1 port 10
+At time +10s client sent 50 bytes to 2001:2::ff:fe00:1 port 10
+At time +10.0047s server received 50 bytes from 2001:2::ff:fe00:2 port 49153
+At time +10.0047s server sent 50 bytes to 2001:2::ff:fe00:2 port 49153
+At time +10.0102s client received 50 bytes from 2001:2::ff:fe00:1 port 10
+Total energy consumed by radio (Station): 0.0613125
+Battery lifetime: 48.9296
+Throughput: 0.00546875
+Success rate: 100
