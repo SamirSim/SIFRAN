@@ -277,11 +277,12 @@ def index():
                                 latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
 
                             elif os.environ['NETWORK'] == "LoRaWAN":
-                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt')
-                                #with open("log.txt", "w") as text_file:
-                                   # text_file.write(output)
-                                output = output + "Energy consumption: " + _check_output(cd_ns3_dir+"cat log.txt | grep -e 'LoraRadioEnergyModel:Total energy consumption' | tail -1 | awk 'NF>1{print $NF}' | sed 's/J//g'")
-                                latency = _check_output(cd_ns3_dir+'cat log.txt | grep -e "Total time" > log-parsed.txt; python3 lora-scripts/get_latencies.py log-parsed.txt')
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt"')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                output = output + "Energy consumption: " + _check_output('cat "log.txt" | grep -e "LoraRadioEnergyModel:Total energy consumption" | tail -1 | awk "NF>1{print $NF}" | sed "s/J//g"')
+                                _check_output("cat 'log.txt' | grep -e 'Total time' | tail -1 | awk '{print $NF}' > 'log-parsed.txt'")  
+                                #latency = _check_output('cat log.txt | grep -e "Total time" > log-parsed.txt; python3 lora-scripts/get_latencies.py log-parsed.txt')
                                 latency = _check_output('cat "log-parsed.txt"')
                             
                             elif os.environ['NETWORK'] == "6LoWPAN":
@@ -305,8 +306,8 @@ def index():
                         logging.error(exception.stderr)
                         raise exception
                     finally:
-                        #pass
-                        _check_output('rm "log.txt"; rm "log-parsed.txt"')
+                        pass
+                        #_check_output('rm "log.txt"; rm "log-parsed.txt"')
 
                     return output, latency
             #Call NS-3 simulation by python shell script according network type
@@ -655,9 +656,13 @@ def explore(technology, densities):
             #os.environ['LOGFILE'] = "log-"+technology+"-"+str(use_case)+"-"+str(nb_devices)+"-"+str(packet_period)+".txt"
             #os.environ['LOGFILEPARSED'] = "log-"+technology+"-"+str(use_case)+"-"+str(nb_devices)+"-"+str(packet_period)+"-parsed.txt"
 
-            output = _check_output('cd static/ns3; ./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT" 2> log.txt')
-            output = output + "Energy consumption: " + _check_output("cd static/ns3; cat log.txt | grep -e 'LoraRadioEnergyModel:Total energy consumption' | tail -1 | awk 'NF>1{print $NF}' | sed 's/J//g'")
-            latency = _check_output('cd static/ns3; cat log.txt | grep -e "Total time" > log-parsed.txt; python3 lora-scripts/get_latencies.py log-parsed.txt')
+            output = _check_output('cd static/ns3; ./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt"')
+            with open("log.txt", "w") as text_file:
+                text_file.write(output)
+            output = output + "Energy consumption: " + _check_output("cat log.txt | grep -e 'LoraRadioEnergyModel:Total energy consumption' | tail -1 | awk 'NF>1{print $NF}' | sed 's/J//g'")
+            _check_output("cat 'log.txt' | grep -e 'Total time' | tail -1 | awk '{print $NF}' > 'log-parsed.txt'")  
+            #latency = _check_output('cat log.txt | grep -e "Total time" > log-parsed.txt; python3 lora-scripts/get_latencies.py log-parsed.txt')
+            latency = _check_output('cat "log-parsed.txt"')
             #subprocess.check_output('rm "log-lora.txt"; rm "log-lora-parsed.txt"', shell=True, text=True,stderr=subprocess.DEVNULL)
 
             #throughput = 0

@@ -73,7 +73,7 @@ main (int argc, char *argv[]) {
   // Delay Propagation Delay
   std::string propDelay = "ConstantSpeedPropagationDelayModel";
   // Radio environment
-  std::string radioEnvironment = "Indoor";
+  std::string radioEnvironment = "Rural";
 
   bool energyRatio = true;
   bool successRate = false;
