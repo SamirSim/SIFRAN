@@ -24,7 +24,7 @@ def configure_auto_logging(force_debug=False):
 
 def _check_output(cmd: str, **kwargs) -> str:
     logging.debug(f'cmd: {cmd}')
-    output = subprocess.check_output(cmd, shell=True, text=True, stderr=subprocess.DEVNULL)
+    output = subprocess.check_output(cmd, shell=True, text=True)
     logging.debug(f'output: {output}')
     return output
 
