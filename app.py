@@ -274,7 +274,7 @@ def index():
                                 #with open("log.txt", "w") as text_file:
                                  #   text_file.write(output)
                                 _check_output(cd_ns3_dir +'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
-                                latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "static/ns3/log-parsed.txt"')
+                                latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
 
                             elif os.environ['NETWORK'] == "LoRaWAN":
                                 output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt"')
