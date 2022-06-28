@@ -1,8 +1,9 @@
 Waf: Entering directory `/home/lip/Bureau/SIFRAN/SIFRAN/static/ns3/build'
 Waf: Leaving directory `/home/lip/Bureau/SIFRAN/SIFRAN/static/ns3/build'
 Build commands will be stored in build/compile_commands.json
-'build' finished successfully (0.642s)
-Total energy consumed by radio (Station): 0.0604394
-Battery lifetime: 49.6365
-Throughput: 0.00234375
-Success rate: 100
+'build' finished successfully (0.648s)
+ns3::NistErrorRateModel
+Total energy consumed by radio (Station): 0.04
+Battery lifetime: 72.53
+Throughput: 0.01
+Success rate: 100.00
