@@ -606,6 +606,376 @@ def index():
     print("Messages error distance ="+messages_error[0])   
     return render_template("index.html", form=form, messages_error=messages_error)
 
+
+@app.route('/stackeo', methods=['POST'])
+def stackeo():
+    secret = request.json.get('secret-key')
+    if secret == "4a05a3bdd6c94bf5a94a4e6d3cb16822":
+        form = ScenarioForm()
+        messages_error = ["", ""]
+        valid = True
+        network = form.network.data
+        num_devices = form.num_devices.data
+        dist_devices_gateway = form.dist_devices_gateway.data
+        simulation_time = form.simulation_time.data
+        if num_devices < 1:
+            valid = False
+        if simulation_time < 5:
+            valid = False
+            messages_error[1] = "Simulation time must be > 5."
+        if network != "LoRaWAN" and network != "Wi-Fi HaLow":
+            packet_size = form.packet_size_wifi.data
+            print("Packet size, WiFi = " + str(packet_size), type(packet_size))
+            if packet_size < 1 or packet_size > 1500:
+                valid = False
+                print("Wi-Fi-False")
+            if dist_devices_gateway < 0 or dist_devices_gateway > 50:
+                valid = False
+                messages_error[0] = "Distance must be between 0 and 50 meters."
+        else:
+            packet_size = form.packet_size_lorawan.data
+            print("Packet size, LoRaWAN = " + str(packet_size), type(packet_size))
+            if packet_size < 1 or packet_size > 230:
+                valid = False
+                print("LoRaWAN-False")
+            if dist_devices_gateway < 0 or dist_devices_gateway > 8000:
+                valid = False
+                messages_error[0] = "Distance must be between 0 and 8000 meters."
+        if form.validate() or valid:
+            session['network'] = form.network.data
+            session['traffic_direction'] = form.traffic_dir.data
+            session['traffic_profile'] = form.traffic_profile.data
+            session['packet_size'] = str(packet_size)
+            session['load_freq'] = str(form.load_freq.data)
+            session['mean_load'] = str(form.mean_load.data)
+            session['fps'] = str(form.fps.data)
+            session['mean'] = str(form.mean.data)
+            session['variance'] = str(form.variance.data)
+            session['number_devices'] = str(form.num_devices.data)
+            session['distance_devices_gateway'] = str(form.dist_devices_gateway.data)
+            session['simulation_time'] = str(form.simulation_time.data)
+            session['hidden_devices'] = dict(form.hidden_devices.choices).get(form.hidden_devices.data)
+            session['sf'] = dict(form.sf.choices).get(form.sf.data)
+            session['propagation_delay_model'] = dict(form.prop_delay.choices).get(form.prop_delay.data)
+            session['radio_environment'] = str(dict(form.radio_environment.choices).get(form.radio_environment.data))
+            session['cyclic_redundacy_check'] = str(form.cyclic_redundacy_check.data)
+            session['coding_rate'] = str(form.coding_rate.data)
+            session['confirmed_traffic'] = str(form.confirmed_traffic.data)
+            session['min_BE'] = str(form.min_BE.data)
+            session['max_BE'] = str(form.max_BE.data)
+            session['max_frame_retries'] = str(form.max_frame_retries.data)
+            session['csma_backoffs'] = str(form.csma_backoffs.data)
+            session['mcs'] = str(dict(form.mcs.choices).get(form.mcs.data))
+            session['bandwidth'] = str(form.bandwidth.data)
+            session['spatial_streams'] = str(form.spatial_streams.data)
+            session['tx_current'] = str(form.tx_current.data)
+            session['rx_current'] = str(form.rx_current.data)
+            session['idle_current'] = str(form.idle_current.data)
+            session['cca_busy_current'] = str(form.cca_busy_current.data)
+            session['sleep_current'] = str(form.sleep_current.data)
+            session['voltage'] = str(form.voltage.data)
+            session['battery_capacity'] = str(form.battery_cap.data)
+
+            # Copy all varaibles to environment varaibles to use in the shell script
+            os.environ['NETWORK'] = session['network']
+            os.environ['DISTANCE'] = session['distance_devices_gateway']
+            os.environ['SIMULATION_TIME'] = session['simulation_time']
+            os.environ['NUMDEVICES'] = session['number_devices']
+            os.environ['TRAFFICDIR'] = session['traffic_direction']
+            os.environ['TRAFFICPROF'] = session['traffic_profile']
+            os.environ['PACKETSIZE'] = session['packet_size']
+            os.environ['LOADFREQ'] = session['load_freq']
+            os.environ['FPS'] = session['fps']
+            os.environ['MEAN'] = session['mean']
+            os.environ['VARIANCE'] = session['variance']
+            os.environ['MEANLOAD'] = str(session['mean_load'])
+            os.environ['HIDDENDEVICES'] = form.hidden_devices.data
+
+            os.environ['PROPDELAY'] = session['propagation_delay_model']
+            os.environ['RADIOENVIRONMENT'] = session['radio_environment']
+            os.environ['BANDWIDTH'] = session['bandwidth']
+            os.environ['TXCURRENT'] = session['tx_current']
+            os.environ['RXCURRENT'] = session['rx_current']
+            os.environ['IDLECURRENT'] = session['idle_current']
+            os.environ['CCABUSYCURRENT'] = session['cca_busy_current']
+            os.environ['SLEEPCURRENT'] = session['sleep_current']
+            os.environ['VOLTAGE'] = session['voltage']
+            os.environ['BATTERYCAP'] = session['battery_capacity']
+
+            # Advanced variables for Wi-Fi
+            os.environ['MCS'] = form.mcs.data
+            os.environ['SPATIALSTREAMS'] = session['spatial_streams']
+
+            # advanced variables for LoRaWAN
+            os.environ['CRC'] = session['cyclic_redundacy_check']
+            os.environ['CODINGRATE'] = session['coding_rate']
+            os.environ['CONFIRMEDTRAFFIC'] = session['confirmed_traffic']
+            os.environ['SF'] = form.sf.data
+
+            # advanced variables for 6LoWPAN
+            os.environ['MINBE'] = session['min_BE']
+            os.environ['MAXBE'] = session['max_BE']
+            os.environ['CSMABACKOFFS'] = session['csma_backoffs']
+            os.environ['MAXFRAMERETRIES'] = session['max_frame_retries']
+
+            output = "#"
+            latency = "#"
+
+            # Create class of a thread
+            class myThread(threading.Thread):
+                def __init__(self, threadID, output, latency):
+                    threading.Thread.__init__(self)
+                    self.threadID = threadID
+                    self.output = output
+                    self.latency = latency
+
+                def run(self):
+                    logging.debug(f"Start Thread {self.threadID}")
+                    self.output, self.latency = simulationCall(self.threadID)
+                    logging.debug(f"Exit Thread {self.threadID}")
+
+            def simulationCall(threadID):
+                if threadID == 1:
+                    try:
+                        logging.debug(f"working dir : {os.getcwd()}")
+                        logging.debug(os.environ['NETWORK'])
+                        cd_ns3_dir = f"cd {NS3_DIR}; "
+                        if os.environ['TRAFFICPROF'] == "cbr":
+                            if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
+                                output = _check_output(
+                                    cd_ns3_dir + './waf --jobs=2 --run "wifi-cbr --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --dataRate=$MEANLOAD --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE"')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                _check_output(
+                                    'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
+                                latency = _check_output(
+                                    'python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
+
+                        elif os.environ['TRAFFICPROF'] == "vbr":
+                            if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
+                                output = _check_output(
+                                    cd_ns3_dir + './waf --jobs=2 --run "wifi-vbr --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --fps=$FPS --mean=$MEAN --variance=$VARIANCE --hiddenStations=$HIDDENDEVICES --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE" 2> log.txt')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                _check_output(
+                                    'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
+                                latency = _check_output(
+                                    'python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
+
+                        elif os.environ['TRAFFICPROF'] == "periodic":
+                            if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
+                                output = _check_output(
+                                    cd_ns3_dir + './waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                _check_output(
+                                    'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
+                                latency = _check_output(
+                                    'python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
+
+                            elif os.environ['NETWORK'] == "LoRaWAN":
+                                output = _check_output(
+                                    cd_ns3_dir + './waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt"')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                output = output + "Energy consumption: " + _check_output(
+                                    'cat "log.txt" | grep -e "LoraRadioEnergyModel:Total energy consumption" | tail -1 | awk "NF>1{print $NF}" | sed "s/J//g"')
+                                _check_output(
+                                    "cat 'log.txt' | grep -e 'Total time' | tail -1 | awk '{print $NF}' > 'log-parsed.txt'")
+                                # latency = _check_output('cat log.txt | grep -e "Total time" > log-parsed.txt; python3 lora-scripts/get_latencies.py log-parsed.txt')
+                                latency = _check_output('cat "log-parsed.txt"')
+
+                            elif os.environ['NETWORK'] == "6LoWPAN":
+                                output = _check_output(
+                                    cd_ns3_dir + './waf --jobs=2 --run "6lowpan-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --packetSize=$PACKETSIZE --period=$LOADFREQ --min_BE=$MINBE --max_BE=$MAXBE --csma_backoffs=$CSMABACKOFFS --maxFrameRetries=$MAXFRAMERETRIES --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT 2> log.txt"')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                _check_output(
+                                    'cat "log.txt" | grep -e "client sent 50 bytes" -e "server received 50 bytes from" > "log-parsed.txt";')
+                                latency = _check_output(
+                                    'python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
+
+                            elif os.environ['NETWORK'] == "Wi-Fi HaLow":
+                                output = _check_output(
+                                    'cd static/ns3-halow; ./waf --jobs=2 --run "rca --rho=$DISTANCE --simulationTime=$SIMULATION_TIME --Nsta=$NUMDEVICES --payloadSize=$PACKETSIZE --trafficInterval=$LOADFREQ --mcs=$MCS --bandWidth=$BANDWIDTH --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT" 2> log.txt')
+                                with open("log.txt", "w") as text_file:
+                                    text_file.write(output)
+                                _check_output(
+                                    'cd static/ns3-halow; cat log.txt | grep -e "UdpEchoClientApplication" -e "UdpEchoServerApplication" > log-parsed.txt;')
+                                latency = _check_output(
+                                    'python3 static/ns3-halow/halow-scripts/get_latencies.py "static/ns3-halow/log-parsed.txt"')
+
+                    except CalledProcessError as exception:
+                        _log_file_content(f'{NS3_DIR}/log.txt')
+                        _log_file_content(f'{NS3_DIR}/log-parsed.txt')
+                        logging.error(exception.output)
+                        logging.error(exception.stderr)
+                        raise exception
+                    finally:
+                        pass
+                        # _check_output('rm "log.txt"; rm "log-parsed.txt"')
+
+                    return output, latency
+
+            # Call NS-3 simulation by python shell script according network type
+            try:
+                model = ModelRecords()
+                if (network == 'LoRaWAN'):
+                    thread1 = myThread(1, output, latency)
+                    thread1.start()
+                    thread1.join()
+                    output, latency = thread1.output, thread1.latency
+                    throughput = 0
+                    lines = output.splitlines()
+                    line = lines[0]
+                    i = 0
+                    while "Success" not in line:
+                        i = i + 1
+                        line = lines[i]
+
+                    success_rate = round(float(lines[i].split()[-1]), 2)
+                    throughput = round(float(lines[i + 1].split()[-1]), 2)
+                    energy = float(lines[i + 2].split()[-1])
+                    capacity = (float(session['battery_capacity']) / 1000.0) * float(session['voltage']) * 3600
+                    battery_lifetime = round(((capacity / energy) * float(session['simulation_time'])) / 86400 / 365, 2)
+                    energy = round(energy, 2)
+                    session['energy_consumption'] = energy
+                    latency = float(latency) * 1000
+                    session['latency'] = str(latency)  # To get in ms
+                    session['latency'] = latency
+                    session['throughput'] = throughput
+                    session['success_rate'] = success_rate
+                    session['battery_lifetime'] = battery_lifetime
+
+                    latencies = []
+
+                    densities = [int(session['number_devices']) + i for i in range(1, 5)]
+                    results_exploration = explore('LoRaWAN', densities)
+
+
+                    success_rates = [row[1] for row in results_exploration]
+                    battery_lifetimes = [row[2] for row in results_exploration]
+
+                elif (network == '6LoWPAN'):
+                    thread1 = myThread(1, output, latency)
+                    thread1.start()
+                    thread1.join()
+                    output, latency = thread1.output, thread1.latency
+                    lines = output.splitlines()
+                    line = lines[0]
+                    i = 0
+                    while "Total" not in line:
+                        i = i + 1
+                        line = lines[i]
+
+                    energy = float(lines[i].split()[-1])
+                    battery_lifetime = float(lines[i + 1].split()[-1])
+                    throughput = float(lines[i + 2].split()[-1])
+                    success_rate = float(lines[i + 3].split()[-1])
+                    latency = float(latency)
+
+                    session['energy_consumption'] = energy
+                    session['throughput'] = throughput
+                    session['latency'] = str(latency)  # To get in ms
+                    session['success_rate'] = success_rate
+                    session['battery_lifetime'] = battery_lifetime
+
+                    densities = [int(session['number_devices']) + i for i in range(1, 5)]
+                    results_exploration = explore('6LoWPAN', densities)
+
+                    print(results_exploration)
+
+                    success_rates = [row[1] for row in results_exploration]
+                    battery_lifetimes = [row[2] for row in results_exploration]
+                    latencies = [row[3] for row in results_exploration]
+
+
+                elif (network == 'Wi-Fi HaLow'):
+                    thread1 = myThread(1, output, latency)
+                    thread1.start()
+                    thread1.join()
+                    output, latency = thread1.output, thread1.latency
+                    lines = output.splitlines()
+                    line = lines[0]
+                    i = 0
+                    while "Total" not in line:
+                        i = i + 1
+                        line = lines[i]
+
+                    energy = float(lines[i].split()[-1])
+                    battery_lifetime = float(lines[i + 1].split()[-1])
+                    throughput = float(lines[i + 2].split()[-1])
+                    success_rate = float(lines[i + 3].split()[-1])
+                    latency = float(latency) * 1000
+
+                    session['energy_consumption'] = energy
+                    session['throughput'] = throughput
+                    session['latency'] = str(latency)  # To get in ms
+                    session['success_rate'] = success_rate
+                    session['battery_lifetime'] = battery_lifetime
+
+                    id = binascii.b2a_hex(os.urandom(12)).decode("ascii")
+                    session['id'] = id
+                    session['path'] = id
+
+                    densities = [int(session['number_devices']) + i for i in range(1, 5)]
+                    results_exploration = explore('Wi-Fi HaLow', densities)
+
+
+                    success_rates = [row[1] for row in results_exploration]
+                    battery_lifetimes = [row[2] for row in results_exploration]
+                    latencies = [row[3] for row in results_exploration]
+
+
+                else:
+                    thread1 = myThread(1, output, latency)
+                    thread1.start()
+                    thread1.join()
+                    output, latency = thread1.output, thread1.latency
+                    lines = output.splitlines()
+                    line = lines[0]
+                    i = 0
+                    while "Total" not in line:
+                        i = i + 1
+                        line = lines[i]
+                    energy = lines[i].split()[-1]
+                    battery_lifetime = lines[i + 1].split()[-1]
+                    throughput = lines[i + 2].split()[-1]
+                    success_rate = lines[i + 3].split()[-1]
+
+                    session['energy_consumption'] = energy
+                    session['throughput'] = throughput
+                    latency = float(latency) * 1000
+                    session['latency'] = str(latency)  # To get in ms
+                    session['success_rate'] = success_rate
+                    session['battery_lifetime'] = battery_lifetime
+
+                    densities = [int(session['number_devices']) + i for i in range(1, 5)]
+                    results_exploration = explore('Wi-Fi', densities)
+
+                    success_rates = [row[1] for row in results_exploration]
+                    battery_lifetimes = [row[2] for row in results_exploration]
+                    latencies = [row[3] for row in results_exploration]
+
+
+                jResults = {
+                    "throughput": throughput,
+                    "latency": latency,  # To get in ms
+                    "success_rate": success_rate,
+                    "energy_consumption": energy,
+                    "battery_lifetime": battery_lifetime,
+                    "densities": densities,
+                    "latencies": latencies,
+                    "battery_lifetimes": battery_lifetimes,
+                    "success_rates": success_rates
+                }
+
+                return jResults
+            except Exception as e:
+                return str(e), 500
+    return 'Ko', 404
+
+
 """
 @app.route('/results')
 def results():
