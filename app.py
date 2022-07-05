@@ -959,11 +959,11 @@ def stackeo():
 
 
                 jResults = {
-                    "throughput": throughput,
-                    "latency": latency,  # To get in ms
-                    "success_rate": success_rate,
-                    "energy_consumption": energy,
-                    "battery_lifetime": battery_lifetime,
+                    "throughput": float(throughput),
+                    "latency": float(latency),  # To get in ms
+                    "success_rate": float(success_rate),
+                    "energy_consumption": float(energy),
+                    "battery_lifetime": float(battery_lifetime),
                     "densities": densities,
                     "latencies": latencies,
                     "battery_lifetimes": battery_lifetimes,
