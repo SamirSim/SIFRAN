@@ -330,7 +330,7 @@
                 <div class="col-5">
             {% if session['network'] == 'LoRaWAN' %}             
                     : {{ jResults['throughput'] }} bps
-            {% elif session['network'] == '6LoWPAN' %}      
+            {% elif session['network'] == '6LoWPAN' or session['network'] == 'Wi-Fi HaLow' %}      
                     : {{ jResults['throughput'] }} Kbps
             {% else %} 
                     : {{ jResults['throughput'] }} Mbps
