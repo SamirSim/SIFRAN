@@ -129,6 +129,8 @@ def index():
         print("Submitted")
         network = form.network.data
         num_devices = form.num_devices.data
+        max_num_devices = form.max_num_devices.data
+        num_gateways = form.num_gateways.data
         dist_devices_gateway = form.dist_devices_gateway.data
         simulation_time = form.simulation_time.data
         if num_devices<1 :
@@ -142,9 +144,9 @@ def index():
             if packet_size<1 or packet_size>1500 :
                 valid = False
                 print("Wi-Fi-False")
-            if dist_devices_gateway<0 or dist_devices_gateway>50 :
+            if dist_devices_gateway<0 :
                 valid = False    
-                messages_error[0] = "Distance must be between 0 and 50 meters."
+                messages_error[0] = "Distance must be positive."
         else :
             packet_size = form.packet_size_lorawan.data
             print("Packet size, LoRaWAN = "+str(packet_size), type(packet_size))
@@ -165,6 +167,8 @@ def index():
             session['mean'] = str(form.mean.data)
             session['variance'] = str(form.variance.data)
             session['number_devices'] = str(form.num_devices.data)
+            session['max_number_devices'] = str(form.max_num_devices.data)
+            session['number_gateways'] = str(form.num_gateways.data)
             session['distance_devices_gateway'] = str(form.dist_devices_gateway.data)
             session['simulation_time'] = str(form.simulation_time.data)
             session['hidden_devices'] = dict(form.hidden_devices.choices).get(form.hidden_devices.data)
@@ -194,6 +198,8 @@ def index():
             os.environ['DISTANCE']=session['distance_devices_gateway'] 
             os.environ['SIMULATION_TIME']=session['simulation_time'] 
             os.environ['NUMDEVICES']=session['number_devices'] 
+            os.environ['MAXNUMDEVICES']=session['max_number_devices'] 
+            os.environ['NUMGATEWAYS']=session['number_gateways'] 
             os.environ['TRAFFICDIR']=session['traffic_direction']
             os.environ['TRAFFICPROF']=session['traffic_profile']
             os.environ['PACKETSIZE']=session['packet_size']
@@ -254,7 +260,7 @@ def index():
                         cd_ns3_dir = f"cd {NS3_DIR}; "
                         if os.environ['TRAFFICPROF'] == "cbr":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                                output = _check_output(cd_ns3_dir + './waf --jobs=2 --run "wifi-cbr --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --dataRate=$MEANLOAD --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE"')
+                                output = _check_output(cd_ns3_dir + './waf --jobs=2 --run "wifi-cbr --distance=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --dataRate=$MEANLOAD --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE"')
                                 with open("log.txt", "w") as text_file:
                                     text_file.write(output)
                                 _check_output('cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
@@ -270,14 +276,14 @@ def index():
 
                         elif os.environ['TRAFFICPROF'] == "periodic":
                             if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
-                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
                                 with open("log.txt", "w") as text_file:
                                    text_file.write(output)
                                 _check_output('cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
                                 latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
 
                             elif os.environ['NETWORK'] == "LoRaWAN":
-                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt"')
+                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt"')
                                 with open("log.txt", "w") as text_file:
                                     text_file.write(output)
                                 output = output + "Energy consumption: " + _check_output('cat "log.txt" | grep -e "LoraRadioEnergyModel:Total energy consumption" | tail -1 | awk "NF>1{print $NF}" | sed "s/J//g"')
@@ -286,19 +292,22 @@ def index():
                                 latency = _check_output('cat "log-parsed.txt"')
                             
                             elif os.environ['NETWORK'] == "6LoWPAN":
-                                output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "6lowpan-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --packetSize=$PACKETSIZE --period=$LOADFREQ --min_BE=$MINBE --max_BE=$MAXBE --csma_backoffs=$CSMABACKOFFS --maxFrameRetries=$MAXFRAMERETRIES --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT 2> log.txt"')
+                                if os.environ['TRAFFICPROF'] == "cbr":
+                                    output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "6lowpan-cbr --distance=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --packetSize=$PACKETSIZE --dataRate=$MEANLOAD --min_BE=$MINBE --max_BE=$MAXBE --csma_backoffs=$CSMABACKOFFS --maxFrameRetries=$MAXFRAMERETRIES --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT 2> log.txt"')
+                                else:
+                                    output = _check_output(cd_ns3_dir +'./waf --jobs=2 --run "6lowpan-periodic --distance=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --packetSize=$PACKETSIZE --period=$LOADFREQ --min_BE=$MINBE --max_BE=$MAXBE --csma_backoffs=$CSMABACKOFFS --maxFrameRetries=$MAXFRAMERETRIES --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT 2> log.txt"')
                                 with open("log.txt", "w") as text_file:
                                     text_file.write(output)
                                 _check_output('cat "log.txt" | grep -e "client sent 50 bytes" -e "server received 50 bytes from" > "log-parsed.txt";')
                                 latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
                             
                             elif os.environ['NETWORK'] == "Wi-Fi HaLow":
-                                output = _check_output('cd static/ns3-halow; ./waf --jobs=2 --run "rca --rho=$DISTANCE --simulationTime=$SIMULATION_TIME --Nsta=$NUMDEVICES --payloadSize=$PACKETSIZE --trafficInterval=$LOADFREQ --mcs=$MCS --bandWidth=$BANDWIDTH --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT" 2> log.txt')
+                                output = _check_output('cd static/ns3-halow; ./waf --jobs=2 --run "rca --rho=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --Nsta=$NUMDEVICES --payloadSize=$PACKETSIZE --trafficInterval=$LOADFREQ --mcs=$MCS --bandWidth=$BANDWIDTH --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT" 2> log.txt')
                                 with open("log.txt", "w") as text_file:
                                     text_file.write(output)
                                 _check_output('cd static/ns3-halow; cat log.txt | grep -e "UdpEchoClientApplication" -e "UdpEchoServerApplication" > log-parsed.txt;')
                                 latency = _check_output('python3 static/ns3-halow/halow-scripts/get_latencies.py "static/ns3-halow/log-parsed.txt"')
-                                
+
                     except CalledProcessError as exception:
                         _log_file_content(f'{NS3_DIR}/log.txt')
                         _log_file_content(f'{NS3_DIR}/log-parsed.txt')
@@ -340,13 +349,14 @@ def index():
                     session['success_rate'] = success_rate
                     session['battery_lifetime'] = battery_lifetime
 
-                    densities = [int(session['number_devices']) + i for i in range(1,5)]
+                    densities = [i for i in range(int(session['number_devices']), max_num_devices)]
                     results_exploration = explore('LoRaWAN', densities)
 
                     print(results_exploration)
 
                     success_rates = [row[1] for row in results_exploration]
                     battery_lifetimes = [row[2] for row in results_exploration]
+                    throughputs = [row[3] for row in results_exploration]
 
                     id = binascii.b2a_hex(os.urandom(12)).decode("ascii")
                     session['id'] = id
@@ -357,6 +367,12 @@ def index():
                     plt.xlabel('Number of end-devices')
                     plt.ylabel('Success Rate')
                     plt.savefig('static/img/'+id+'-success-rate.png')
+
+                    plt.figure()
+                    plt.plot(densities, throughputs)
+                    plt.xlabel('Number of end-devices')
+                    plt.ylabel('Throughput')
+                    plt.savefig('static/img/'+id+'-throughput.png')
                     #plt.show()
 
                     #If a user has already login, save input parameters and results in JSON. 
@@ -379,15 +395,15 @@ def index():
                     battery_lifetime = float(lines[i+1].split()[-1])
                     throughput = float(lines[i+2].split()[-1])
                     success_rate = float(lines[i+3].split()[-1])
-                    latency = float(latency)
+                    latency = float(latency) * 1000
 
                     session['energy_consumption'] = energy
                     session['throughput'] = throughput
-                    session['latency'] = str(latency) # To get in ms
+                    session['latency'] = str(latency)# To get in ms
                     session['success_rate'] = success_rate
                     session['battery_lifetime'] = battery_lifetime
 
-                    densities = [int(session['number_devices']) + i for i in range(1,5)]
+                    densities = [i for i in range(int(session['number_devices']), max_num_devices)]
                     results_exploration = explore('6LoWPAN', densities)
 
                     print(results_exploration)
@@ -395,6 +411,7 @@ def index():
                     success_rates = [row[1] for row in results_exploration]
                     battery_lifetimes = [row[2] for row in results_exploration]
                     latencies = [row[3] for row in results_exploration]
+                    throughputs = [row[4] for row in results_exploration]
 
                     id = binascii.b2a_hex(os.urandom(12)).decode("ascii")
                     session['id'] = id
@@ -420,6 +437,12 @@ def index():
                     plt.ylabel('Packet Latency')
                     plt.savefig('static/img/'+id+'-latency.png')
                     #plt.show()
+
+                    plt.figure()
+                    plt.plot(densities, throughputs)
+                    plt.xlabel('Number of end-devices')
+                    plt.ylabel('Throughput')
+                    plt.savefig('static/img/'+id+'-throughput.png')
 
                     if 'username' in session:
                         post = model.sixlowpanRec()
@@ -452,7 +475,7 @@ def index():
                     session['id'] = id
                     session['path'] = id
 
-                    densities = [int(session['number_devices']) + i for i in range(1,5)]
+                    densities = [i for i in range(int(session['number_devices']), max_num_devices)]
                     results_exploration = explore('Wi-Fi HaLow', densities)
 
                     print(results_exploration)
@@ -460,6 +483,7 @@ def index():
                     success_rates = [row[1] for row in results_exploration]
                     battery_lifetimes = [row[2] for row in results_exploration]
                     latencies = [row[3] for row in results_exploration]
+                    throughputs = [row[4] for row in results_exploration]
 
                     plt.figure()
                     plt.plot(densities, success_rates)
@@ -481,6 +505,12 @@ def index():
                     plt.ylabel('Packet Latency')
                     plt.savefig('static/img/'+id+'-latency.png')
                     #plt.show()
+
+                    plt.figure()
+                    plt.plot(densities, throughputs)
+                    plt.xlabel('Number of end-devices')
+                    plt.ylabel('Throughput')
+                    plt.savefig('static/img/'+id+'-throughput.png')
 
                     #If a user has already login, save input parameters and results in JSON. 
                     if 'username' in session:
@@ -509,7 +539,7 @@ def index():
                     session['success_rate'] = success_rate
                     session['battery_lifetime'] = battery_lifetime
                     
-                    densities = [int(session['number_devices']) + i for i in range(1,5)]
+                    densities = [i for i in range(int(session['number_devices']), max_num_devices)]
                     results_exploration = explore('Wi-Fi', densities)
 
                     print(results_exploration)
@@ -517,6 +547,7 @@ def index():
                     success_rates = [row[1] for row in results_exploration]
                     battery_lifetimes = [row[2] for row in results_exploration]
                     latencies = [row[3] for row in results_exploration]
+                    throughputs = [row[4] for row in results_exploration]
 
                     id = binascii.b2a_hex(os.urandom(12)).decode("ascii")
                     session['id'] = id
@@ -542,6 +573,12 @@ def index():
                     plt.ylabel('Packet Latency')
                     plt.savefig('static/img/'+id+'-latency.png')
                     #plt.show()
+
+                    plt.figure()
+                    plt.plot(densities, throughputs)
+                    plt.xlabel('Number of end-devices')
+                    plt.ylabel('Throughput')
+                    plt.savefig('static/img/'+id+'-throughput.png')
 
                     # If a user has already login, save input parameters and results in JSON. 
                     if 'username' in session:
@@ -616,8 +653,10 @@ def explore(technology, densities):
             os.environ['NUMDEVICES'] = str(nb_devices)
             #os.environ['LOGFILE'] = "log-"+technology+"-"+str(use_case)+"-"+str(nb_devices)+"-"+str(packet_period)+".txt"
             #os.environ['LOGFILEPARSED'] = "log-"+technology+"-"+str(use_case)+"-"+str(nb_devices)+"-"+str(packet_period)+"-parsed.txt"
-
-            output = _check_output('cd static/ns3; ./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
+            if os.environ['TRAFFICPROF'] == "cbr":
+                output = _check_output('cd static/ns3' + './waf --jobs=2 --run "wifi-cbr --distance=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --dataRate=$MEANLOAD --hiddenStations=$HIDDENDEVICES --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE"')
+            else:
+                output = _check_output('cd static/ns3; ./waf --jobs=2 --run "wifi-periodic --distance=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --nWifi=$NUMDEVICES --trafficDirection=$TRAFFICDIR --payloadSize=$PACKETSIZE --period=$LOADFREQ --hiddenStations=$HIDDENDEVICES --radioEnvironment=$RADIOENVIRONMENT --spatialStreams=$SPATIALSTREAMS --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT --ccaBusyCurrent=$CCABUSYCURRENT --MCS=$MCS --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --spatialStreams=$SPATIALSTREAMS --batteryCap=$BATTERYCAP --voltage=$VOLTAGE 2> log.txt"')
             with open("log.txt", "w") as text_file:
                 text_file.write(output)
             _check_output('cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
@@ -635,11 +674,11 @@ def explore(technology, densities):
                 line = lines[i]
             energy = float(lines[i].split()[-1])
             battery_lifetime = float(lines[i+1].split()[-1])
-            #throughput = float(lines[i+2].split()[-1])
+            throughput = float(lines[i+2].split()[-1])
             success_rate = float(lines[i+3].split()[-1])
             latency = float(latency) * 1000
 
-            result = [nb_devices, success_rate, battery_lifetime, latency]
+            result = [nb_devices, success_rate, battery_lifetime, latency, throughput]
                                         
             #configuration = "WiFi-"+str(mcs)+"-"+str(sgi)+"-"+str(spatial_stream)+"-"+str(agregation)+"-"+str(ngateway)
             #configuration = "WiFi-GW"+str(ngateway)+"-Nsta"+str(nb_devices)+"-Period"+str(packet_period)+": "+str(result)
@@ -656,7 +695,7 @@ def explore(technology, densities):
             #os.environ['LOGFILE'] = "log-"+technology+"-"+str(use_case)+"-"+str(nb_devices)+"-"+str(packet_period)+".txt"
             #os.environ['LOGFILEPARSED'] = "log-"+technology+"-"+str(use_case)+"-"+str(nb_devices)+"-"+str(packet_period)+"-parsed.txt"
 
-            output = _check_output('cd static/ns3; ./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt"')
+            output = _check_output('cd static/ns3; ./waf --jobs=2 --run "lora-periodic --distance=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --payloadSize=$PACKETSIZE --period=$LOADFREQ --SF=$SF --crc=$CRC --codingRate=$CODINGRATE --trafficType=$CONFIRMEDTRAFFIC --channelWidth=$BANDWIDTH --propDelay=$PROPDELAY --radioEnvironment=$RADIOENVIRONMENT --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --sleepCurrent=$SLEEPCURRENT 2> log.txt"')
             with open("log.txt", "w") as text_file:
                 text_file.write(output)
             output = output + "Energy consumption: " + _check_output("cat log.txt | grep -e 'LoraRadioEnergyModel:Total energy consumption' | tail -1 | awk 'NF>1{print $NF}' | sed 's/J//g'")
@@ -673,12 +712,12 @@ def explore(technology, densities):
                 i = i + 1
                 line = lines[i]
             success_rate = round(float(lines[i].split()[-1]), 2)
-            #throughput = round(float(lines[i+1].split()[-1]), 2)
+            throughput = round(float(lines[i+1].split()[-1]), 2)
             energy = float(lines[i+2].split()[-1])
             capacity = (float(session['battery_capacity']) / 1000.0) * float(session['voltage']) * 3600
             battery_lifetime = round(((capacity / energy) * float(session['simulation_time'])) / 86400, 2)
 
-            result = [nb_devices, success_rate, battery_lifetime]
+            result = [nb_devices, success_rate, battery_lifetime, throughput]
 
             results_exploration.append(result)
 
@@ -689,8 +728,8 @@ def explore(technology, densities):
             os.environ['NUMDEVICES'] = str(nb_devices)
             #os.environ['LOGFILE'] = "log-"+str(nb_devices)+".txt"
             #os.environ['LOGFILEPARSED'] = "log-"+str(nb_devices)+"-parsed.txt"
-
-            output = _check_output('cd static/ns3; ./waf --jobs=2 --run "6lowpan-periodic --distance=$DISTANCE --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --packetSize=$PACKETSIZE --period=$LOADFREQ --min_BE=$MINBE --max_BE=$MAXBE --csma_backoffs=$CSMABACKOFFS --maxFrameRetries=$MAXFRAMERETRIES --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT" 2> "log.txt"')
+ 
+            output = _check_output('cd static/ns3; ./waf --jobs=2 --run "6lowpan-periodic --distance=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --nSta=$NUMDEVICES --packetSize=$PACKETSIZE --period=$LOADFREQ --min_BE=$MINBE --max_BE=$MAXBE --csma_backoffs=$CSMABACKOFFS --maxFrameRetries=$MAXFRAMERETRIES --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT" 2> "log.txt"')
             with open("log.txt", "w") as text_file:
                 text_file.write(output)
             latency = _check_output('cat "log.txt" | grep -e "client sent 50 bytes" -e "server received 50 bytes from" > "log-parsed.txt"; python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
@@ -705,11 +744,11 @@ def explore(technology, densities):
                 line = lines[i]
             energy = float(lines[i].split()[-1])
             battery_lifetime = float(lines[i+1].split()[-1])
-            #throughput = float(lines[i+2].split()[-1])
+            throughput = float(lines[i+2].split()[-1])
             success_rate = float(lines[i+3].split()[-1])
             latency = float(latency) * 1000
 
-            result = [nb_devices, success_rate, battery_lifetime, latency]
+            result = [nb_devices, success_rate, battery_lifetime, latency, throughput]
 
             results_exploration.append(result)
             
@@ -722,7 +761,7 @@ def explore(technology, densities):
             #os.environ['LOGFILE'] = "log-"+technology+"-"+str(use_case)+"-"+str(nb_devices)+"-"+str(packet_period)+"-parsed.txt"
 
             #subprocess.check_output("cd NS3-802.11ah; ./scratch/RAWGenerate.sh $NBDEVICES $NRAWGROUPS $BEACONINTERVAL", shell=True, text=True,stderr=subprocess.DEVNULL)
-            output = _check_output('cd static/ns3-halow; ./waf --jobs=2 --run "rca --rho=$DISTANCE --simulationTime=$SIMULATION_TIME --Nsta=$NUMDEVICES --payloadSize=$PACKETSIZE --trafficInterval=$LOADFREQ --mcs=$MCS --bandWidth=$BANDWIDTH --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT" 2> log.txt')
+            output = _check_output('cd static/ns3-halow; ./waf --jobs=2 --run "rca --rho=$DISTANCE --nGW=$NUMGATEWAYS --simulationTime=$SIMULATION_TIME --Nsta=$NUMDEVICES --payloadSize=$PACKETSIZE --trafficInterval=$LOADFREQ --mcs=$MCS --bandWidth=$BANDWIDTH --voltage=$VOLTAGE --txCurrent=$TXCURRENT --rxCurrent=$RXCURRENT --idleCurrent=$IDLECURRENT" 2> log.txt')
             _check_output('cd static/ns3-halow; cat log.txt | grep -e "UdpEchoClientApplication" -e "UdpEchoServerApplication" > log-parsed.txt;')
             latency = _check_output('python3 static/ns3-halow/halow-scripts/get_latencies.py "static/ns3-halow/log-parsed.txt"')
             #latency = subprocess.check_output('cd NS3-802.11ah; cat $LOGFILE | grep -e "UdpEchoClientApplication" -e "UdpEchoServerApplication" > $LOGFILEPARSED; python3 halow-scripts/get_latencies.py $LOGFILEPARSED', shell=True, text=True,stderr=subprocess.DEVNULL)
@@ -743,7 +782,7 @@ def explore(technology, densities):
 
             latency = float(latency) * 1000
 
-            result = [nb_devices, success_rate, battery_lifetime, latency]
+            result = [nb_devices, success_rate, battery_lifetime, latency, throughput]
 
             results_exploration.append(result)
 

@@ -27,6 +27,10 @@
 #include "ns3/energy-source-container.h"
 #include "ns3/device-energy-model-container.h"
 #include "ns3/applications-module.h"
+#include "ns3/building.h"
+#include "ns3/mobility-building-info.h"
+#include "ns3/building-list.h"
+#include "ns3/buildings-helper.h"
 #include <iomanip>
 
 using namespace ns3;
@@ -45,14 +49,38 @@ void TotalEnergy (double oldValue, double totalEnergy) {
 
 int main (int argc, char *argv[]) {
   SeedManager::SetSeed (3);  // Changes seed from default of 1 to 3
-  SeedManager::SetRun (2);  // Changes run number from default of 1 to 7
-  double simulationTime = 20; // Seconds
-  uint32_t nWifi = 2; // Number of stations
-  uint32_t MCS = 0; // Number of stations
-  uint32_t txPower = 9; // Number of stations
-  std::string trafficDirection = "upstream";
-  uint32_t payloadSize = 1024; 
-  std::string dataRate = "10";
+  SeedManager::SetRun (7);  // Changes run number from default of 1 to 7
+  /*/ Input parameters definition /*/
+  // Simulation Time Seconds
+  double simulationTime = 5; 
+  // Number of stations
+  int nWifi = 5; 
+  // Number of gatewyas
+  int nGW = 1; 
+  // Modulation and Coding Scheme
+  int MCS = 10;  // If 10 then IdealWifiManager
+  // TxPower
+  int txPower = 9; 
+  // Traffic direction
+  std::string trafficDirection = "upstream"; 
+  // Payload size in bytes
+  int payloadSize = 1500; 
+  // Data rate in Mbps
+  std::string dataRate = "2";
+  // Meters between AP and stations
+  double distance = 10;
+  // Allow or not the packet agregation
+  int agregation = 0;
+  // BW Channel Width in MHz
+  int channelWidth = 80;
+  // Indicates whether Short Guard Interval is enabled or not
+  int sgi = 0; 
+  // Delay propagation model
+  std::string propDelay = "ConstantSpeedPropagationDelayModel";
+  // Radio environment
+  std::string radioEnvironment = "Urban";
+  // Number of spatial streams
+  int spatialStreams = 1;
 
   bool latency = true;
   bool energyPower = true;
@@ -63,14 +91,7 @@ int main (int argc, char *argv[]) {
 
   bool hiddenStations = 0;
 
-  double distance = 30.0; // Meters between AP and stations
-  bool agregation = false; // Allow or not the packet agregation
-  int channelWidth = 80; // BW Channel Width in MHz
-  int sgi = 0; // Indicates whether Short Guard Interval is enabled or not (SGI==1 <==> GI=400ns)
-  //Avanced parameters
-  std::string propDelay = "ConstantSpeedPropagationDelayModel";
-  std::string propLoss = "LogDistancePropagationLossModel";
-  int spatialStreams = 1;
+  // Energy parameters
   // Tx current draw in mA
   double txCurrent = 107;
   // Rx current draw in mA
@@ -78,25 +99,23 @@ int main (int argc, char *argv[]) {
   // CCA_Busy current draw in mA
   double ccaBusyCurrent = 1;
   // Idle current draw in mA
-  double idleCurrent = 1; 
-
-  //Energy parameters
-  double tx = 0.52;  // in W
-  double rx = 0.16;  // in W
-  double txFactor = 0.93; // in mJ
-  double rxFactor = 0.93; // in mJ
+  double idleCurrent = 1;
+  // Battery voltage
   double voltage = 12; // in V
-  double batteryCap = 5200; // Battery capacity in mAh
+  // Battery Capacity
+  double batteryCap = 5200; // In mAh
 
   CommandLine cmd (__FILE__);
   cmd.AddValue ("distance", "Distance in meters between the station and the access point", distance);
   cmd.AddValue ("simulationTime", "Simulation time in seconds", simulationTime);
   cmd.AddValue ("MCS", "MCS", MCS);
+  cmd.AddValue ("sgi", "SGI", sgi);
+  cmd.AddValue ("agregation", "Allow agregation or not", agregation);
   cmd.AddValue ("txPower", "TxPower in dBm", txPower);
   cmd.AddValue ("payloadSize", "Payload size in Bytes", payloadSize);
   cmd.AddValue ("channelWidth", "Channel Width in MHz", channelWidth);
   cmd.AddValue ("propDelay", "Delay Propagation Model", propDelay);
-  cmd.AddValue ("propLoss", "Distance Propagation Model", propLoss);
+  cmd.AddValue ("radioEnvironment", "Distance Propagation Model", radioEnvironment);
   cmd.AddValue ("spatialStreams", "Number of Spatial Streams", spatialStreams);
   cmd.AddValue ("batteryCap", "Battery Capacity in mAh", batteryCap);
   cmd.AddValue ("voltage", "Battery voltage in Volts", voltage);
@@ -106,6 +125,7 @@ int main (int argc, char *argv[]) {
   cmd.AddValue ("ccaBusyCurrent", "CCA Busy voltage in Volts", ccaBusyCurrent);
   cmd.AddValue ("dataRate", "Data rate in Mbps", dataRate);
   cmd.AddValue ("nWifi", "Number of stations", nWifi);
+  cmd.AddValue ("nGW", "Number of gateways", nGW);
   cmd.AddValue ("trafficDirection", "Direction of traffic UL/DL", trafficDirection);
   cmd.AddValue ("latency", "Time a probing packets takes", latency);
   cmd.AddValue ("energyPower", "Energy consumption in Watts", energyPower);
@@ -127,7 +147,16 @@ int main (int argc, char *argv[]) {
   LogComponentEnableAll (LOG_PREFIX_NODE);
   LogComponentEnableAll (LOG_PREFIX_TIME);
 
+  nWifi = (int) (nWifi / nGW) + 1;
+  distance = distance / nGW;
+
   YansWifiChannelHelper channel;
+  std::string propLoss;
+  if (radioEnvironment == "Urban") propLoss = "Cost231PropagationLossModel";
+  else if (radioEnvironment == "Suburban") propLoss = "LogDistancePropagationLossModel";
+  else if (radioEnvironment == "Rural") propLoss = "OkumuraHataPropagationLossModel";
+  else if (radioEnvironment == "Indoor") propLoss = "HybridBuildingsPropagationLossModel";
+
   channel.AddPropagationLoss ("ns3::"+propLoss);
   channel.SetPropagationDelay("ns3::"+propDelay);
 
@@ -189,13 +218,35 @@ int main (int argc, char *argv[]) {
     mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
     mobility.Install (wifiApNode);
 
+    if (radioEnvironment == "Indoor") {
+      double x_min = 0.0;
+      double x_max = 10.0;
+      double y_min = 0.0;
+      double y_max = 20.0;
+      double z_min = 0.0;
+      double z_max = 10.0;
+      Ptr<Building> b = CreateObject <Building> ();
+      b->SetBoundaries (Box (x_min, x_max, y_min, y_max, z_min, z_max));
+      b->SetBuildingType (Building::Residential);
+      b->SetExtWallsType (Building::ConcreteWithWindows);
+      b->SetNFloors (3);
+      b->SetNRoomsX (3);
+      b->SetNRoomsY (2);
+
+      BuildingsHelper::Install (wifiStaNodes);
+      
+      BuildingsHelper::Install (wifiApNode);
+    }
+
     if (latency) {
-      positionAllocAp->Add (Vector (distance, 0.0, 0.0));
-      mobility.SetPositionAllocator (positionAllocAp);
+      positionAlloc->Add (Vector (distance, 0, 1));
+      mobility.SetPositionAllocator (positionAlloc);
       mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
       mobility.Install (wifiProbingNode);
+      if (radioEnvironment == "Indoor") BuildingsHelper::Install (wifiProbingNode);
     }
   }
+
   YansWifiPhyHelper phy;
   phy.SetChannel (channel.Create ());
 
@@ -203,10 +254,16 @@ int main (int argc, char *argv[]) {
   WifiHelper wifi;
   wifi.SetStandard (WIFI_STANDARD_80211ac);
 
-  std::ostringstream oss;
-  oss << "VhtMcs" << MCS;
-  wifi.SetRemoteStationManager ("ns3::ConstantRateWifiManager","DataMode", StringValue (oss.str ()),
-                                "ControlMode", StringValue (oss.str ()));
+  if (MCS == 10) {
+    wifi.SetRemoteStationManager("ns3::IdealWifiManager");
+  }
+  else {
+    std::ostringstream oss;
+    oss << "VhtMcs" << MCS;
+    wifi.SetRemoteStationManager ("ns3::ConstantRateWifiManager",
+                                  "DataMode", StringValue (oss.str ()),
+                                  "ControlMode", StringValue (oss.str ()));
+  }
 
   Ssid ssid = Ssid ("ns3-80211ac");
 
@@ -474,7 +531,7 @@ int main (int argc, char *argv[]) {
       /*/ Calculating Packet throughput and packet delivery /*/
       totalPacketsThrough = DynamicCast<PacketSink> (
                             sinkApplications.Get (0))->GetTotalRx ();
-      throughput += ((totalPacketsThrough * 8) / ((simulationTime) * 1000000.0)); //Mbps
+      throughput += ((totalPacketsThrough * 8) / ((simulationTime) * 1024 * 1024)); //Mbps
       std::cout << "Packet Throughput: " << throughput << std::endl;
       double successRate =  (totalPacketsThrough / totalpacketsSent / nWifi) * 100;
       std::cout << "Packet Delivery: " << successRate << std::endl; // %

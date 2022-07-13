@@ -123,8 +123,7 @@ int main (int argc, char** argv)
     LogComponentEnableAll (LOG_PREFIX_TIME);
   }
 
-  nSta = nSta + 2; // Add GW and probing node
-  nSta = (int) (nSta / nGW);
+  nSta = (int) (nSta / nGW) + 1;
   nSta = nSta + 2;
   distance = distance / nGW;
 
@@ -294,7 +293,7 @@ int main (int argc, char** argv)
   double totalPacketsThrough, throughput;
   for (uint32_t index = 0; index < serverApps.GetN (); ++index) {
     totalPacketsThrough = DynamicCast<PacketSink> (serverApps.Get (index)) ->GetTotalRx ();
-    throughput += ((totalPacketsThrough * 8) / ((simulationTime) * 1024 * 1024)); //Mbit/s
+    throughput += ((totalPacketsThrough * 8) / ((simulationTime) * 1024 )); //Kbit/s
     std::cout << "Throughput: " << throughput << std::endl;
   }
 

@@ -328,10 +328,12 @@
                    Packet throughput
                 </div>
                 <div class="col-5">
-            {% if session['network'] != 'LoRaWAN' %}             
-                    : {{ jResults['throughput'] }} Mbps
-            {% else %}        
+            {% if session['network'] == 'LoRaWAN' %}             
                     : {{ jResults['throughput'] }} bps
+            {% elif session['network'] == '6LoWPAN' %}      
+                    : {{ jResults['throughput'] }} Kbps
+            {% else %} 
+                    : {{ jResults['throughput'] }} Mbps
             {% endif %} 
                 </div>
             </div> 
@@ -377,6 +379,14 @@
                 </div>
                 <div class="col-5">
                     : <a target="_blank" style="color:DodgerBlue;" href="{{'../static/img/'+jResults['path']+'-success-rate.png'}}">Link</a>
+                </div>
+            </div> 
+            <div class="row mb-2">
+                <div class="col-7">
+                   Throughput Scalability
+                </div>
+                <div class="col-5">
+                    : <a target="_blank" style="color:DodgerBlue;" href="{{'../static/img/'+jResults['path']+'-throughput.png'}}">Link</a>
                 </div>
             </div> 
             {% if session['network'] != 'LoRaWAN' %}   

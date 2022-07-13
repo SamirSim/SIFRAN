@@ -21,6 +21,8 @@ var lbl_sf = document.getElementById("lbl_sf");
 var sf = document.getElementById("sf");
 
 var num_devices = document.getElementById("num_devices");
+var max_num_devices = document.getElementById("max_num_devices");
+var num_gateways = document.getElementById("num_gateways");
 var dist_devices_gateway = document.getElementById("dist_devices_gateway");
 var simulation_time = document.getElementById("simulation_time");
 
@@ -131,6 +133,8 @@ submit_btn.addEventListener("click", function() {
     var packet_size_lorawan_indicator = document.getElementById("packet_size_lorawan").value;
     var packet_size_6lowpan_indicator = document.getElementById("packet_size_6lowpan").value;
     var num_devices_indicator = document.getElementById("num_devices").value;
+    var max_num_devices_indicator = document.getElementById("max_num_devices").value;
+    var num_gateways_indicator = document.getElementById("num_gateways").value;
     var dist_devices_gateway_indicator = document.getElementById("dist_devices_gateway").value;
     var simulation_time_indicator = document.getElementById("simulation_time").value;
     var load_freq_indicator = document.getElementById("load_freq").value;
@@ -147,7 +151,7 @@ submit_btn.addEventListener("click", function() {
     
    if (!simulation_time_indicator == ' ' && !packet_size_wifi_indicator == ' ' &&
        !packet_size_lorawan_indicator == ' ' && !packet_size_6lowpan_indicator == ' ' &&
-    !num_devices_indicator == ' ' &&
+    !num_devices_indicator == ' ' && !max_num_devices_indicator == ' ' &&
        !dist_devices_gateway_indicator == ' ' && !load_freq_indicator == ' ' &&
        !mean_load_indicator == ' ' && !fps_indicator == ' ' && 
        !mean_indicator == ' ' && !variance_indicator == ' ' &&
@@ -287,6 +291,8 @@ function onCheck(){
     var dist_devices_gateway_error = document.getElementById("dist_devices_gateway_error");
     var simulation_time_error = document.getElementById("simulation_time_error");
     var num_devices_error = document.getElementById("num_devices_error");
+    var max_num_devices_error = document.getElementById("max_num_devices_error");
+    var num_gateways_error = document.getElementById("num_gateways_error");
     var fps_error = document.getElementById("fps_error");
     var mean_error = document.getElementById("mean_error");
     var variance_error = document.getElementById("variance_error");
@@ -385,6 +391,8 @@ else
      lorawan_error.innerText = "";
      sixlowpan_error.innerText = "";
      num_devices_error.innerText = "";
+     max_num_devices_error.innerText = "";
+     num_gateways_error.innerText = "";
      fps_error.innerText = "";
      mean_error.innerText = "";
      variance_error.innerText = "";
@@ -472,7 +480,9 @@ else
                         traffic_profile.selectedIndex = "0";    //set to Periodic
                         packet_size_wifi.value = "1024";             //set to 1024 bytes
                         load_freq.value = "1";                  //set to 1 packet/sec
-                        num_devices.value = "1";                //set to 20 devices
+                        num_devices.value = "1";                //set to 1 devices
+                        max_num_devices.value = "10";                //set to 10 devices
+                        num_gateways.value = "1";                //set to 10 devices
                         dist_devices_gateway.value = "20";       //set distance to 10 meter
                         simulation_time.value = "10";
                         radio_environment.value = 0;
@@ -492,6 +502,8 @@ else
                         packet_size_wifi.value = "1500";             //set to 1024 bytes
                         mean_load.value = "2";                  //set to 2 Mbps
                         num_devices.value = "5";                //set to 5 devices
+                        max_num_devices.value = "10";                //set to 5 devices
+                        num_gateways.value = "1";                //set to 10 devices
                         //fps.value = "30";                //FPS=30
                         dist_devices_gateway.value = "10";       //set distance to 1 meter
                         simulation_time.value = "5";
@@ -510,6 +522,8 @@ else
                         packet_size_wifi.value = "1500";            //set to 1024 bytes
                         mean_load.value = "2";                  //set to 2 Mbps
                         num_devices.value = "5";               //set to 20 devices
+                        max_num_devices.value = "10";                //set to 5 devices
+                        num_gateways.value = "1";                //set to 10 devices
                         dist_devices_gateway.value = "10";       //set distance to 1 meter
                         simulation_time.value = "5";
                         radio_environment.value = 1;
@@ -521,13 +535,15 @@ else
                         //diagra.SetAttribute('src', '../static/img/diagram_traffic_downstream.png');
                         break;
                     case '4'://smart metering
-                        network.selectedIndex = "2";             //set to LoRaWAN
+                        network.selectedIndex = "1";             //set to LoRaWAN
                         console.log("Selected network =", network.value);
                         direction.selectedIndex = "0";          //set to Upstream
                         traffic_profile.selectedIndex = "0";    //set to Periodic
                         packet_size_lorawan.value = "23";               //set to 23 bytes
                         load_freq.value = "360";           //set to 3600 packet/sec or 1 packet/hr
                         num_devices.value = "10" ;           //set to 10 devices
+                        max_num_devices.value = "20";                //set to 5 devices
+                        num_gateways.value = "1";                //set to 10 devices
                         dist_devices_gateway.value = "1000";    //set distance to 100 m
                         simulation_time.value = "3600";
                         tx_current.value = "77";
@@ -664,6 +680,7 @@ function onChangeSelectNetwork(){
         //set a default value to battery capacity depending on a network
         load_freq.value = "1"; 
         num_devices.value = "5";
+        max_num_devices.value = "10";
         battery_cap.value = "2400"; 
         voltage.value = "3"; 
         tx_current.value = "7.2";
@@ -675,6 +692,7 @@ function onChangeSelectNetwork(){
     else
     {
         num_devices.placeholder ="";
+        max_num_devices.placeholder ="";
         dist_devices_gateway.placeholder = "";
         //diagra.SetAttribute('src', '../static/img/network-IOT_640.png');
         packetSizeShow("");   

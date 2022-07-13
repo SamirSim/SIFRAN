@@ -151,7 +151,7 @@ int main (int argc, char *argv[]) {
   LogComponentEnableAll (LOG_PREFIX_NODE);
   LogComponentEnableAll (LOG_PREFIX_TIME);
 
-  nWifi = (int) (nWifi / nGW);
+  nWifi = (int) (nWifi / nGW) + 1;
   distance = distance / nGW;
 
   YansWifiChannelHelper channel;

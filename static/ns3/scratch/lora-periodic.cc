@@ -53,7 +53,7 @@ main (int argc, char *argv[]) {
   // Number of stations
   int nSta = 400;
   // Number of gatewyas
-  int nGateways = 1;
+  int nGW = 1;
   // Spreading Factor
   double SF=0; // If SF=0, then the SF is set automatically
   // Coding Rate
@@ -93,7 +93,7 @@ main (int argc, char *argv[]) {
 
   CommandLine cmd;
   cmd.AddValue ("nSta", "Number of end devices to include in the simulation", nSta);
-  cmd.AddValue ("nGateways", "Number of gateways", nGateways);
+  cmd.AddValue ("nGW", "Number of gateways", nGW);
   cmd.AddValue ("distance", "The distance of the area to simulate", distance);
   cmd.AddValue ("SF", "Fixed spreading factor", SF);
   cmd.AddValue ("voltage", "voltage in Volts", voltage);
@@ -116,8 +116,8 @@ main (int argc, char *argv[]) {
   //cmd.AddValue ("topologyFile", "Topology file name", topologyFile);
   cmd.Parse (argc, argv);
 
-  distance = distance / nGateways;
-  nSta = (int) (nSta / nGateways);
+  distance = distance / nGW;
+  nSta = (int) (nSta / nGW) + 1;
 
   if (energyRatio) {
     LogComponentEnable ("lora-periodic", LOG_LEVEL_ALL);
@@ -310,7 +310,7 @@ main (int argc, char *argv[]) {
       mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
       mobility.Install(endDevices);
 
-      for (uint32_t i = 0; i < nGateways; i++) {
+      for (uint32_t i = 0; i < nGW; i++) {
         csv.FetchNextRow ();
         ok1 = csv.GetValue (0, x);
         ok2= csv.GetValue (1, y);

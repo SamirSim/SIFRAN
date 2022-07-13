@@ -134,6 +134,28 @@
                     {% endfor %}    
                         </ul>
                     </div>
+                    <div class="mb-3">
+                        {{ form.max_num_devices.label(class="form-label") }}
+                        {{ form.max_num_devices(class="form-control", id="max_num_devices") }}
+                    </div>
+                    <div id="max_num_devices_error">
+                        <ul>
+                    {% for error in form.max_num_devices.errors %}       
+                        <li style="color:red;">{{ error }}</li>
+                    {% endfor %}    
+                        </ul>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.num_gateways.label(class="form-label") }}
+                        {{ form.num_gateways(class="form-control", id="num_gateways") }}
+                    </div>
+                    <div id="num_gateways_error">
+                        <ul>
+                    {% for error in form.num_gateways.errors %}       
+                        <li style="color:red;">{{ error }}</li>
+                    {% endfor %}    
+                        </ul>
+                    </div>
                      <div class="mb-3">
                         {{ form.dist_devices_gateway.label(class="form-label") }}
                         {{ form.dist_devices_gateway(class="form-control" , id="dist_devices_gateway") }}

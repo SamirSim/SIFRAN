@@ -6,7 +6,7 @@ from wtforms.i18n import messages_path
 from wtforms.validators import DataRequired, Length, NumberRange, Email, InputRequired, EqualTo
 
 class ScenarioForm(FlaskForm):
-    choices_network = [('Wi-Fi 802.11ac', 'Wi-Fi 802.11ac'), ('Wi-Fi 802.11ax', 'Wi-Fi 802.11ax'), ('LoRaWAN', 'LoRaWAN'), ('6LoWPAN', '6LoWPAN'), ('Wi-Fi HaLow', 'Wi-Fi HaLow')] 
+    choices_network = [('Wi-Fi 802.11ac', 'Wi-Fi 802.11ac'), ('LoRaWAN', 'LoRaWAN'), ('6LoWPAN', '6LoWPAN'), ('Wi-Fi HaLow', 'Wi-Fi HaLow')] 
     choices_MCS = [('0', '0'), ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'),('5', '5'),('6', '6'),('7', '7'),('8', '8'),
                     ('9', '9'),('10', 'Ideal Wi-Fi manager')]
     #choices_bandwidth = [(20, '20'),(40, '40'),(80, '80'),(160, '160')]
@@ -27,6 +27,8 @@ class ScenarioForm(FlaskForm):
     mean = IntegerField('Mean of packet size variable', validators=[DataRequired(), NumberRange(min=0, message='Mean must not be negative.')], default=1500)
     variance = IntegerField('Variance of packet size variable', validators=[DataRequired(), NumberRange(min=0, message='Variance must not be negative.')], default=100)
     num_devices = IntegerField('Number of end-devices', validators=[DataRequired(), NumberRange(min=1, message='Number of end-devices must not be negative.')]) 
+    max_num_devices = IntegerField('Maximum number of end-devices (for scaling)', validators=[DataRequired(), NumberRange(min=1, message='Number of end-devices must not be negative.')]) 
+    num_gateways = IntegerField('Number of gateways', validators=[DataRequired(), NumberRange(min=1, message='Number of gateways must not be negative.')]) 
     dist_devices_gateway = IntegerField('Distance end-devices-gateway, meter', validators=[DataRequired(), NumberRange(min=0, message='Distance between gateway and end-devices must not be negative.')])
     simulation_time = IntegerField('Simulation time, seconds', validators=[DataRequired(), NumberRange(min=0, message='Time must be > 5s')])
     hidden_devices = RadioField('Hidden devices?', choices = [('1', 'Yes'), ('0', 'No')], default='0')

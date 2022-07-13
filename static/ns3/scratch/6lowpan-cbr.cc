@@ -31,6 +31,8 @@
 #include "ns3/applications-module.h"
 #include "ns3/inet6-socket-address.h"
 #include "ns3/random-variable-stream.h"
+#include "ns3/buildings-helper.h"
+#include "ns3/building.h"
 
 using namespace ns3;
 
@@ -43,20 +45,65 @@ int main (int argc, char** argv)
   bool disablePcap = true;
   bool disableAsciiTrace = true;
 
-  int nDevices = 7; // 1 PAN Node + 1 Probing node + (nDevices-2) communication nodes
-  int simulationTime = 20;
-  uint8_t max_BE = 4;
-  uint8_t min_BE = 2;
-  uint8_t csma_backoffs = 6;
+  // Number of stations
+  double nSta = 1; // 1 PAN Node + 1 Probing node + (nDevices-2) communication nodes
+  // Number of gatewyas
+  double nGW = 1;
+  // Simulation Time Seconds
+  double simulationTime = 10;
+  // Meters between AP and stations
+  double distance = 20;
+  // Data rate in Kbps
+  std::string dataRate = "10";
+  // Payload size in bytes
+  uint32_t packetSize = 20;
+  // Traffic direction
+  std::string trafficDirection = "upstream";
+  // Minimum Backoff Exponent
+  uint8_t min_BE = 3;
+  // Maximum Backoff Exponent
+  uint8_t max_BE = 5;
+  // Number of CSMA Backoffs
+  uint8_t csma_backoffs = 4;
+  // Maximum number or Frame Retries
   uint8_t maxFrameRetries = 5;
-  int distance = 1;
-  std::string propLoss = "LogDistancePropagationModel";
+  // Topology file name
+  std::string topologyFile = "topology.csv";
+  // Radio Environment
+  std::string radioEnvironment = "Urban";
+
+  // Energy parameters
+  // Tx current draw in mA
+  double txCurrent = 7;
+  // Rx current draw in mA
+  double rxCurrent = 1.5;
+  // Idle current draw in mA
+  double idleCurrent = 0.5;
+  // Battery voltage 
+  double voltage = 3; // In V
+  // Battery Capacity
+  double capacity = 2400; // In mAh
+
+  bool latency = true;
 
   CommandLine cmd (__FILE__);
-  cmd.AddValue ("verbose", "turn on log components", verbose);
-  cmd.AddValue ("disable-pcap", "disable PCAP generation", disablePcap);
-  cmd.AddValue ("disable-asciitrace", "disable ascii trace generation", disableAsciiTrace);
-  cmd.AddValue ("nDevices", "number of stations", nDevices);
+  cmd.AddValue ("nSta", "Number of stations", nSta);
+  cmd.AddValue ("nGW", "Number of stations", nGW);
+  cmd.AddValue ("distance", "Distance between EDs and PAN", distance);
+  cmd.AddValue ("radioEnvironment", "Loss Propagation Model", radioEnvironment);
+  cmd.AddValue ("simulationTime", "Simulation time", simulationTime);
+  cmd.AddValue ("dataRate", "Packet period", dataRate);
+  cmd.AddValue ("max_BE", "Max Backoff Exponent", max_BE);
+  cmd.AddValue ("min_BE", "Min Backoff Exponent", min_BE);
+  cmd.AddValue ("csma_backoffs", "CSMA Backoffs", csma_backoffs);
+  cmd.AddValue ("maxFrameRetries", "Max Frame Retries", maxFrameRetries);
+  cmd.AddValue ("packetSize", "Packet size", packetSize);
+  cmd.AddValue ("trafficDirection", "Traffic direction", trafficDirection);
+  cmd.AddValue ("voltage", "Voltage capacity", voltage);
+  cmd.AddValue ("capacity", "Batttery capacity", capacity);
+  cmd.AddValue ("txCurrent", "Percentage of successful packets", txCurrent);
+  cmd.AddValue ("rxCurrent", "Percentage of successful packets", rxCurrent);
+  cmd.AddValue ("idleCurrent", "Percentage of successful packets", idleCurrent);
   cmd.Parse (argc, argv);
   
   if (verbose)
@@ -69,26 +116,66 @@ int main (int argc, char** argv)
       LogComponentEnable ("UdpServer", LOG_LEVEL_INFO);
       LogComponentEnable ("OnOffApplication", LOG_LEVEL_INFO);
       LogComponentEnable ("PacketSink", LOG_LEVEL_INFO);
-      LogComponentEnable ("LrWpanMac", LOG_LEVEL_INFO);
-      LogComponentEnable ("LrWpanPhy", LOG_LEVEL_INFO);
+      //LogComponentEnable ("LrWpanMac", LOG_LEVEL_INFO);
+      //LogComponentEnable ("LrWpanPhy", LOG_LEVEL_INFO);
       LogComponentEnableAll (LOG_PREFIX_FUNC);
       LogComponentEnableAll (LOG_PREFIX_NODE);
       LogComponentEnableAll (LOG_PREFIX_TIME);
     }
 
+  nSta = (int) (nSta / nGW) + 1;
+  nSta = nSta + 2;
+  distance = distance / nGW;
+
   NodeContainer nodes;
-  nodes.Create(nDevices);
+  nodes.Create(nSta);
 
-  MobilityHelper mobility;
-  Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
+  MobilityHelper mobility;  
 
-  for (uint32_t i = 0; i < nDevices; i++) {
-      positionAlloc->Add (Vector (distance, 0.0, 0.0));
+  // Setting stations' positions
+  mobility.SetPositionAllocator ("ns3::UniformDiscPositionAllocator", "rho", DoubleValue (distance),
+                                  "X", DoubleValue (0.0), "Y", DoubleValue (0.0), "Z", DoubleValue(1.0));
+  mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
+  for (uint32_t i = 2; i < nSta; i++) {
+        mobility.Install(nodes.Get(i));
+  }
+    
+  MobilityHelper mobilityAp;
+  Ptr<ListPositionAllocator> positionAllocGW = CreateObject<ListPositionAllocator> ();
+  positionAllocGW->Add (Vector (0, 0, 1));
+  mobilityAp.SetPositionAllocator (positionAllocGW);
+  mobilityAp.SetMobilityModel("ns3::ConstantPositionMobilityModel");
+  mobilityAp.Install(nodes.Get(0));
+
+  if (radioEnvironment == "Indoor") {
+    double x_min = 0.0;
+    double x_max = 10.0;
+    double y_min = 0.0;
+    double y_max = 20.0;
+    double z_min = 0.0;
+    double z_max = 10.0;
+    Ptr<Building> b = CreateObject <Building> ();
+    b->SetBoundaries (Box (x_min, x_max, y_min, y_max, z_min, z_max));
+    b->SetBuildingType (Building::Residential);
+    b->SetExtWallsType (Building::ConcreteWithWindows);
+    b->SetNFloors (3);
+    b->SetNRoomsX (3);
+    b->SetNRoomsY (2);
+
+    for (uint32_t i = 2; i < nSta; i++) {
+      BuildingsHelper::Install (nodes.Get(i));
+    }
+      
+    BuildingsHelper::Install (nodes.Get(0));
   }
 
-  mobility.SetPositionAllocator (positionAlloc);
-  mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
-  mobility.Install (nodes);
+  if (latency) {
+    positionAllocGW->Add (Vector (distance, 0, 1));
+    mobility.SetPositionAllocator (positionAllocGW);
+    mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
+    mobility.Install (nodes.Get(1));
+    if (radioEnvironment == "Indoor") BuildingsHelper::Install (nodes.Get(1));
+  }
   
   LrWpanHelper lrWpanHelper;
   // Add and install the LrWpanNetDevice for each node
@@ -97,7 +184,7 @@ int main (int argc, char** argv)
   // Fake PAN association and short address assignment.
   // This is needed because the lr-wpan module does not provide (yet)
   // a full PAN association procedure.
-  lrWpanHelper.AssociateToPan (lrwpanDevices, 0, max_BE, min_BE, csma_backoffs, maxFrameRetries, propLoss);
+  lrWpanHelper.AssociateToPan (lrwpanDevices, 0, max_BE, min_BE, csma_backoffs, maxFrameRetries, radioEnvironment);
 
   InternetStackHelper internetv6;
   internetv6.Install (nodes);
@@ -135,8 +222,6 @@ int main (int argc, char** argv)
   clientApps1.Start(Seconds(1.0));
   clientApps1.Stop(Seconds(simulationTime+1));
   
-  uint32_t packetSize = 500; //Bytes
-
   Inet6SocketAddress socket = Inet6SocketAddress (panAddr, port);
   PacketSinkHelper ulPacketSinkHelper ("ns3::UdpSocketFactory", socket);
   ApplicationContainer serverApps, clientApps;
@@ -147,12 +232,12 @@ int main (int argc, char** argv)
 
   Ptr<UniformRandomVariable> x = CreateObject<UniformRandomVariable> ();
 
-  for (uint32_t index = 2; index < nDevices; ++index) {
+  for (uint32_t index = 2; index < nSta; ++index) {
     OnOffHelper client ("ns3::UdpSocketFactory", socket);
     client.SetAttribute ("PacketSize", UintegerValue (packetSize));
     client.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
     client.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
-    client.SetAttribute ("DataRate", DataRateValue (DataRate ("90Kbps"))); //Value greater than maximum possible value
+    client.SetAttribute ("DataRate", DataRateValue (DataRate (dataRate+"Kbps"))); //Value greater than maximum possible value
 
     double value = x->GetValue (0, 10);
 
@@ -165,9 +250,6 @@ int main (int argc, char** argv)
   serverApps.Stop(Seconds (simulationTime+1));
 
  DeviceEnergyModelContainer deviceModels;
-
-  double voltage = 3;
-  double capacity = 2300; // 5.2 Ah * 12 V * 3600
 
    double capacityJoules = capacity * voltage * 3.6; // 5.2 Ah * 12 V * 3600
 
@@ -208,14 +290,15 @@ int main (int argc, char** argv)
   }
 
   double totalPacketsThrough, throughput;
-  
+  std::cout << nSta << std::endl;
   for (uint32_t index = 0; index < serverApps.GetN (); ++index) {
       /*/ Calculating Packet throughput and packet delivery /*/
       totalPacketsThrough = DynamicCast<PacketSink> (
                             serverApps.Get (0))->GetTotalRx ();
       throughput += ((totalPacketsThrough * 8) / ((simulationTime) * 1024.0)); //Kbps
       std::cout << "Packet Throughput: " << throughput << std::endl;
-      double successRate =  (totalPacketsThrough / totalpacketsSent / (nDevices-2)) * 100;
+      double successRate =  (totalPacketsThrough / totalpacketsSent) / (nSta-2) * 100;
+      if (successRate > 100) successRate = 100;
       std::cout << "Packet Delivery: " << successRate << std::endl; // %
   }
 }
