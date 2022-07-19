@@ -637,7 +637,7 @@ def stackeo():
                     valid = False
                     messages_error[0] = "Distance must be positive."
             else:
-                packet_size = form.packet_size_lorawan.data
+                packet_size = form.packet_size_wifi.data
                 print("Packet size, LoRaWAN = " + str(packet_size), type(packet_size))
                 if packet_size < 1 or packet_size > 230:
                     valid = False
