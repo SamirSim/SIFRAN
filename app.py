@@ -118,7 +118,7 @@ def dashboard():
     if 'username' in session:
         user_records = records.find({"username":session['username']})
         return render_template("dashboard.html", user_records=user_records)    
-    return redirect(url_for("index"))    
+    return redirect(url_for("index"))
 
 
 # Create class of a thread
@@ -151,8 +151,7 @@ def simulationCall(threadID):
                         text_file.write(output)
                     _check_output(
                         'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
-                    latency = _check_output(
-                        'python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
+                    latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
 
             elif os.environ['TRAFFICPROF'] == "vbr":
                 if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
@@ -162,8 +161,7 @@ def simulationCall(threadID):
                         text_file.write(output)
                     _check_output(
                         'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
-                    latency = _check_output(
-                        'python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
+                    latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
 
             elif os.environ['TRAFFICPROF'] == "periodic":
                 if os.environ['NETWORK'] == "Wi-Fi 802.11ac":
@@ -173,8 +171,7 @@ def simulationCall(threadID):
                         text_file.write(output)
                     _check_output(
                         'cat "log.txt" | grep -e "client sent 1023 bytes" -e "server received 1023 bytes from" > "log-parsed.txt";')
-                    latency = _check_output(
-                        'python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
+                    latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
 
                 elif os.environ['NETWORK'] == "LoRaWAN":
                     output = _check_output(
@@ -199,8 +196,7 @@ def simulationCall(threadID):
                         text_file.write(output)
                     _check_output(
                         'cat "log.txt" | grep -e "client sent 50 bytes" -e "server received 50 bytes from" > "log-parsed.txt";')
-                    latency = _check_output(
-                        'python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
+                    latency = _check_output('python3 static/ns3/wifi-scripts/get_latencies.py "log-parsed.txt"')
 
                 elif os.environ['NETWORK'] == "Wi-Fi HaLow":
                     output = _check_output(
