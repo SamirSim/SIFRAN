@@ -16,6 +16,8 @@ from pymongo import MongoClient
 from models import ModelUsers, ModelRecords 
 import matplotlib.pyplot as plt
 
+SIMULATIONS = {}
+
 
 def configure_auto_logging(force_debug=False):
     debug = force_debug or os.getenv('VERBOSE') == '1'
@@ -611,6 +613,44 @@ def index():
 def stackeo():
     secret = request.json.get('secret-key')
     if secret == "4a05a3bdd6c94bf5a94a4e6d3cb16822":
+        parameters = request.json
+        del parameters["secret-key"]
+        del parameters["submit"]
+
+        network = parameters["network"]
+        simulations_by_network = {
+            "Wi-Fi 802.11ac": "WiFi",
+            "6lowpan": "6LoWPAN",
+            "Wi-Fi 802.11ah": "HaLow",
+        }
+
+        if network != "LoraWan":
+            simulation_file = simulations_by_network.get(network)
+
+        else:
+            if parameters["sf"] == 7:
+                simulation_file = "LoRaWAN-SF7"
+            else:
+                simulation_file = "LoRaWAN-SF9"
+
+        simulation = SIMULATIONS.get(simulation_file)
+
+        return simulation["results"]
+    return 'Ko', 404
+
+
+def load_all_simulations():
+    for filename in os.listdir("simulations"):
+        with open(os.path.join("simulations", filename), 'r') as f:
+            data = json.loads(f.read())
+            global SIMULATIONS
+            SIMULATIONS[filename.split('.')[0]] = data
+
+
+@app.route('/stackeo-ns3', methods=['POST'])
+def stackeo_ns3():
+    secret = request.json.get('secret-key')
+    if secret == "4a05a3bdd6c94bf5a94a4e6d3cb16822":
         form = ScenarioForm()
         messages_error = ["", ""]
         if request.method == "POST":
@@ -993,8 +1033,6 @@ def stackeo():
                     return str(e), 500
     return 'Ko', 404
 
-
-
 """
 @app.route('/results')
 def results():
@@ -1178,6 +1216,9 @@ def explore(technology, densities):
             #_check_output('cd static/ns3-halow; rm "log.txt"; rm "log-parsed.txt"')
 
     return results_exploration
+
+
+load_all_simulations()
 
 if __name__ == "__main__" :
     port = os.getenv('PORT', 80)

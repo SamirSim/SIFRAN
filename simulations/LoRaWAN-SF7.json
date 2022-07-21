@@ -1,0 +1,60 @@
+{
+  "results": {
+    "battery_lifetime": 679.83,
+    "battery_lifetimes": [
+      483.95,
+      483.95,
+      483.95
+    ],
+    "densities": [
+      200,
+      400,
+      600
+    ],
+    "energy_consumption": 0.22,
+    "latencies": [
+      194.81,
+      194.81,
+      194.81
+    ],
+    "latency": 184.57,
+    "success_rate": 94.4,
+    "success_rates": [
+      86.21,
+      73.37,
+      63.54
+    ],
+    "throughput": 0.61,
+    "throughputs": [
+      0.61,
+      0.61,
+      0.61
+    ]
+  },
+
+  "parameters": {
+    "gatewaysNumber": 1,
+    "dist_devices_gateway": 200,
+    "bandwidth": 125,
+    "sf": 7,
+    "cyclic_redundancy_check": 0,
+    "coding_rate": 1,
+    "confirmed_traffic": 0,
+    "tx_current": 77.0,
+    "rx_current": 28.0,
+    "idle_current": 1.0,
+    "network": "LoRaWAN",
+    "traffic_dir": "upstream",
+    "traffic_profile": "periodic",
+    "radio_environment": 3,
+    "num_devices_min": 100,
+    "num_devices": 600,
+    "packet_size_lorawan": 100,
+    "load_freq": 120,
+    "battery_cap": 2400,
+    "voltage": 3,
+    "simulation_time": 300,
+    "secret-key": "4a05a3bdd6c94bf5a94a4e6d3cb16822",
+    "submit": true
+  }
+}

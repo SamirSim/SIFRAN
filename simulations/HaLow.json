@@ -1,0 +1,58 @@
+{
+  "results": {
+    "battery_lifetime": 400,
+    "battery_lifetimes": [
+      460.693,
+      457.379,
+      428.416
+    ],
+    "densities": [
+      200,
+      400,
+      600
+    ],
+    "energy_consumption": 0.22,
+    "latencies": [
+      41.39,
+      41.6,
+      126.64
+    ],
+    "latency": 35.44,
+    "success_rate": 100.0,
+    "success_rates": [
+      100.0,
+      100.0,
+      100.0
+    ],
+    "throughput": 0.651042,
+    "throughputs": [
+      0.61,
+      0.61,
+      0.61
+    ]
+  },
+
+  "parameters": {
+    "gatewaysNumber": 1,
+    "dist_devices_gateway": 200,
+    "bandwidth": 1,
+    "mcs": 10,
+    "spatial_streams": 1,
+    "tx_current": 7.2,
+    "rx_current": 4.4,
+    "idle_current": 1.0,
+    "network": "Wi-Fi HaLow",
+    "traffic_dir": "upstream",
+    "traffic_profile": "periodic",
+    "radio_environment": 3,
+    "num_devices_min": 100,
+    "num_devices": 600,
+    "packet_size_wifi": 100,
+    "load_freq": 120,
+    "battery_cap": 2400,
+    "voltage": 3,
+    "simulation_time": 300,
+    "secret-key": "4a05a3bdd6c94bf5a94a4e6d3cb16822",
+    "submit": true
+  }
+}
