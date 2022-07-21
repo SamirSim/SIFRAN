@@ -1,54 +1,55 @@
 {
   "results": {
-    "battery_lifetime": 86.65,
+    "battery_lifetime": 387.2,
     "battery_lifetimes": [
-      77.83,
-      73.47,
-      72.21
+      243.27,
+      243.35, 
+      243.42
     ],
     "densities": [
       200,
       400,
       600
     ],
-    "energy_consumption": 1.04,
+    "energy_consumption": 0.22,
     "latencies": [
-      0.07,
-      0.07,
-      0.07
+      348.67,
+      348.67,
+      348.67
     ],
-    "latency": 0.07,
-    "success_rate": 100,
+    "latency": 328,
+    "success_rate": 90.12,
     "success_rates": [
-      97.0,
-      96.0,
-      88.0
+      75.45,
+      59.89,
+      44.65
     ],
-    "throughput": 0.65,
+    "throughput": 0.58,
     "throughputs": [
-      1.85,
-      3.66,
-      5.04
+      1.43,
+      2.29,
+      2.52
     ]
   },
 
   "parameters": {
     "gatewaysNumber": 1,
     "dist_devices_gateway": 200,
-    "bandwidth": 80,
-    "mcs": 10,
-    "spatial_streams": 1,
-    "tx_current": 107.0,
-    "rx_current": 40.0,
+    "bandwidth": 125,
+    "sf": 8,
+    "cyclic_redundancy_check": 0,
+    "coding_rate": 1,
+    "confirmed_traffic": 0,
+    "tx_current": 77.0,
+    "rx_current": 28.0,
     "idle_current": 1.0,
-    "cca_busy_current": 40.0,
-    "network": "Wi-Fi 802.11ac",
+    "network": "LoRaWAN",
     "traffic_dir": "upstream",
     "traffic_profile": "periodic",
     "radio_environment": 3,
     "num_devices_min": 100,
     "num_devices": 600,
-    "packet_size_wifi": 100,
+    "packet_size_lorawan": 100,
     "load_freq": 120,
     "battery_cap": 2400,
     "voltage": 3,

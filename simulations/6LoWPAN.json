@@ -11,7 +11,7 @@
       400,
       600
     ],
-    "energy_consumption": 0.39,
+    "energy_consumption": 0.58,
     "latencies": [
       6.53,
       6.94,
@@ -24,11 +24,11 @@
       100.0,
       100.0
     ],
-    "throughput": 0.61,
+    "throughput": 0.65,
     "throughputs": [
-      0.61,
-      0.61,
-      0.61
+      1.9,
+      3.8,
+      5.7
     ]
   },
   "parameters": {

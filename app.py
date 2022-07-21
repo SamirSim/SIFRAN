@@ -630,8 +630,10 @@ def stackeo():
         else:
             if parameters["sf"] == 7:
                 simulation_file = "LoRaWAN-SF7"
-            else:
+            elif parameters["sf"] == 9:
                 simulation_file = "LoRaWAN-SF9"
+            else:
+                simulation_file = "LoRaWAN-SF8"
 
         simulation = SIMULATIONS.get(simulation_file)
 
